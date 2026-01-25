@@ -23,7 +23,8 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
@@ -38,7 +39,24 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      "expo-video",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/GoogleSansCode-Italic-VariableFont_wght.ttf",
+            "./assets/fonts/GoogleSansCode-VariableFont_wght.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-secure-store", 
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true,

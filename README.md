@@ -48,3 +48,55 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+```
+Second-Brain-OS-Mobile
+├─ README.md
+├─ app
+│  ├─ (auth)
+│  │  ├─ _layout.tsx
+│  │  └─ index.tsx
+│  ├─ (tabs)
+│  │  ├─ _layout.tsx
+│  │  └─ index.tsx
+│  ├─ +not-found.tsx
+│  ├─ _layout.tsx
+│  └─ index.tsx
+├─ app.json
+├─ assets
+│  └─ images
+│     ├─ android-icon-background.png
+│     ├─ android-icon-foreground.png
+│     ├─ android-icon-monochrome.png
+│     ├─ favicon.png
+│     ├─ icon.png
+│     ├─ partial-react-logo.png
+│     ├─ react-logo.png
+│     ├─ react-logo@2x.png
+│     ├─ react-logo@3x.png
+│     └─ splash-icon.png
+├─ components
+│  ├─ external-link.tsx
+│  ├─ haptic-tab.tsx
+│  ├─ hello-wave.tsx
+│  ├─ parallax-scroll-view.tsx
+│  ├─ themed-text.tsx
+│  ├─ themed-view.tsx
+│  └─ ui
+│     ├─ collapsible.tsx
+│     ├─ icon-symbol.ios.tsx
+│     └─ icon-symbol.tsx
+├─ constants
+│  └─ theme.ts
+├─ eslint.config.js
+├─ hooks
+│  ├─ use-color-scheme.ts
+│  ├─ use-color-scheme.web.ts
+│  └─ use-theme-color.ts
+├─ package-lock.json
+├─ package.json
+├─ scripts
+│  └─ reset-project.js
+└─ tsconfig.json
+
+```

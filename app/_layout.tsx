@@ -1,24 +1,31 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import '../global.css'
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded, fontError] = useFonts({
+    'GoogleSansCode-Regular': require('@/assets/fonts/GoogleSansCode-VariableFont_wght.ttf'),
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null; // Shows splash screen
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    // hide the navigation header in all pages of this app
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='(auth)' />
+      <Stack.Screen name='(tabs)' />
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }
