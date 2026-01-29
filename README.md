@@ -49,8 +49,12 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
+
+
 ```
 Second-Brain-OS-Mobile
+├─ .env
+├─ .env.example
 ├─ README.md
 ├─ app
 │  ├─ (auth)
@@ -58,45 +62,68 @@ Second-Brain-OS-Mobile
 │  │  └─ index.tsx
 │  ├─ (tabs)
 │  │  ├─ _layout.tsx
-│  │  └─ index.tsx
+│  │  ├─ calendar.tsx
+│  │  ├─ chatroom
+│  │  │  └─ index.tsx
+│  │  ├─ files.tsx
+│  │  └─ inbox.tsx
 │  ├─ +not-found.tsx
 │  ├─ _layout.tsx
+│  ├─ history-modal.tsx
 │  └─ index.tsx
 ├─ app.json
 ├─ assets
-│  └─ images
-│     ├─ android-icon-background.png
-│     ├─ android-icon-foreground.png
-│     ├─ android-icon-monochrome.png
-│     ├─ favicon.png
-│     ├─ icon.png
-│     ├─ partial-react-logo.png
-│     ├─ react-logo.png
-│     ├─ react-logo@2x.png
-│     ├─ react-logo@3x.png
-│     └─ splash-icon.png
+│  ├─ fonts
+│  │  ├─ GoogleSansCode-Italic-VariableFont_wght.ttf
+│  │  └─ GoogleSansCode-VariableFont_wght.ttf
+│  ├─ images
+│  │  ├─ android-icon-background.png
+│  │  ├─ android-icon-foreground.png
+│  │  ├─ android-icon-monochrome.png
+│  │  ├─ favicon.png
+│  │  ├─ icon.png
+│  │  ├─ partial-react-logo.png
+│  │  ├─ react-logo.png
+│  │  ├─ react-logo@2x.png
+│  │  ├─ react-logo@3x.png
+│  │  ├─ second-brain-icon.png
+│  │  └─ splash-icon.png
+│  └─ videos
+│     └─ auth-bg.mp4
+├─ babel.config.js
 ├─ components
 │  ├─ external-link.tsx
 │  ├─ haptic-tab.tsx
 │  ├─ hello-wave.tsx
 │  ├─ parallax-scroll-view.tsx
+│  ├─ siginin-button.tsx
 │  ├─ themed-text.tsx
 │  ├─ themed-view.tsx
 │  └─ ui
 │     ├─ collapsible.tsx
 │     ├─ icon-symbol.ios.tsx
-│     └─ icon-symbol.tsx
+│     ├─ icon-symbol.tsx
+│     └─ typewriter.tsx
 ├─ constants
 │  └─ theme.ts
 ├─ eslint.config.js
+├─ global.css
 ├─ hooks
 │  ├─ use-color-scheme.ts
 │  ├─ use-color-scheme.web.ts
+│  ├─ use-signin.ts
 │  └─ use-theme-color.ts
+├─ lib
+│  └─ utils
+│     ├─ appleAuth.ts
+│     └─ googleAuth.ts
+├─ metro.config.js
+├─ nativewind-env.d.ts
 ├─ package-lock.json
 ├─ package.json
 ├─ scripts
 │  └─ reset-project.js
+├─ tailwind.config.js
 └─ tsconfig.json
 
 ```

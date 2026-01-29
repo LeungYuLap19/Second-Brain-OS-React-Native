@@ -36,8 +36,8 @@ export default function Auth() {
 
       <View className='flex-0 relative z-10 justify-center items-center gap-4 px-4 pb-4'>
         { Platform.OS == 'ios' && <SigninButton platform='Apple' /> }
-        <SigninButton platform='Google' />
-        <SigninButton platform='Email' />
+        {/* <SigninButton platform='Google' />
+        <SigninButton platform='Email' /> */}
 
         <Text className='text-zinc-300/50 text-sm '>
           <Text className='font-bold'>Second Brain OS</Text>

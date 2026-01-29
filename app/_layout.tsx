@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
+SplashScreen.preventAutoHideAsync(); 
+
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     'GoogleSansCode-Regular': require('@/assets/fonts/GoogleSansCode-VariableFont_wght.ttf'),
@@ -17,12 +19,17 @@ export default function RootLayout() {
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded && !fontError) {
-    return null; // Shows splash screen
+    return null; 
   }
 
   return (
-    // hide the navigation header in all pages of this app
     <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="history-modal"
+        options={{
+          presentation: 'modal',
+        }}
+      />
       <Stack.Screen name='(auth)' />
       <Stack.Screen name='(tabs)' />
       <Stack.Screen name="+not-found" />

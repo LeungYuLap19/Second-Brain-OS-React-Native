@@ -1,19 +1,25 @@
 import React from 'react'
-import { Tabs } from 'expo-router'
-import Feather from '@expo/vector-icons/Feather';
+import { NativeTabs, Icon, Label } from 'expo-router/unstable-native-tabs';
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
-      <Tabs.Screen 
-        name='index'
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name='home' size={size} color={color} />
-          )
-        }}
-      />
-    </Tabs>
+    <NativeTabs>
+      <NativeTabs.Trigger name="chatroom/index">
+        <Label>Chatroom</Label>
+        <Icon sf={{ default: 'bubble.left', selected: 'bubble.left.fill' }} />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="files">
+        <Label>Files</Label>
+        <Icon sf={{ default: 'folder', selected: 'folder.fill' }} />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="calendar">
+        <Label>Calendar</Label>
+        <Icon sf={{ default: 'calendar', selected: 'calendar' }} />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="inbox">
+        <Label>Inbox</Label>
+        <Icon sf={{ default: 'mail.stack', selected: 'mail.stack.fill' }} />
+      </NativeTabs.Trigger>
+    </NativeTabs>
   )
 }
