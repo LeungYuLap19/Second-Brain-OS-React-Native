@@ -50,7 +50,6 @@ Join our community of developers creating universal apps.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
 
-
 ```
 Second-Brain-OS-Mobile
 ├─ .env
@@ -105,6 +104,7 @@ Second-Brain-OS-Mobile
 │     ├─ icon-symbol.tsx
 │     └─ typewriter.tsx
 ├─ constants
+│  ├─ samples.ts
 │  └─ theme.ts
 ├─ eslint.config.js
 ├─ global.css
@@ -116,7 +116,8 @@ Second-Brain-OS-Mobile
 ├─ lib
 │  └─ utils
 │     ├─ appleAuth.ts
-│     └─ googleAuth.ts
+│     ├─ googleAuth.ts
+│     └─ utilities.ts
 ├─ metro.config.js
 ├─ nativewind-env.d.ts
 ├─ package-lock.json
