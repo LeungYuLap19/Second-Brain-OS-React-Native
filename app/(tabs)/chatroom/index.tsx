@@ -1,11 +1,11 @@
+import { getClientId, getMarkdownStyles } from '@/lib/utils/utilities';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Markdown from 'react-native-markdown-display';
-import { getMarkdownStyles } from '@/lib/utils/utilities';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export interface Message {
   id: string;
@@ -45,65 +45,96 @@ export default function Home() {
     };
   }, []);
 
-  const connectWebSocket = () => {
+  const connectWebSocket = async () => {
     setIsConnecting(true);
-    
-    // Use wss:// for production, ws:// for local development
-    const ws = new WebSocket('ws://192.168.1.240:8000/ws/chat');
-    
+    const clientId = await getClientId();
+
+    const ws = new WebSocket(`ws://192.168.1.240:8000/ws/${clientId}`);
+
     ws.onopen = () => {
       console.log('WebSocket connected');
       setIsConnecting(false);
       setSocket(ws);
     };
-    
+
     ws.onclose = () => {
       console.log('WebSocket disconnected');
       setSocket(null);
       setIsConnecting(false);
+      setCurrentAssistantMessageId(null);
+      currentAssistantMessageIdRef.current = null;
     };
-    
+
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
       setIsConnecting(false);
     };
-    
+
     ws.onmessage = (event) => {
-      const data = event.data;
-      
-      if (data === '[[END]]') {
+      let data: any = event.data;
+
+      if (typeof data !== 'string') {
+        try {
+          data = String(data);
+        } catch {
+          return;
+        }
+      }
+
+      const hasStart = data.includes('<RESPONSE_START>');
+      const hasEnd = data.includes('<END_OF_STREAM>');
+
+      // Remove protocol markers
+      data = data
+        .replace(/<RESPONSE_START>/g, '')
+        .replace(/<END_OF_STREAM>/g, '');
+
+      if (hasStart) {
+        // Remove the placeholder message that was added when the user sent their request
+        if (currentAssistantMessageIdRef.current) {
+          const oldId = currentAssistantMessageIdRef.current;
+          setMessages(prev => prev.filter(msg => msg.id !== oldId));
+        }
+
+        // Start a fresh streaming message (tokens after <RESPONSE_START> will be appended)
+        const id = Date.now().toString();
+        currentAssistantMessageIdRef.current = id;
+        setCurrentAssistantMessageId(id);
+
+        setMessages(prev => [
+          ...prev,
+          {
+            id,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date()
+          }
+        ]);
+      }
+
+      if (data && data.trim() !== '') {
+        const id = currentAssistantMessageIdRef.current;
+        if (!id) return;
+
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === id
+              ? { ...msg, content: msg.content + data }
+              : msg
+          )
+        );
+      }
+
+      if (hasEnd) {
         console.log('Stream ended');
         setCurrentAssistantMessageId(null);
         currentAssistantMessageIdRef.current = null;
-        return;
       }
-      
-      if (currentAssistantMessageIdRef.current) {
-        const id = currentAssistantMessageIdRef.current;
-        setMessages(prev => prev.map(msg => {
-          if (msg.id === id) {
-            return {
-              ...msg,
-              content: msg.content + data
-            };
-          }
-          return msg;
-        }));
-      } else {
-        const newMessageId = Date.now().toString();
-        setCurrentAssistantMessageId(newMessageId);
-        currentAssistantMessageIdRef.current = newMessageId;
-        setMessages(prev => [...prev, {
-          id: newMessageId,
-          role: 'assistant',
-          content: data,
-          timestamp: new Date()
-        }]);
-      }
-    }; 
-    
+    };
+
     setSocket(ws);
   };
+
 
   const handleSend = () => {
     if (!input.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
@@ -131,7 +162,7 @@ export default function Home() {
     setMessages(prev => [...prev, {
       id: placeholderId,
       role: 'assistant',
-      content: '...',
+      content: '',
       timestamp: new Date()
     }]);
   };
@@ -160,15 +191,15 @@ export default function Home() {
     >
       <SafeAreaView className='flex-1'>
         <View className='flex-row justify-between items-center px-6 pb-4'>
-          <View className='flex-row items-center gap-2'>
-            <Text className='text-2xl font-bold'>Assistant</Text>
+          <View className='flex-row items-center gap-4'>
+            <Text className='text-2xl font-bold'>Second Brain OS</Text>
             {isConnecting && (
               <ActivityIndicator size="small" color="#000" />
             )}
             {socket && socket.readyState === WebSocket.OPEN ? (
-              <View className='w-2 h-2 rounded-full bg-green-500' />
+              <View className='w-3 h-3 rounded-full bg-green-500' />
             ) : (
-              <Pressable onPress={reconnect} className='px-2 py-1 bg-red-100 rounded'>
+              <Pressable onPress={reconnect} className='p-2 px-3 bg-red-100 rounded-full'>
                 <Text className='text-xs text-red-600'>Reconnect</Text>
               </Pressable>
             )}
@@ -226,13 +257,13 @@ export default function Home() {
                     className={`
                       p-4 py-2 rounded-3xl relative
                       ${isUser ? 'bg-zinc-800' : 'bg-zinc-100'}
-                      ${isStreaming ? 'border border-zinc-300' : ''}
+                      ${isStreaming ? 'border border-zinc-300 py-4' : ''}
                     `}
                   >
-                    {isStreaming && message.content === '...' ? (
+                    {isStreaming && message.content === '' ? (
                       <View className='flex-row items-center gap-1'>
-                        <ActivityIndicator size="small" color="#52525b" />
-                        <Text className='text-zinc-600'>Thinking...</Text>
+                        <ActivityIndicator size="small" color="#a1a1aa" />
+                        <Text className='text-zinc-400'>Thinking...</Text>
                       </View>
                     ) : (
                       <>
@@ -256,7 +287,7 @@ export default function Home() {
         <View className={'flex-row items-end gap-2 pt-4 px-6'}>
           <TextInput 
             placeholder={!socket || socket.readyState !== WebSocket.OPEN ? 'Connecting...' : 'Enter anything here...'}
-            className={`flex-1 border bg-zinc-100/90 border-transparent rounded-3xl min-h-12 max-h-24 placeholder:text-zinc-600 p-4 ${
+            className={`flex-1 border bg-zinc-100 border-transparent rounded-3xl min-h-12 max-h-24 placeholder:text-zinc-400 p-4 shadow-md ${
               (!socket || socket.readyState !== WebSocket.OPEN) ? 'opacity-50' : ''
             }`}
             onChangeText={setInput}
@@ -274,15 +305,11 @@ export default function Home() {
           <Pressable 
             onPress={handleSend}
             disabled={!input.trim() || !socket || socket.readyState !== WebSocket.OPEN}
-            className={`rounded-full p-3 ${
-              (!input.trim() || !socket || socket.readyState !== WebSocket.OPEN)
-                ? 'bg-zinc-100/50'
-                : 'bg-zinc-100/90 active:bg-zinc-200'
-            }`}
+            className={`rounded-full p-3 shadow-md bg-zinc-100 active:bg-zinc-200`}
           >
             <Feather 
-              name="send" 
-              size={20} 
+              name="arrow-up" 
+              size={24} 
               color={(!input.trim() || !socket || socket.readyState !== WebSocket.OPEN) ? '#a1a1aa' : 'black'} 
             />
           </Pressable>

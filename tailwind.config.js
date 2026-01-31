@@ -7,7 +7,10 @@ module.exports = {
     extend: {
       fontFamily: {
         'sanscode': ['GoogleSansCode-Regular', 'monospace'],
-      }
+      },
+      boxShadow: {
+        md: '0px 3px 10px rgba(0,0,0,0.2)',
+      },
     },
   },
   plugins: [],
