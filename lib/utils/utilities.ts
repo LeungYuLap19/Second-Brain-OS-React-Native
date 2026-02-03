@@ -1,31 +1,4 @@
-import { Message } from "@/app/(tabs)/chatroom";
-import { ChatHistory, Chatroom } from "@/app/history-modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export function convertToChatHistories(chatrooms: Chatroom[]): ChatHistory[] {
-  return chatrooms.map(chatroom => ({
-    id: chatroom.id,
-    topic: chatroom.topic,
-    lastMessage: getLastMessageContent(chatroom.messages),
-    updatedAt: chatroom.updatedAt
-  }));
-}
-
-function getLastMessageContent(messages: Message[]): string {
-  if (messages.length === 0) {
-    return "No messages yet";
-  }
-  
-  const lastMessage = messages[messages.length - 1];
-  
-  // Truncate long messages for display
-  const maxLength = 100;
-  if (lastMessage.content.length <= maxLength) {
-    return lastMessage.content;
-  }
-  
-  return lastMessage.content.substring(0, maxLength) + "...";
-}
 
 export const getMarkdownStyles = (isDark: boolean) => {
   const textColor = isDark ? '#ffffff' : '#111827';
@@ -133,8 +106,8 @@ export const getMarkdownStyles = (isDark: boolean) => {
   };
 };
 
-
-const CLIENT_ID_KEY = 'clientId';
+const CLIENT_ID_KEY = 'clientid';
+const CHATROOM_ID_KEY = 'chatroomid';
 
 export async function getClientId() {
   let id = await AsyncStorage.getItem(CLIENT_ID_KEY);
@@ -143,4 +116,23 @@ export async function getClientId() {
     await AsyncStorage.setItem(CLIENT_ID_KEY, id);
   }
   return id;
+}
+
+export async function getChatroomId() {
+  let id = await AsyncStorage.getItem(CHATROOM_ID_KEY);
+  if (!id) {
+    id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
+    await AsyncStorage.setItem(CHATROOM_ID_KEY, id);
+  }
+  return id;
+}
+
+export async function getNewChatroomId() {
+  await AsyncStorage.removeItem(CHATROOM_ID_KEY);
+  const id = await getChatroomId();
+  return id;
+}
+
+export async function setChatroomId(id: string) {
+  await AsyncStorage.setItem(CHATROOM_ID_KEY, id);
 }

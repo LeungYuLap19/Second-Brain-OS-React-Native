@@ -1,4 +1,6 @@
-import { getClientId, getMarkdownStyles } from '@/lib/utils/utilities';
+import { Chatroom } from '@/app/history-modal';
+import URLHelper from '@/lib/utils/url-helper';
+import { getClientId, getNewChatroomId, getChatroomId, getMarkdownStyles } from '@/lib/utils/utilities';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from 'expo-router';
@@ -11,7 +13,7 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  timestamp: Date;
+  timestamp: string;
 }
 
 export default function Home() {
@@ -20,7 +22,7 @@ export default function Home() {
       id: Date.now().toString(),
       role: 'assistant', 
       content: 'Hey! Here is Mochi 😸! How can I help you today?',
-      timestamp: new Date(),
+      timestamp: Date.now().toString(),
     }
   ]);
   const [input, setInput] = useState<string>('');
@@ -28,14 +30,21 @@ export default function Home() {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [currentAssistantMessageId, setCurrentAssistantMessageId] = useState<string | null>(null);
+  const [chatroomId, setChatroomId] = useState<string | null>(null);
+
   const currentAssistantMessageIdRef = useRef<string | null>(null);
-  
   const inputRef = useRef<TextInput>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
+  useEffect(() => {
+    initChatroom()
+  }, [])
+
   // WebSocket connection
   useEffect(() => {
-    connectWebSocket();
+    if (chatroomId) {
+      connectWebSocket(chatroomId);
+    }
     
     // Cleanup on unmount
     return () => {
@@ -43,13 +52,56 @@ export default function Home() {
         socket.close();
       }
     };
-  }, []);
+  }, [chatroomId]);
 
-  const connectWebSocket = async () => {
+  const retrieveChatroom = async (id: string) => {
+    try {
+      const response = await URLHelper.fetchFromApi(`/retrieve_chatroom/${id}`, {
+        method: 'GET'
+      });
+      const body = await response.json();
+      if (response.ok && body.success) {
+        const chatroom: Chatroom = body.data;
+        setMessages(prev => [...prev, ...chatroom.messages]);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  const initChatroom = async () => {
+    if (socket) {
+      socket.close();
+    }
+
+    const id = await getChatroomId();
+    setChatroomId(id);
+    setInput('');
+    setInputHeight(48);
+    await retrieveChatroom(id);
+  }
+
+  const createNewChatroom = async () => {
+    if (socket) {
+      socket.close();
+    }
+    const id = await getNewChatroomId();
+    setChatroomId(id);
+    setMessages([{
+      id: Date.now().toString(),
+      role: 'assistant', 
+      content: 'Hey! Here is Mochi 😸! How can I help you today?',
+      timestamp: Date.now().toString(),
+    }]);
+    setInput('');
+    setInputHeight(48);
+  }
+
+  const connectWebSocket = async (chatroomId: string) => {
     setIsConnecting(true);
-    const clientId = await getClientId();
+    const clientid = await getClientId();
 
-    const ws = new WebSocket(`ws://192.168.1.240:8000/ws/${clientId}`);
+    const ws = new WebSocket(URLHelper.getWebSocketUrl(clientid, chatroomId));
 
     ws.onopen = () => {
       console.log('WebSocket connected');
@@ -107,7 +159,7 @@ export default function Home() {
             id,
             role: 'assistant',
             content: '',
-            timestamp: new Date()
+            timestamp: Date.now().toString()
           }
         ]);
       }
@@ -144,7 +196,7 @@ export default function Home() {
       id: Date.now().toString(),
       role: 'user',
       content: input.trim(),
-      timestamp: new Date()
+      timestamp: Date.now().toString()
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -163,7 +215,7 @@ export default function Home() {
       id: placeholderId,
       role: 'assistant',
       content: '',
-      timestamp: new Date()
+      timestamp: Date.now().toString()
     }]);
   };
 
@@ -171,7 +223,9 @@ export default function Home() {
     if (socket) {
       socket.close();
     }
-    connectWebSocket();
+    if (chatroomId){
+      connectWebSocket(chatroomId);
+    }
   };
 
   // Auto-scroll to bottom when messages update
@@ -197,9 +251,9 @@ export default function Home() {
               <ActivityIndicator size="small" color="#000" />
             )}
             {socket && socket.readyState === WebSocket.OPEN ? (
-              <View className='w-3 h-3 rounded-full bg-green-500' />
+              <View className='w-3 h-3 rounded-full bg-green-500 animate-pulse' />
             ) : (
-              <Pressable onPress={reconnect} className='p-2 px-3 bg-red-100 rounded-full'>
+              <Pressable onPress={reconnect} className='p-2 px-3 bg-red-100 rounded-full animate-pulse'>
                 <Text className='text-xs text-red-600'>Reconnect</Text>
               </Pressable>
             )}
@@ -212,7 +266,10 @@ export default function Home() {
               </Pressable>
             </Link>
 
-            <Pressable className='rounded-full p-3 active:bg-zinc-200'>
+            <Pressable 
+              onPress={createNewChatroom}
+              className='rounded-full p-3 active:bg-zinc-200'
+            >
               <AntDesign name="plus-circle" size={20} color="black" />
             </Pressable>
           </View>
@@ -233,7 +290,7 @@ export default function Home() {
 
             return (
               <View
-                key={message.id}
+                key={message.timestamp}
                 className={`mb-6 flex ${isUser ? 'items-end' : 'items-start'}`}
               >
                 <View
@@ -271,8 +328,8 @@ export default function Home() {
                           {message.content}
                         </Markdown>
                         {isStreaming && (
-                          <View className='absolute -bottom-1 right-2'>
-                            <View className='w-2 h-2 rounded-full bg-zinc-400 animate-pulse' />
+                          <View className='absolute bottom-1 right-0'>
+                            <View className='w-3 h-3 rounded-full bg-zinc-400 animate-pulse' />
                           </View>
                         )}
                       </>

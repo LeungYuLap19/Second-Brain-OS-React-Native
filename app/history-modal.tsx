@@ -1,35 +1,91 @@
-import { View, Text, Modal, ScrollView, Pressable, Alert } from 'react-native'
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { Message } from './(tabs)/chatroom';
-import { convertToChatHistories } from '@/lib/utils/utilities';
-import { sampleChatrooms } from '@/constants/samples';
+import { getClientId, setChatroomId } from '@/lib/utils/utilities';
+import { router } from 'expo-router';
+import URLHelper from '@/lib/utils/url-helper';
 
 export interface ChatHistory {
   id: string,
-  topic: string,
-  lastMessage: string,
-  updatedAt: Date
+  topic?: string,
+  last_message: string,
+  updated_at: string
 }
 
 export interface Chatroom { 
   id: string,
-  topic: string,
+  client_id: string,
+  topic?: string,
+  created_at: string,
+  updated_at: string,
   messages: Message[],
-  startedAt: Date,
-  updatedAt: Date,
 }
 
 export default function HistoryModal() {
   const [histories, setHistories] = useState<ChatHistory[]>([]);
 
   useEffect(() => {
-    setHistories(convertToChatHistories(sampleChatrooms));
+    getChatHistory()
   }, []);
 
-  const clearAll = () => {
-    Alert.alert('Clear all conversations', 'Are you sure to erase all chat history?');
+  const getChatHistory = async () => {
+    const client_id = await getClientId();
+    try {
+      const response = await URLHelper.fetchFromApi(`/chat_history/${client_id}`, {
+        method: 'GET'
+      });
+      const body = await response.json();
+      if (response.ok && body.success) {
+        setHistories(body.data)
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
   }
+
+  const clearAll = async () => {
+    Alert.alert(
+      'Clear all conversations',
+      'Are you sure to erase all chat history?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const client_id = await getClientId();
+              
+              const response = await URLHelper.fetchFromApi(`/delete_all_chatrooms`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ client_id }),
+              });
+              
+              const body = await response.json();
+              
+              if (response.ok && body.success) {
+                Alert.alert('Success', 'All chat history cleared');
+                setHistories([]); 
+              } else {
+                Alert.alert('Error', body.detail || 'Failed to clear history');
+              }
+            } catch (error: any) {
+              console.log('Error clearing chat history:', error);
+              Alert.alert('Error', 'Failed to clear history. Please try again.');
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View className='flex-1 pt-12 px-6 gap-8'>
@@ -56,24 +112,28 @@ export default function HistoryModal() {
       >
         {
           histories.map((history) => (
-            <View 
+            <Pressable 
               key={history.id}
+              onPress={async () => {
+                await setChatroomId(history.id);
+                router.replace('/(tabs)/chatroom');
+              }}
               className='p-4 w-full rounded-3xl bg-zinc-200 flex-col mb-4'
             >
               <View className='flex-row justify-between items-center pr-2'>
-                <Text className='text-lg font-medium w-4/5 line-clamp-1'>{history.topic}</Text>
+                <Text className='text-lg font-medium w-4/5 line-clamp-1'>{history.topic ?? 'Topic'}</Text>
 
                 <Pressable>
                   <Entypo name="dots-three-horizontal" size={16} color="#52525b" />
                 </Pressable>
               </View>
               
-              <Text className='text-lg text-zinc-600 mb-4 line-clamp-2'>{history.lastMessage}</Text>
+              <Text className='text-lg text-zinc-600 mb-4 line-clamp-2'>{history.last_message}</Text>
               <View className='flex-row gap-2'>
                 <AntDesign name="field-time" size={16} color="#52525b" />
-                <Text className='text-sm text-zinc-600'>{history.updatedAt.toDateString()}</Text>
+                <Text className='text-sm text-zinc-600'>{history.updated_at}</Text>
               </View>
-            </View>
+            </Pressable>
           ))
         }
       </ScrollView>
