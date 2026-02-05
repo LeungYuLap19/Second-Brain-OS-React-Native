@@ -42,10 +42,17 @@ export default function RootLayout() {
           name="history-modal"
           options={{
             presentation: 'modal',
+            gestureEnabled: false,
           }}
         />
-        <Stack.Screen name='(auth)' />
-        <Stack.Screen name='(tabs)' />
+        <Stack.Screen 
+          name='(auth)' 
+          options={{ gestureEnabled: false, }}
+        />
+        <Stack.Screen 
+          name='(tabs)' 
+          options={{ gestureEnabled: false, }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     </View>

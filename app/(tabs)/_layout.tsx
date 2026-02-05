@@ -1,9 +1,16 @@
-import React from 'react'
-import { NativeTabs, Icon, Label } from 'expo-router/unstable-native-tabs';
+import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs';
+import React from 'react';
 
 export default function TabsLayout() {
   return (
-    <NativeTabs>
+    <NativeTabs
+      backgroundColor="#0a0a0a"
+      iconColor={{ default: '#71717a', selected: '#f4f4f5' }}
+      labelStyle={{
+        default: { color: '#71717a' },
+        selected: { color: '#f4f4f5' },
+      }}
+    >
       <NativeTabs.Trigger name="chatroom">
         <Label>Chatroom</Label>
         <Icon sf={{ default: 'bubble.left', selected: 'bubble.left.fill' }} />

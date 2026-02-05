@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function calendar() {
   return (
-    <SafeAreaView>
+    <SafeAreaView className='flex-1 bg-zinc-950'>
       <Text>calendar</Text>
     </SafeAreaView>
   )

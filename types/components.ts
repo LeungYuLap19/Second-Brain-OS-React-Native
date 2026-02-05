@@ -1,5 +1,6 @@
 // Chat component props
-import { Message } from './chat';
+import { RowMap } from 'react-native-swipe-list-view';
+import { ChatHistory, Message } from './chat';
 
 export interface ChatHeaderProps {
   isConnecting: boolean;
@@ -30,3 +31,15 @@ export interface MessageListProps {
 export interface SigninButtonProps {
   platform: 'Apple' | 'Google' | 'Email';
 }
+
+export interface HistoryItemProps {
+  currentId: string | null;
+  item: ChatHistory;
+}
+
+export interface HiddenDeleteProps {
+  rowMap: RowMap<ChatHistory>;
+  item: ChatHistory;
+  handleDeleteChatroom: (chatroomId: string) => Promise<void>;
+}
+

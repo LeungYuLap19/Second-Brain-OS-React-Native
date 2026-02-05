@@ -12,12 +12,12 @@ export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightCh
       <TextInput
         ref={inputRef}
         placeholder={isConnected ? 'Enter anything here...' : 'Connecting...'}
-        className={`flex-1 border bg-zinc-100 border-transparent rounded-3xl min-h-12 max-h-24 placeholder:text-zinc-400 p-4 shadow-md ${
+        className={`flex-1 border bg-zinc-900 border-zinc-800 text-zinc-100 rounded-3xl min-h-12 max-h-24 p-4 ${
           !isConnected ? 'opacity-50' : ''
         }`}
         value={value}
         onChangeText={onChangeText}
-        returnKeyType="send"
+        returnKeyType="default"
         multiline
         editable={isConnected}
         onSubmitEditing={onSend}
@@ -27,12 +27,12 @@ export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightCh
       <Pressable
         onPress={onSend}
         disabled={!canSend}
-        className="rounded-full p-3 shadow-md bg-zinc-100 active:bg-zinc-200"
+        className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800"
       >
         <Feather
           name="arrow-up"
           size={24}
-          color={canSend ? 'black' : '#a1a1aa'}
+          color={canSend ? '#f4f4f5' : '#52525b'}
         />
       </Pressable>
     </View>

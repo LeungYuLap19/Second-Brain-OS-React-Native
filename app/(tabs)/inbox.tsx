@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function inbox() {
   return (
-    <SafeAreaView>
+    <SafeAreaView className='flex-1 bg-zinc-950'>
       <Text>inbox</Text>
     </SafeAreaView>
   )

@@ -1,7 +1,7 @@
 import { getNewChatroomId } from '@/lib/utils/utilities';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { ActivityIndicator, View, Text } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 export default function ChatroomIndex() {
   useEffect(() => {
@@ -13,9 +13,9 @@ export default function ChatroomIndex() {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator size="large" />
-      <Text>Creating new chatroom...</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#09090b' }}>
+      <ActivityIndicator size="large" color="#e5e7eb" />
+      <Text style={{ color: '#e5e7eb' }}>Creating new chatroom...</Text>
     </View>
   );
 }

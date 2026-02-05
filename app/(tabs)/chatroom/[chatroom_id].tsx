@@ -55,18 +55,17 @@ export default function ChatroomPage() {
   };
 
   const handleNewChatroom = async () => {
-    if (messages.length <= 1) return;
     const id = await getNewChatroomId();
     router.push(`/(tabs)/chatroom/${id}`);
   };
 
   return (
     <KeyboardAvoidingView
-      className="h-screen-safe-offset-6"
+      className="h-screen-safe-offset-6 bg-zinc-950"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? -20 : 0}
     >
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1 bg-zinc-950">
         <ChatHeader
           isConnecting={isConnecting}
           isConnected={isConnected}

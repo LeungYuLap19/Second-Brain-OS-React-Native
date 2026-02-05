@@ -15,7 +15,7 @@ export function MessageList({ messages, currentAssistantMessageId, inputHeight }
   return (
     <ScrollView
       ref={scrollViewRef}
-      className="flex-grow w-full px-6"
+      className="flex-grow w-full px-6 bg-zinc-950"
       onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
       style={{ marginBottom: -inputHeight * 4 }}
       contentContainerStyle={{ paddingBottom: inputHeight * 4 }}
