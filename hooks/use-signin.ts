@@ -1,27 +1,10 @@
 // hooks/useSignIn.ts
 import { appleSignIn } from '@/lib/utils/appleAuth';
 import { googleSignIn } from '@/lib/utils/googleAuth';
-import { useState, useCallback } from 'react';
-import { Alert } from 'react-native';
+import { PlatformType, UseSignInOptions, UseSignInReturn } from '@/types/auth';
 import * as AuthSession from 'expo-auth-session';
-import { Redirect } from 'expo-router';
-
-type PlatformType = 'Apple' | 'Google' | 'Email';
-
-interface UseSignInReturn {
-  loading: boolean;
-  signIn: (
-    platform: PlatformType,
-    redirectUri?: string,
-    promptAsync?: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>
-  ) => Promise<void>;
-}
-
-interface UseSignInOptions {
-  onSuccess?: (userData: any) => void;
-  onError?: (error: string) => void;
-  showAlerts?: boolean;
-}
+import { useCallback, useState } from 'react';
+import { Alert } from 'react-native';
 
 export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
   const [loading, setLoading] = useState(false);

@@ -1,26 +1,10 @@
-import { View, Text, ScrollView, Pressable, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { API_URL } from '@/lib/utils/server-uri';
+import { getClientId, getNewChatroomId, setChatroomId } from '@/lib/utils/utilities';
+import { ChatHistory } from '@/types/chat';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import { Message } from './(tabs)/chatroom';
-import { getClientId, setChatroomId } from '@/lib/utils/utilities';
 import { router } from 'expo-router';
-import URLHelper from '@/lib/utils/url-helper';
-
-export interface ChatHistory {
-  id: string,
-  topic?: string,
-  last_message: string,
-  updated_at: string
-}
-
-export interface Chatroom { 
-  id: string,
-  client_id: string,
-  topic?: string,
-  created_at: string,
-  updated_at: string,
-  messages: Message[],
-}
+import React, { useEffect, useState } from 'react';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function HistoryModal() {
   const [histories, setHistories] = useState<ChatHistory[]>([]);
@@ -32,7 +16,7 @@ export default function HistoryModal() {
   const getChatHistory = async () => {
     const client_id = await getClientId();
     try {
-      const response = await URLHelper.fetchFromApi(`/chat_history/${client_id}`, {
+      const response = await fetch(`${API_URL}/chat_history/${client_id}`, {
         method: 'GET'
       });
       const body = await response.json();
@@ -60,7 +44,7 @@ export default function HistoryModal() {
             try {
               const client_id = await getClientId();
               
-              const response = await URLHelper.fetchFromApi(`/delete_all_chatrooms`, {
+              const response = await fetch(`${API_URL}/delete_all_chatrooms`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
@@ -72,7 +56,10 @@ export default function HistoryModal() {
               
               if (response.ok && body.success) {
                 Alert.alert('Success', 'All chat history cleared');
-                setHistories([]); 
+                setHistories([]);
+                
+                const id = await getNewChatroomId();
+                router.replace(`/(tabs)/chatroom/${id}`);
               } else {
                 Alert.alert('Error', body.detail || 'Failed to clear history');
               }
@@ -116,12 +103,12 @@ export default function HistoryModal() {
               key={history.id}
               onPress={async () => {
                 await setChatroomId(history.id);
-                router.replace('/(tabs)/chatroom');
+                router.replace(`/(tabs)/chatroom/${history.id}`);
               }}
               className='p-4 w-full rounded-3xl bg-zinc-200 flex-col mb-4'
             >
               <View className='flex-row justify-between items-center pr-2'>
-                <Text className='text-lg font-medium w-4/5 line-clamp-1'>{history.topic ?? 'Topic'}</Text>
+                <Text className='text-lg font-medium w-4/5 line-clamp-1'>{history.first_message}</Text>
 
                 <Pressable>
                   <Entypo name="dots-three-horizontal" size={16} color="#52525b" />

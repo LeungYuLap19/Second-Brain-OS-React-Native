@@ -63,7 +63,8 @@ Second-Brain-OS-Mobile
 │  │  ├─ _layout.tsx
 │  │  ├─ calendar.tsx
 │  │  ├─ chatroom
-│  │  │  └─ index.tsx
+│  │  │  ├─ [chatroom_id].tsx
+│  │  │  └─ _layout.tsx
 │  │  ├─ files.tsx
 │  │  └─ inbox.tsx
 │  ├─ +not-found.tsx
@@ -104,7 +105,6 @@ Second-Brain-OS-Mobile
 │     ├─ icon-symbol.tsx
 │     └─ typewriter.tsx
 ├─ constants
-│  ├─ samples.ts
 │  └─ theme.ts
 ├─ eslint.config.js
 ├─ global.css
@@ -117,6 +117,7 @@ Second-Brain-OS-Mobile
 │  └─ utils
 │     ├─ appleAuth.ts
 │     ├─ googleAuth.ts
+│     ├─ server-uri.ts
 │     └─ utilities.ts
 ├─ metro.config.js
 ├─ nativewind-env.d.ts

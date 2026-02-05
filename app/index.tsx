@@ -35,5 +35,5 @@ export default function Index() {
     return <Redirect href="/(auth)" />;
   }
 
-  return <Redirect href="/(tabs)/chatroom" />;
+  return <Redirect href="/(tabs)/chatroom/" />;
 }

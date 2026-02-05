@@ -1,21 +1,16 @@
-import { Alert, Pressable, Text } from 'react-native'
-import React, { useMemo } from 'react'
-import { Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSignIn } from '@/hooks/use-signin';
-import * as AuthSession from 'expo-auth-session';
 import { clientIds, googleDiscovery } from '@/lib/utils/googleAuth';
+import { PlatformType, SigninButtonProps } from '@/types';
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import * as AuthSession from 'expo-auth-session';
 import { router } from 'expo-router';
-
-type PlatformType = 'Apple' | 'Google' | 'Email';
-
-interface SigninButtonProps {
-  platform: PlatformType;
-}
+import React, { useMemo } from 'react';
+import { Alert, Pressable, Text } from 'react-native';
 
 export default function SigninButton({ platform }: SigninButtonProps) {
   const { loading, signIn } = useSignIn({
     onSuccess: () => {
-      router.replace('/(tabs)/chatroom');
+      router.replace('/(tabs)/chatroom/');
     }
   });
 

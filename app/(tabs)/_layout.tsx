@@ -4,7 +4,7 @@ import { NativeTabs, Icon, Label } from 'expo-router/unstable-native-tabs';
 export default function TabsLayout() {
   return (
     <NativeTabs>
-      <NativeTabs.Trigger name="chatroom/index">
+      <NativeTabs.Trigger name="chatroom">
         <Label>Chatroom</Label>
         <Icon sf={{ default: 'bubble.left', selected: 'bubble.left.fill' }} />
       </NativeTabs.Trigger>
