@@ -17,7 +17,7 @@ export function MessageItem({ message, isStreaming }: MessageItemProps) {
         {/* Avatar */}
         <View
           className={`w-8 h-8 rounded-full items-center justify-center flex-shrink-0 ${
-            isUser ? 'bg-zinc-800' : 'bg-zinc-700'
+            isUser ? 'bg-zinc-800/70' : 'bg-zinc-900/70'
           }`}
         >
           <Text className="text-xs text-zinc-100">
@@ -28,8 +28,8 @@ export function MessageItem({ message, isStreaming }: MessageItemProps) {
         {/* Message Bubble */}
         <View
           className={`p-4 py-2 rounded-3xl relative ${
-            isUser ? 'bg-zinc-800' : 'bg-zinc-900'
-          } ${isStreaming ? 'border border-zinc-700 py-4' : ''}`}
+            isUser ? 'bg-zinc-800/70 border border-zinc-700' : 'bg-zinc-900/70 border border-zinc-800'
+          } ${isStreaming ? 'animate-pulse' : ''}`}
         >
           {isStreaming && message.content === '' ? (
             <View className="flex-row items-center gap-1">

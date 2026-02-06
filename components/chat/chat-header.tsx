@@ -4,18 +4,19 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link, router } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import HeaderView from '../ui/header-view';
+import { Feather } from '@expo/vector-icons';
 
 export function ChatHeader({ isConnecting, isConnected, onReconnect, onNewChatroom }: ChatHeaderProps) {
   // temp signout
-
   const handleSignout = async () => {
     await appleSignOut();
     router.replace('/(auth)')
   }
   
   return (
-    <View className="flex-row justify-between items-center px-6 pb-4 bg-zinc-950">
-      <View className="flex-row items-center gap-4">
+    <HeaderView className='justify-between bg-zinc-950 pt-0'>
+      <View className="flex-row items-center gap-3">
         <Text 
           onPress={handleSignout}
           className="text-2xl font-bold text-zinc-100">Second Brain OS</Text>
@@ -38,15 +39,15 @@ export function ChatHeader({ isConnecting, isConnected, onReconnect, onNewChatro
 
       <View className="flex-row items-center gap-2">
         <Link href="/history-modal" asChild>
-          <Pressable className="rounded-full p-3 active:bg-zinc-800">
-            <AntDesign name="history" size={20} color="#e5e7eb" />
+          <Pressable className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800">
+            <AntDesign name="history" size={18} color="#e5e7eb" />
           </Pressable>
         </Link>
 
-        <Pressable onPress={onNewChatroom} className="rounded-full p-3 active:bg-zinc-800">
-          <AntDesign name="plus-circle" size={20} color="#e5e7eb" />
+        <Pressable onPress={onNewChatroom} className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800">
+          <Feather name="plus" size={18} color="#e4e4e7" />
         </Pressable>
       </View>
-    </View>
+    </HeaderView>
   );
 }

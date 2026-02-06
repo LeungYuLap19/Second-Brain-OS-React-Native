@@ -40,10 +40,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="history-modal"
-          options={{
-            presentation: 'modal',
-            gestureEnabled: false,
-          }}
+          options={{ presentation: 'modal', }}
         />
         <Stack.Screen 
           name='(auth)' 

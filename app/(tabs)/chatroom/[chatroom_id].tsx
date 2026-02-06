@@ -26,7 +26,6 @@ export default function ChatroomPage() {
     addMessages,
   } = useChatroomWebSocket(chatroom_id);
 
-  // Fetch existing chatroom messages
   const retrieveChatroom = async (id: string) => {
     try {
       const response = await fetch(`${API_URL}/retrieve_chatroom/${id}`, { method: 'GET' });
@@ -41,7 +40,6 @@ export default function ChatroomPage() {
     }
   };
 
-  // Load chatroom messages on mount
   useEffect(() => {
     if (chatroom_id) {
       retrieveChatroom(chatroom_id);

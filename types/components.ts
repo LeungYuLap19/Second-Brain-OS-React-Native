@@ -1,4 +1,5 @@
 // Chat component props
+import type { ReactNode } from 'react';
 import { RowMap } from 'react-native-swipe-list-view';
 import { ChatHistory, Message } from './chat';
 
@@ -43,3 +44,12 @@ export interface HiddenDeleteProps {
   handleDeleteChatroom: (chatroomId: string) => Promise<void>;
 }
 
+export interface HistoryHeaderProps {
+  clearAll: () => Promise<void>;
+  handleNewChatroom: () => Promise<void>;
+}
+
+export interface HeaderViewProps {
+  className?: string;
+  children?: ReactNode;
+}

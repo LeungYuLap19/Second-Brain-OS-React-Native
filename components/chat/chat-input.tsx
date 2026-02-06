@@ -31,7 +31,7 @@ export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightCh
       >
         <Feather
           name="arrow-up"
-          size={24}
+          size={22}
           color={canSend ? '#f4f4f5' : '#52525b'}
         />
       </Pressable>

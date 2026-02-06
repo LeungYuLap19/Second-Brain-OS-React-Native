@@ -12,7 +12,9 @@ export default function HistoryItem({ currentId, item }: HistoryItemProps) {
         await setChatroomId(item.id);
         router.replace(`/(tabs)/chatroom/${item.id}`);
       }}
-      className={`p-4 w-full rounded-3xl flex-col mb-4 bg-zinc-950 ${currentId == item.id && 'bg-zinc-900'}`}
+      className={`p-4 w-full rounded-3xl flex-col mb-4 border ${
+        currentId === item.id ? 'bg-zinc-900 border-zinc-700' : 'bg-zinc-950 border-zinc-800'
+      }`}
       >
       <View className='flex-row justify-between items-center pr-2'>
         <Text className='text-lg font-medium w-4/5 line-clamp-1 text-zinc-100'>{item.first_message}</Text>

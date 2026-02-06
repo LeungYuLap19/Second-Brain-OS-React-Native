@@ -1,29 +1,15 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useRef } from 'react'
+import { View, Text } from 'react-native'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { VideoView, useVideoPlayer } from 'expo-video'
 import TypeWriter from '@/components/ui/typewriter';
-import SigninButton from '@/components/siginin-button';
+import SigninButton from '@/components/ui/siginin-button';
 import { Platform } from 'react-native';
+import AnimatedBackground from '@/components/ui/animated-background';
 
 export default function Auth() {
-  const videoUri = useRef(require('@/assets/videos/auth-bg.mp4')).current;
-
-  const player = useVideoPlayer(videoUri, (player) => {
-    player.loop = true
-    player.muted = true
-    player.play()
-  });
-
   return (
     <SafeAreaView className="flex-1 bg-[#0a0a0a]">
-      <VideoView
-        player={player}
-        style={StyleSheet.absoluteFillObject}
-        contentFit="cover"
-        fullscreenOptions={{enable: false}}
-        nativeControls={false}
-      />
+      <AnimatedBackground />
       
       <View className="absolute inset-0 bg-black/50" />
       
