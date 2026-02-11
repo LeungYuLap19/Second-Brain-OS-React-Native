@@ -36,7 +36,7 @@ export default function ChatroomPage() {
         addMessages(chatroom.messages);
       }
     } catch (error) {
-      console.error('Error retrieving chatroom:', error);
+      // console.error('Error retrieving chatroom:', error);
     }
   };
 

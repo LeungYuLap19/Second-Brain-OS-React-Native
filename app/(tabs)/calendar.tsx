@@ -1,8 +1,8 @@
 import MonthView from '@/components/calendar/month-view';
-import ViewToggle from '@/components/calendar/view-toggle';
 import WeekView from '@/components/calendar/week-view';
 import HeaderView from '@/components/ui/header-view';
-import { Activity, formatDateKey } from '@/lib/utils/date-utils';
+import { formatDateKey } from '@/lib/utils/date-utils';
+import type { Activity } from '@/types';
 import { Feather } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -26,7 +26,6 @@ const activityMap: Record<string, Activity[]> = {
 };
 
 export default function CalendarPage() {
-  const [viewMode, setViewMode] = useState<'week' | 'month'>('month');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const selectedKey = useMemo(() => formatDateKey(selectedDate), [selectedDate]);
@@ -34,9 +33,6 @@ export default function CalendarPage() {
 
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
-    if (viewMode === 'month') {
-      setViewMode('week');
-    }
   };
 
   return (
@@ -47,28 +43,24 @@ export default function CalendarPage() {
           <Text className="text-xs text-zinc-400">{selectedCount} activities today</Text>
         </View>
         <View className='flex-row items-center gap-2'>
-          <ViewToggle value={viewMode} onChange={setViewMode} />
           <Pressable className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800">
             <Feather name="plus" size={18} color="#e4e4e7" />
           </Pressable>
         </View>
       </HeaderView>
 
-      <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 32 }}>
-        {viewMode === 'month' ? (
-          <MonthView
-            monthDate={selectedDate}
-            selectedDate={selectedDate}
-            activities={activityMap}
-            onSelectDate={handleSelectDate}
+      <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 80, gap: 16 }}>
+        <MonthView
+          monthDate={selectedDate}
+          selectedDate={selectedDate}
+          activities={activityMap}
+          onSelectDate={handleSelectDate}
+        />
+        <WeekView
+          selectedDate={selectedDate}
+          activities={activityMap}
+          onSelectDate={handleSelectDate}
           />
-        ) : (
-          <WeekView
-            selectedDate={selectedDate}
-            activities={activityMap}
-            onSelectDate={handleSelectDate}
-          />
-        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,12 +1,6 @@
-import { View, Text, TextProps } from 'react-native'
-import React, { useEffect, useState, useRef } from 'react'
-
-interface TypewriterTextProps extends TextProps {
-  text: string | string[]; 
-  speed?: number;
-  cursorChar?: string;
-  className?: string;
-}
+import type { TypewriterTextProps } from '@/types'
+import { Text } from 'react-native'
+import React, { useEffect, useState } from 'react'
 
 export default function TypeWriter({
   text,

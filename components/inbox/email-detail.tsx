@@ -1,17 +1,7 @@
+import type { EmailDetailData, EmailDetailProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { EmailListItemData } from './email-list-item';
-
-export interface EmailDetailData extends EmailListItemData {
-  body: string;
-  to: string[];
-  cc?: string[];
-}
-
-interface EmailDetailProps {
-  email: EmailDetailData;
-}
 
 export default function EmailDetail({ email }: EmailDetailProps) {
   return (

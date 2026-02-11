@@ -95,7 +95,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
       };
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
+        // console.error('WebSocket error:', error);
         setIsConnecting(false);
       };
 
@@ -118,7 +118,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
         }
       };
     } catch (error) {
-      console.error('Failed to connect WebSocket:', error);
+      // console.error('Failed to connect WebSocket:', error);
       setIsConnecting(false);
     }
   };

@@ -1,12 +1,7 @@
+import type { ReplyBoxProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Pressable, TextInput, View } from 'react-native';
-
-interface ReplyBoxProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  onSend: () => void;
-}
 
 export default function ReplyBox({ value, onChangeText, onSend }: ReplyBoxProps) {
   const canSend = value.trim().length > 0;

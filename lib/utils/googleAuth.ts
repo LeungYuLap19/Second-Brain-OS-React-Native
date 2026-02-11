@@ -1,19 +1,9 @@
+import type { GoogleAuthResult } from '@/types';
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
 
 WebBrowser.maybeCompleteAuthSession();
-
-export type GoogleAuthResult = {
-  success: boolean;
-  user?: {
-    id: string;
-    email: string;
-    name: string;
-  };
-  error?: string;
-  accessToken?: string;
-};
 
 // Store keys
 const GOOGLE_AUTH_KEYS = {

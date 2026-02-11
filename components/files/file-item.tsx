@@ -1,16 +1,8 @@
-import FileStatusPill, { FileStatus } from '@/components/files/file-status-pill';
+import FileStatusPill from '@/components/files/file-status-pill';
+import type { FileItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-
-interface FileItemProps {
-  name: string;
-  size: string;
-  type: string;
-  status: FileStatus;
-  progress?: number;
-  updatedAt: string;
-}
 
 const typeIconMap: Record<string, keyof typeof Feather.glyphMap> = {
   pdf: 'file-text',
@@ -24,10 +16,8 @@ const typeIconMap: Record<string, keyof typeof Feather.glyphMap> = {
   zip: 'archive',
 };
 
-export default function FileItem({ name, size, type, status, progress = 0, updatedAt }: FileItemProps) {
+export default function FileItem({ name, size, type, status, updatedAt }: FileItemProps) {
   const iconName = typeIconMap[type] ?? 'file';
-  const showProgress = status === 'uploading' || status === 'processing';
-  const progressPercent = Math.min(100, Math.max(0, Math.round(progress * 100)));
 
   return (
     <Pressable className="p-4 rounded-3xl bg-zinc-900/70 border border-zinc-800 mb-4 active:bg-zinc-900">
@@ -53,22 +43,6 @@ export default function FileItem({ name, size, type, status, progress = 0, updat
           </View>
         </View>
       </View>
-
-      {showProgress && (
-        <View className="mt-4">
-          <View className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
-            <View
-              className={`h-full ${status === 'processing' ? 'bg-amber-400' : 'bg-sky-400'}`}
-              style={{ width: `${progressPercent}%` }}
-            />
-          </View>
-          <Text className="text-xs text-zinc-400 mt-2">
-            {status === 'processing'
-              ? 'Indexing into vector DB...'
-              : `${progressPercent}% uploaded`}
-          </Text>
-        </View>
-      )}
     </Pressable>
   );
 }

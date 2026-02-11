@@ -1,23 +1,7 @@
+import type { EmailListItemData, EmailListItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-
-export interface EmailListItemData {
-  id: string;
-  senderName: string;
-  senderEmail: string;
-  subject: string;
-  preview: string;
-  time: string;
-  unread: boolean;
-  tags?: string[];
-}
-
-interface EmailListItemProps {
-  email: EmailListItemData;
-  isSelected: boolean;
-  onPress: (id: string) => void;
-}
 
 const tagStyles: Record<string, { bg: string; text: string }> = {
   Work: { bg: 'bg-sky-500/15', text: 'text-sky-200' },

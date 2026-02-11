@@ -1,18 +1,7 @@
-// utils/auth/appleAuth.ts
+import type { AppleAuthResult } from '@/types';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-
-export type AppleAuthResult = {
-  success: boolean;
-  user?: {
-    id: string;
-    email?: string;
-    fullName?: AppleAuthentication.AppleAuthenticationFullName | undefined;
-  };
-  error?: string;
-  token?: string | null;
-};
 
 // Store keys
 const APPLE_AUTH_KEYS = {

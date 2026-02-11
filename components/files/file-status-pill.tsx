@@ -1,11 +1,6 @@
+import type { FileStatus, FileStatusPillProps } from '@/types';
 import React from 'react';
 import { Text, View } from 'react-native';
-
-export type FileStatus = 'uploading' | 'processing' | 'ready';
-
-interface FileStatusPillProps {
-  status: FileStatus;
-}
 
 const statusStyles: Record<FileStatus, { label: string; container: string; text: string }> = {
   uploading: {

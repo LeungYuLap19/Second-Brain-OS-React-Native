@@ -20,7 +20,6 @@ const files = [
     type: 'txt',
     size: '12 KB',
     status: 'processing',
-    progress: 0.46,
     updatedAt: 'just now',
   },
   {
@@ -29,7 +28,6 @@ const files = [
     type: 'zip',
     size: '18.2 MB',
     status: 'uploading',
-    progress: 0.72,
     updatedAt: '5s ago',
   },
   {
@@ -79,7 +77,6 @@ export default function FilesPage() {
             size={file.size}
             type={file.type}
             status={file.status as 'uploading' | 'processing' | 'ready'}
-            progress={file.progress}
             updatedAt={file.updatedAt}
           />
         ))}

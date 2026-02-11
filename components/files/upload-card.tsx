@@ -1,10 +1,7 @@
+import type { UploadCardProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-
-interface UploadCardProps {
-  onUpload?: () => void;
-}
 
 const fileTypes = ['PDF', 'DOCX', 'TXT', 'IMAGE'];
 

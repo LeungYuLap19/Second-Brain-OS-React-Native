@@ -1,9 +1,4 @@
-export interface Activity {
-  id: string;
-  title: string;
-  time: string;
-  tag?: string;
-}
+import type { MonthDay, MonthMatrix } from '@/types';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -36,12 +31,7 @@ export const getWeekDays = (date: Date) => {
   });
 };
 
-export interface MonthDay {
-  date: Date;
-  isCurrentMonth: boolean;
-}
-
-export const getMonthMatrix = (date: Date) => {
+export const getMonthMatrix = (date: Date): MonthMatrix => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const firstOfMonth = new Date(year, month, 1);
@@ -58,7 +48,12 @@ export const getMonthMatrix = (date: Date) => {
       });
       cursor.setDate(cursor.getDate() + 1);
     }
-    weeks.push(week);
+    const weekHasCurrentMonthDay = week.some((day) => day.isCurrentMonth);
+    if (weekHasCurrentMonthDay) {
+      weeks.push(week);
+    } else if (weeks.length > 0) {
+      break;
+    }
   }
 
   return weeks;
