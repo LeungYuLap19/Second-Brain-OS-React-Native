@@ -1,4 +1,6 @@
+import { monthNames } from '@/constants/calendar';
 import usePagerLoop from '@/hooks/use-pager-loop';
+import { getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/utilities';
 import type { MonthViewProps } from '@/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
@@ -6,44 +8,31 @@ import PagerView from 'react-native-pager-view';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import MonthBlock from './month-block';
 
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-const shiftDatebyMonth = (date: Date, delta: 1 | -1) => {
-  return new Date(date.getFullYear(), date.getMonth() + delta, 1)
-};
-
 export default function MonthView({ monthDate, selectedDate, activities, onSelectDate }: MonthViewProps) {
+  const pages = useMemo(() => {
+    return [
+      { key: 'prev-month', days: shiftDateByMonth(selectedDate, -1) },
+      { key: 'current-month', days: selectedDate },
+      { key: 'next-month', days: shiftDateByMonth(selectedDate, 1) },
+    ];
+  }, [selectedDate]);
+  
   const monthActivityCount = useMemo(() => {
-    const targetMonth = monthDate.getMonth();
-    const targetYear = monthDate.getFullYear();
-    return Object.entries(activities).reduce((acc, [key, list]) => {
-      const date = new Date(key);
-      if (date.getMonth() === targetMonth && date.getFullYear() === targetYear) {
-        return acc + (list?.length ?? 0);
-      }
-      return acc;
-    }, 0);
+    return getMonthActivityCount(activities, monthDate)
   }, [activities, monthDate]);
+  const title = `${monthNames[monthDate.getMonth()]} ${monthDate.getFullYear()}`;
+  const infoLabel = `${monthActivityCount} ${monthActivityCount === 1 ? 'activity' : 'activities'} this month`;
 
   const [expand, setExpand] = useState(false);
-  const firstOfNext = useMemo(() => shiftDatebyMonth(selectedDate, 1), [selectedDate]);
-  const firstOfPrev = useMemo(() => shiftDatebyMonth(selectedDate, -1), [selectedDate]);
-  const pages = [
-    { key: 'prev-month', days: firstOfPrev },
-    { key: 'current-month', days: selectedDate },
-    { key: 'next-month', days: firstOfNext },
-  ]
-  
   const [pageHeights, setPageHeights] = useState<Record<number, number>>({});
-  const pagerHeight = pageHeights[1];
+  const pagerHeight = pageHeights[1] ?? 0;
   const animatedHeight = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     height: animatedHeight.value,
   }));
 
   useEffect(() => {
-    const nextHeight = expand ? (pagerHeight ?? 0) : 0;
-    animatedHeight.value = withSpring(nextHeight, { duration: 200 });
+    animatedHeight.value = withSpring(expand ? pagerHeight : 0, { duration: 200 });
   }, [expand, pagerHeight, animatedHeight]);
 
   const onPageLayout = (event: LayoutChangeEvent, pageIndex: number) => {
@@ -56,7 +45,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
 
   const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
-    getShiftedValue: shiftDatebyMonth,
+    getShiftedValue: shiftDateByMonth,
     onChange: onSelectDate,
   });
 
@@ -67,10 +56,10 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
         className="flex-row items-center justify-between p-4 active:bg-zinc-800 rounded-t-3xl"
       >
         <Text className="text-lg font-semibold text-zinc-100">
-          {`${monthNames[monthDate.getMonth()]} ${monthDate.getFullYear()}`}
+          {title}
         </Text>
         <Text className="text-xs text-zinc-400">
-          {`${monthActivityCount} ${monthActivityCount === 1 ? 'activity' : 'activities'} this month`}
+          {infoLabel}
         </Text>
       </Pressable>
       
@@ -89,11 +78,12 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
                 onLayout={event => onPageLayout(event, index)}
                 style={{ alignSelf: 'flex-start' }}
               >
-                <MonthBlock 
+                <MonthBlock
                   monthDate={page.days}
                   selectedDate={page.days}
                   activities={activities}
                   onSelectDate={onSelectDate}
+                  setExpand={setExpand}
                 />
               </View>
             </View>

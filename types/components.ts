@@ -1,11 +1,11 @@
 // Chat component props
 import type { ReactNode } from 'react';
+import { TextProps } from 'react-native';
 import { RowMap } from 'react-native-swipe-list-view';
+import { Activity } from './calendar';
 import { ChatHistory, Message } from './chat';
-import { Activity, MonthMatrix } from './calendar';
 import { FileStatus } from './files';
 import { EmailDetailData, EmailListItemData } from './inbox';
-import { TextProps } from 'react-native';
 
 export interface ChatHeaderProps {
   isConnecting: boolean;
@@ -42,10 +42,12 @@ export interface HistoryItemProps {
   item: ChatHistory;
 }
 
-export interface HiddenDeleteProps {
-  rowMap: RowMap<ChatHistory>;
-  item: ChatHistory;
-  handleDeleteChatroom: (chatroomId: string) => Promise<void>;
+export interface HiddenDeleteProps<T extends { id: string }> {
+  rowMap: RowMap<T>;
+  item: T;
+  onDelete: (id: string) => void | Promise<void>;
+  containerClassName?: string;
+  buttonClassName?: string;
 }
 
 export interface HistoryHeaderProps {
@@ -76,6 +78,7 @@ export interface MonthBlockProps {
   selectedDate: Date;
   activities: Record<string, Activity[]>;
   onSelectDate: (date: Date) => void;
+  setExpand: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MonthViewProps {
@@ -88,6 +91,12 @@ export interface MonthViewProps {
 export interface TodaysActivitiesProps {
   selectedDate: Date;
   dayActivities: Activity[];
+}
+
+export interface ActivityItemProps {
+  activity: Activity;
+  isSelected: boolean;
+  onToggle: (id: string) => void;
 }
 
 export interface FileStatusPillProps {

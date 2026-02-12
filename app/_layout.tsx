@@ -43,6 +43,10 @@ export default function RootLayout() {
           options={{ presentation: 'modal', }}
         />
         <Stack.Screen 
+          name='activity-modal'
+          options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen 
           name='(auth)' 
           options={{ gestureEnabled: false, }}
         />

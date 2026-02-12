@@ -1,36 +1,33 @@
 import usePagerLoop from '@/hooks/use-pager-loop';
 import { formatDateKey, getWeekDays } from '@/lib/utils/date-utils';
+import { countWeekActivities, formatRangeLabel, shiftDateByDays } from '@/lib/utils/utilities';
 import type { WeekViewProps } from '@/types';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import TodaysActivities from './todays-activities';
+import TodaysActivities from '../today/todays-activities';
 import WeekRow from './week-row';
 
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-const shiftDateByDays = (date: Date, delta: number) => {
-  const next = new Date(date);
-  next.setDate(date.getDate() + delta);
-  return next;
-};
-
 export default function WeekView({ selectedDate, activities, onSelectDate }: WeekViewProps) {
-  const currentWeekDays = getWeekDays(selectedDate);
-  const prevWeekDays = useMemo(() => getWeekDays(shiftDateByDays(selectedDate, -7)), [selectedDate]);
-  const nextWeekDays = useMemo(() => getWeekDays(shiftDateByDays(selectedDate, 7)), [selectedDate]);
-  const pages = [
-    { key: 'prev-week', days: prevWeekDays },
-    { key: 'current-week', days: currentWeekDays },
-    { key: 'next-week', days: nextWeekDays },
-  ];
+  const pages = useMemo(() => {
+    return [
+      { key: 'prev-week', days: getWeekDays(shiftDateByDays(selectedDate, -7)) },
+      { key: 'current-week', days: getWeekDays(selectedDate) },
+      { key: 'next-week', days: getWeekDays(shiftDateByDays(selectedDate, 7)) },
+    ];
+  }, [selectedDate]);
+
+  const currentWeekDays = pages[1].days;
+  const numOfActivities = useMemo(
+    () => countWeekActivities(currentWeekDays, activities),
+    [currentWeekDays, activities]
+  );
+  const weekRangeLabel = useMemo(() => formatRangeLabel(currentWeekDays), [currentWeekDays]);
+  const infoLabel = `${numOfActivities} ${numOfActivities === 1 ? 'activity' : 'activities'} this week`;
 
   const selectedKey = formatDateKey(selectedDate);
-  const dayActivities = activities[selectedKey] ?? [];
-  const numOfActivities = currentWeekDays.reduce((acc, value) => {
-    const key = formatDateKey(value);
-    return acc + (activities[key]?.length ?? 0);
-  }, 0);
+  const dayActivities = activities[selectedKey] ?? [];  
+  
   const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
     getShiftedValue: (current, delta) => shiftDateByDays(current, delta * 7),
@@ -44,12 +41,12 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
           <View className='px-4'>
             <Text className="text-lg font-semibold text-zinc-100">Weekly View</Text>
             <Text className="text-xs text-zinc-400">
-              {`${monthNames[currentWeekDays[0].getMonth()]} ${currentWeekDays[0].getDate()} - ${monthNames[currentWeekDays[6].getMonth()]} ${currentWeekDays[6].getDate()}`}
+              {weekRangeLabel}
             </Text>
           </View>
           <View className="px-4">
             <Text className="text-xs text-zinc-400">
-              {`${numOfActivities} ${numOfActivities === 1 ? 'activity' : 'activities'} this week`}
+              {infoLabel}
             </Text>
           </View>
         </View>
@@ -59,7 +56,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
           initialPage={1}
           onPageSelected={handlePageSelected}
           scrollEnabled={scrollEnabled}
-          style={{ height: 66 }}
+          style={{ height: 68 }}
         >
           {
             pages.map(page => (
@@ -75,7 +72,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
         </PagerView>
       </View>
 
-      <TodaysActivities 
+      <TodaysActivities
         selectedDate={selectedDate}
         dayActivities={dayActivities} 
       />

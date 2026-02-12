@@ -1,6 +1,6 @@
-import HiddenDelete from '@/components/chat-history/hidden-delete';
 import HistoryHeader from '@/components/chat-history/history-header';
 import HistoryItem from '@/components/chat-history/history-item';
+import HiddenDelete from '@/components/ui/hidden-delete';
 import { useChatHistory } from '@/hooks/use-chat-history';
 import React from 'react';
 import { View } from 'react-native';
@@ -26,7 +26,11 @@ export default function HistoryModal() {
           <HistoryItem currentId={currentId} item={item} />
         )}
         renderHiddenItem={({ item }, rowMap) => (
-          <HiddenDelete rowMap={rowMap} item={item} handleDeleteChatroom={handleDeleteChatroom} />
+          <HiddenDelete 
+            rowMap={rowMap} 
+            item={item} 
+            onDelete={handleDeleteChatroom} 
+          />
         )}
       />
     </View>
