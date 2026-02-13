@@ -5,6 +5,7 @@ import type { WeekViewProps } from '@/types';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
+import CardContainer from '../../ui/card-container';
 import TodaysActivities from '../today/todays-activities';
 import WeekRow from './week-row';
 
@@ -36,7 +37,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
 
   return (
     <View className="gap-4">
-      <View className="py-4 rounded-3xl bg-zinc-900/70 border border-zinc-800">
+      <CardContainer className="py-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className='px-4'>
             <Text className="text-lg font-semibold text-zinc-100">Weekly View</Text>
@@ -70,7 +71,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
             ))
           }
         </PagerView>
-      </View>
+      </CardContainer>
 
       <TodaysActivities
         selectedDate={selectedDate}

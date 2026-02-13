@@ -1,4 +1,5 @@
 import AnimatedHeightView from '@/components/ui/animated-height-view';
+import CardContainer from '@/components/ui/card-container';
 import { monthNames } from '@/constants/calendar';
 import usePagerLoop from '@/hooks/use-pager-loop';
 import { getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/utilities';
@@ -43,7 +44,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
   });
 
   return (
-    <View className={`rounded-3xl bg-zinc-900/70 border border-zinc-800 overflow-hidden`}>
+    <CardContainer className="overflow-hidden">
       <Pressable 
         onPress={() => setExpand(!expand)}
         className="flex-row items-center justify-between p-4 active:bg-zinc-800 rounded-t-3xl"
@@ -83,6 +84,6 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
           ))}
         </PagerView>
       </AnimatedHeightView>
-    </View>
+    </CardContainer>
   );
 }

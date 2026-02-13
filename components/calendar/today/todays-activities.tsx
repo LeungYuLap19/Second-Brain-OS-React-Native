@@ -5,6 +5,7 @@ import type { TodaysActivitiesProps } from '@/types';
 import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 
+import CardContainer from '@/components/ui/card-container';
 import HiddenDelete from '@/components/ui/hidden-delete';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ActivityItem from './activity-item';
@@ -36,7 +37,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
   };
 
   return (
-    <View className="rounded-3xl bg-zinc-900/70 border border-zinc-800 overflow-hidden">
+    <CardContainer className="overflow-hidden">
       <View className="flex-row items-center justify-between p-4">
         <Text className="text-lg font-semibold text-zinc-100">
           {`${dayActivities.length > 1 ? 'Activities' : 'Activity'} for ${isToday ? 'Today' : title}`}
@@ -85,6 +86,6 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
             />
         )}
       </AnimatedHeightView>
-    </View>
+    </CardContainer>
   );
 }

@@ -53,13 +53,6 @@ export default function Inbox() {
               onPress={setSelectedId}
             />
           ))}
-
-          {/* {selectedEmail && (
-            <View className="mt-2 mb-6">
-              <Text className="text-sm text-zinc-400 mb-3">Selected conversation</Text>
-              <EmailDetail email={selectedEmail} />
-            </View>
-          )} */}
         </ScrollView>
       </View>
     </ThemedSafeAreaView>

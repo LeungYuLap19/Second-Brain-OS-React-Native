@@ -173,3 +173,13 @@ export interface AnimatedHeightViewProps {
 export interface CircleButtonProps extends PressableProps {
   children: React.ReactNode;
 }
+
+export interface CardContainerProps extends ViewProps {
+  children: React.ReactNode;
+  asChild?: false;
+}
+
+export interface CardPressableProps extends PressableProps {
+  children: React.ReactNode;
+  asChild: true;
+}

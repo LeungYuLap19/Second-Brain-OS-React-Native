@@ -1,3 +1,4 @@
+import CardContainer from '@/components/ui/card-container';
 import type { UploadCardProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
@@ -7,7 +8,7 @@ const fileTypes = ['PDF', 'DOCX', 'TXT', 'IMAGE'];
 
 export default function UploadCard({ onUpload }: UploadCardProps) {
   return (
-    <View className="p-5 rounded-3xl bg-zinc-900/70 border border-zinc-800 mb-6">
+    <CardContainer className="p-5 mb-6">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
           <View className="w-11 h-11 rounded-2xl bg-zinc-800 items-center justify-center">
@@ -37,6 +38,6 @@ export default function UploadCard({ onUpload }: UploadCardProps) {
           </View>
         ))}
       </View>
-    </View>
+    </CardContainer>
   );
 }

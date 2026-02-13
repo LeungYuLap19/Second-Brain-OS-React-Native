@@ -1,7 +1,8 @@
-import type { EmailListItemData, EmailListItemProps } from '@/types';
+import CardContainer from '@/components/ui/card-container';
+import type { EmailListItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const tagStyles: Record<string, { bg: string; text: string }> = {
   Work: { bg: 'bg-sky-500/15', text: 'text-sky-200' },
@@ -11,14 +12,11 @@ const tagStyles: Record<string, { bg: string; text: string }> = {
 };
 
 export default function EmailListItem({ email, isSelected, onPress }: EmailListItemProps) {
-  const containerClass = isSelected
-    ? 'bg-zinc-900 border-zinc-700'
-    : 'bg-zinc-950 border-zinc-800';
-
   return (
-    <Pressable
-      onPress={() => onPress(email.id)}
-      className={`p-4 rounded-3xl border ${containerClass} mb-4 active:bg-zinc-900`}
+    <CardContainer 
+      asChild 
+      onPress={() => onPress(email.id)} 
+      className="p-4 mb-4 active:bg-zinc-900"
     >
       <View className="flex-row items-start justify-between gap-3">
         <View className="flex-1">
@@ -63,6 +61,6 @@ export default function EmailListItem({ email, isSelected, onPress }: EmailListI
           <Feather name="chevron-right" size={16} color="#a1a1aa" />
         </View>
       </View>
-    </Pressable>
+    </CardContainer>
   );
 }

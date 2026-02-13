@@ -1,8 +1,9 @@
 import FileStatusPill from '@/components/files/file-status-pill';
+import CardContainer from '@/components/ui/card-container';
 import type { FileItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const typeIconMap: Record<string, keyof typeof Feather.glyphMap> = {
   pdf: 'file-text',
@@ -20,7 +21,7 @@ export default function FileItem({ name, size, type, status, updatedAt }: FileIt
   const iconName = typeIconMap[type] ?? 'file';
 
   return (
-    <Pressable className="p-4 rounded-3xl bg-zinc-900/70 border border-zinc-800 mb-4 active:bg-zinc-900">
+    <CardContainer asChild className="p-4 mb-4 active:bg-zinc-900">
       <View className="flex-row items-center gap-3">
         <View className="w-11 h-11 rounded-2xl bg-zinc-800 items-center justify-center">
           <Feather name={iconName} size={18} color="#e4e4e7" />
@@ -43,6 +44,6 @@ export default function FileItem({ name, size, type, status, updatedAt }: FileIt
           </View>
         </View>
       </View>
-    </Pressable>
+    </CardContainer>
   );
 }
