@@ -1,7 +1,8 @@
 import { ChatInputProps } from '@/types/components';
 import Feather from '@expo/vector-icons/Feather';
 import React, { useRef } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
+import CircleButton from '../ui/circle-button';
 
 export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightChange }: ChatInputProps) {
   const inputRef = useRef<TextInput>(null);
@@ -24,17 +25,13 @@ export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightCh
         onLayout={(event) => onHeightChange(event.nativeEvent.layout.height)}
       />
       
-      <Pressable
-        onPress={onSend}
-        disabled={!canSend}
-        className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800"
-      >
+      <CircleButton onPress={onSend} disabled={!canSend}>
         <Feather
           name="arrow-up"
           size={22}
           color={canSend ? '#f4f4f5' : '#52525b'}
         />
-      </Pressable>
+      </CircleButton>
     </View>
   );
 }

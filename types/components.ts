@@ -1,6 +1,8 @@
 // Chat component props
 import type { ReactNode } from 'react';
-import { TextProps } from 'react-native';
+import { PressableProps, StyleProp, TextProps, ViewProps, ViewStyle } from 'react-native';
+import { WithSpringConfig } from 'react-native-reanimated';
+import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 import { RowMap } from 'react-native-swipe-list-view';
 import { Activity } from './calendar';
 import { ChatHistory, Message } from './chat';
@@ -56,7 +58,14 @@ export interface HistoryHeaderProps {
 }
 
 export interface HeaderViewProps {
+  title?: string;
+  subtitle?: string;
+  leftSlot?: ReactNode;
+  rightSlot?: ReactNode;
+  variant?: 'page' | 'modal';
   className?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
   children?: ReactNode;
 }
 
@@ -135,4 +144,32 @@ export interface TypewriterTextProps extends TextProps {
   speed?: number;
   cursorChar?: string;
   className?: string;
+}
+
+export interface ThemedTextProps extends TextProps {
+  tone?: 'primary' | 'secondary' | 'muted' | 'subtle' | 'inverse';
+  className?: string;
+  children?: ReactNode;
+}
+
+export interface ThemedSafeAreaViewProps extends SafeAreaViewProps {
+  className?: string;
+  children?: ReactNode;
+}
+
+export interface ThemedViewProps extends ViewProps {
+  className?: string;
+  children?: ReactNode;
+}
+
+export interface AnimatedHeightViewProps {
+  height: number;
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  overflowHidden?: boolean;
+  springConfig?: WithSpringConfig;
+};
+
+export interface CircleButtonProps extends PressableProps {
+  children: React.ReactNode;
 }

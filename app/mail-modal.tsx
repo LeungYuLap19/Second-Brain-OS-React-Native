@@ -2,17 +2,17 @@ import React from 'react'
 import ThemedView from '@/components/ui/themed-view'
 import Header from '@/components/ui/header'
 import CircleButton from '@/components/ui/circle-button'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 
-export default function ActivityModal() {
+export default function MailModal() {
   return (
     <ThemedView>
       <Header 
-        title='New Activity'
+        title='New Email'
         variant='modal'
         rightSlot={
           <CircleButton>
-            <MaterialIcons name="done" size={18} color="#e4e4e7" />
+            <Feather name="send" size={18} color="#e4e4e7" />
           </CircleButton>
         }
       />

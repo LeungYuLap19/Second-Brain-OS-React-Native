@@ -1,9 +1,9 @@
+import AnimatedHeightView from '@/components/ui/animated-height-view';
 import { monthNames, weekdayNames } from '@/constants/calendar';
 import { isSameDay } from '@/lib/utils/date-utils';
 import type { TodaysActivitiesProps } from '@/types';
 import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent, Text, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import HiddenDelete from '@/components/ui/hidden-delete';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -16,16 +16,6 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
   const isToday = isSameDay(selectedDate, new Date());
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
   const [listHeight, setListHeight] = useState(0);
-  const animatedHeight = useSharedValue(0);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: animatedHeight.value,
-    overflow: 'hidden',
-  }));
-
-  useEffect(() => {
-    animatedHeight.value = withSpring(listHeight, SPRING_CONFIG);
-  }, [listHeight, animatedHeight]);
 
   useEffect(() => {
     setListHeight(0);
@@ -54,13 +44,12 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
         <Text className="text-xs text-zinc-400">{dayActivities.length} items</Text>
       </View>
 
-      <Animated.View style={animatedStyle}>
+      <AnimatedHeightView height={listHeight} overflowHidden springConfig={SPRING_CONFIG}>
         {dayActivities.length === 0 ? (
           <View onLayout={onPlaceholderLayout} className="px-4 pb-4">
             <Placeholder />
           </View>
         ) : (
-          <View className="px-4">
             <SwipeListView
               data={dayActivities}
               keyExtractor={(item) => item.id}
@@ -72,6 +61,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => <View className="h-3" />}
               ListFooterComponent={() => <View className="h-4" />}
+              contentContainerStyle={{ paddingHorizontal: 16 }}
               extraData={selectedActivityId}
               onContentSizeChange={onContentSizeChange}
               removeClippedSubviews={false}
@@ -93,9 +83,8 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
                 />
               )}
             />
-          </View>
         )}
-      </Animated.View>
+      </AnimatedHeightView>
     </View>
   );
 }

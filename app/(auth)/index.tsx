@@ -1,14 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import TypeWriter from '@/components/ui/typewriter';
-import SigninButton from '@/components/ui/siginin-button';
-import { Platform } from 'react-native';
 import AnimatedBackground from '@/components/ui/animated-background';
+import SigninButton from '@/components/ui/siginin-button';
+import ThemedSafeAreaView from '@/components/ui/themed-safe-area-view';
+import TypeWriter from '@/components/ui/typewriter';
+import React from 'react';
+import { Platform, Text, View } from 'react-native';
 
 export default function Auth() {
   return (
-    <SafeAreaView className="flex-1 bg-[#0a0a0a]">
+    <ThemedSafeAreaView>
       <AnimatedBackground />
       
       <View className="absolute inset-0 bg-black/50" />
@@ -30,6 +29,6 @@ export default function Auth() {
           <Text> Beta Version</Text>
         </Text>
       </View>
-    </SafeAreaView>
+    </ThemedSafeAreaView>
   )
 }

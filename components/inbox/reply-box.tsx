@@ -1,7 +1,8 @@
 import type { ReplyBoxProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
+import CircleButton from '../ui/circle-button';
 
 export default function ReplyBox({ value, onChangeText, onSend }: ReplyBoxProps) {
   const canSend = value.trim().length > 0;
@@ -18,13 +19,9 @@ export default function ReplyBox({ value, onChangeText, onSend }: ReplyBoxProps)
           returnKeyType="default"
           multiline
         />
-        <Pressable
-          onPress={onSend}
-          disabled={!canSend}
-          className="rounded-full p-3 bg-zinc-900 border border-zinc-800 active:bg-zinc-800"
-        >
+        <CircleButton onPress={onSend} disabled={!canSend}>
           <Feather name="send" size={18} color={canSend ? '#f4f4f5' : '#52525b'} />
-        </Pressable>
+        </CircleButton>
       </View>
     </View>
   );

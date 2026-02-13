@@ -15,7 +15,7 @@ export default function ChatroomIndex() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#09090b' }}>
       <ActivityIndicator size="large" color="#e5e7eb" />
-      <Text style={{ color: '#e5e7eb' }}>Creating new chatroom...</Text>
+      <Text>Creating new chatroom...</Text>
     </View>
   );
 }

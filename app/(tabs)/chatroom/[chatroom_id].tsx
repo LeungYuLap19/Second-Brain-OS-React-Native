@@ -1,6 +1,7 @@
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/message-list';
+import ThemedSafeAreaView from '@/components/ui/themed-safe-area-view';
 import { useChatroomWebSocket } from '@/hooks/use-chatroom-websocket';
 import { API_URL } from '@/lib/utils/server-uri';
 import { getNewChatroomId } from '@/lib/utils/utilities';
@@ -8,7 +9,6 @@ import { Chatroom } from '@/types/chat';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChatroomPage() {
   const { chatroom_id } = useLocalSearchParams<{ chatroom_id: string }>();
@@ -59,11 +59,11 @@ export default function ChatroomPage() {
 
   return (
     <KeyboardAvoidingView
-      className="h-screen-safe-offset-6 bg-zinc-950"
+      className="h-screen-safe-offset-6"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? -20 : 0}
     >
-      <SafeAreaView className="flex-1 bg-zinc-950">
+      <ThemedSafeAreaView>
         <ChatHeader
           isConnecting={isConnecting}
           isConnected={isConnected}
@@ -84,7 +84,7 @@ export default function ChatroomPage() {
           isConnected={isConnected}
           onHeightChange={setInputHeight}
         />
-      </SafeAreaView>
+      </ThemedSafeAreaView>
     </KeyboardAvoidingView>
   );
 }

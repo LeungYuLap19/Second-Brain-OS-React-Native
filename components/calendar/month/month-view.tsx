@@ -1,11 +1,11 @@
+import AnimatedHeightView from '@/components/ui/animated-height-view';
 import { monthNames } from '@/constants/calendar';
 import usePagerLoop from '@/hooks/use-pager-loop';
 import { getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/utilities';
 import type { MonthViewProps } from '@/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import MonthBlock from './month-block';
 
 export default function MonthView({ monthDate, selectedDate, activities, onSelectDate }: MonthViewProps) {
@@ -26,14 +26,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
   const [expand, setExpand] = useState(false);
   const [pageHeights, setPageHeights] = useState<Record<number, number>>({});
   const pagerHeight = pageHeights[1] ?? 0;
-  const animatedHeight = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => ({
-    height: animatedHeight.value,
-  }));
-
-  useEffect(() => {
-    animatedHeight.value = withSpring(expand ? pagerHeight : 0, { duration: 200 });
-  }, [expand, pagerHeight, animatedHeight]);
+  const containerHeight = expand ? pagerHeight : 0;
 
   const onPageLayout = (event: LayoutChangeEvent, pageIndex: number) => {
     const { height } = event.nativeEvent.layout;
@@ -63,7 +56,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
         </Text>
       </Pressable>
       
-      <Animated.View style={animatedStyle}>
+      <AnimatedHeightView height={containerHeight} springConfig={{ duration: 200 }}>
         <PagerView
           ref={pagerRef}
           initialPage={1}
@@ -89,7 +82,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
             </View>
           ))}
         </PagerView>
-      </Animated.View>
+      </AnimatedHeightView>
     </View>
   );
 }

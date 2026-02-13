@@ -47,6 +47,10 @@ export default function RootLayout() {
           options={{ presentation: 'modal' }}
         />
         <Stack.Screen 
+          name='mail-modal'
+          options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen 
           name='(auth)' 
           options={{ gestureEnabled: false, }}
         />

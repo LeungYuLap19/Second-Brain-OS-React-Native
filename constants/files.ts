@@ -1,0 +1,42 @@
+export const files = [
+  {
+    id: '1',
+    name: 'Project-Brief.pdf',
+    type: 'pdf',
+    size: '2.4 MB',
+    status: 'ready',
+    updatedAt: '2m ago',
+  },
+  {
+    id: '2',
+    name: 'Meeting Notes.txt',
+    type: 'txt',
+    size: '12 KB',
+    status: 'processing',
+    updatedAt: 'just now',
+  },
+  {
+    id: '3',
+    name: 'Brand Assets.zip',
+    type: 'zip',
+    size: '18.2 MB',
+    status: 'uploading',
+    updatedAt: '5s ago',
+  },
+  {
+    id: '4',
+    name: 'Roadmap.docx',
+    type: 'docx',
+    size: '1.1 MB',
+    status: 'ready',
+    updatedAt: '1h ago',
+  },
+  {
+    id: '5',
+    name: 'Product Shot.png',
+    type: 'image',
+    size: '3.9 MB',
+    status: 'ready',
+    updatedAt: '3h ago',
+  },
+];
