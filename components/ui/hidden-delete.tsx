@@ -7,7 +7,7 @@ export default function HiddenDelete<T extends { id: string }>({
   rowMap,
   item,
   onDelete,
-  containerClassName = 'flex-1 h-full flex-row justify-end items-center mb-4 pr-4',
+  containerClassName = 'flex-1 h-full py-[1px] flex-row justify-end items-center mb-4 pr-4',
   buttonClassName = 'bg-red-500 h-full w-20 rounded-3xl items-center justify-center',
 }: HiddenDeleteProps<T>) {
   return (

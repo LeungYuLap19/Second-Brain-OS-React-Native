@@ -16,6 +16,7 @@ export default function WeekRow({ days, selectedDate, activities, onSelectDate }
           <Pressable
             key={date.toISOString()}
             onPress={() => onSelectDate(date)}
+            disabled={isSelected}
             className={`
               flex-1 items-center py-3 rounded-2xl 
               ${isSelected ? 'bg-zinc-100' : 'bg-zinc-950'} 

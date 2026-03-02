@@ -37,7 +37,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
     }));
   };
 
-  const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
+  const { pagerRef, scrollEnabled, handlePageScrollStateChanged, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
     getShiftedValue: shiftDateByMonth,
     onChange: onSelectDate,
@@ -61,6 +61,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
         <PagerView
           ref={pagerRef}
           initialPage={1}
+          onPageScrollStateChanged={handlePageScrollStateChanged}
           onPageSelected={handlePageSelected}
           scrollEnabled={scrollEnabled}
           style={{ flex: 1 }}
@@ -74,7 +75,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
               >
                 <MonthBlock
                   monthDate={page.days}
-                  selectedDate={page.days}
+                  selectedDate={selectedDate}
                   activities={activities}
                   onSelectDate={onSelectDate}
                   setExpand={setExpand}

@@ -3,6 +3,10 @@ export interface Activity {
   title: string;
   time: string;
   tag?: string;
+  notes?: string;
+  urgent?: boolean;
+  priority?: 'low' | 'medium' | 'high';
+  location?: string;
 }
 
 export interface MonthDay {

@@ -108,6 +108,11 @@ export interface ActivityItemProps {
   onToggle: (id: string) => void;
 }
 
+export interface ActivityFieldProps {
+  value?: Partial<Activity>;
+  onChange?: (value: Partial<Activity>) => void;
+}
+
 export interface FileStatusPillProps {
   status: FileStatus;
 }
@@ -137,6 +142,19 @@ export interface ReplyBoxProps {
   value: string;
   onChangeText: (text: string) => void;
   onSend: () => void;
+}
+
+export interface MessageComposerProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  onSend: () => void;
+  placeholder: string;
+  editable?: boolean;
+  onHeightChange?: (height: number) => void;
+  containerClassName?: string;
+  inputClassName?: string;
+  sendIcon?: React.ComponentProps<typeof import('@expo/vector-icons/Feather').default>['name'];
+  sendIconSize?: number;
 }
 
 export interface TypewriterTextProps extends TextProps {

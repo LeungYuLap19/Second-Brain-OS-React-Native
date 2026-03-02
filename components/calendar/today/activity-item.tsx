@@ -19,7 +19,7 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
           <Feather name="circle" size={22} color="#a1a1aa" />
         )}
       </Pressable>
-      <Link href={'/activity-modal'} asChild>
+      <Link href={`/activity-modal?id=${activity.id}`} asChild>
         <Pressable className='flex-row items-center gap-2 flex-1'>
           <View className="flex-1">
             <Text className="text-sm font-semibold text-zinc-100" numberOfLines={1}>{activity.title}</Text>

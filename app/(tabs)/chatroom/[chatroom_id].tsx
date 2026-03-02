@@ -59,9 +59,9 @@ export default function ChatroomPage() {
 
   return (
     <KeyboardAvoidingView
-      className="h-screen-safe-offset-6"
+      className="flex-1 bg-zinc-950"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? -20 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? -80 : 0}
     >
       <ThemedSafeAreaView>
         <ChatHeader

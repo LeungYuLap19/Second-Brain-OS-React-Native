@@ -29,7 +29,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
   const selectedKey = formatDateKey(selectedDate);
   const dayActivities = activities[selectedKey] ?? [];  
   
-  const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
+  const { pagerRef, scrollEnabled, handlePageScrollStateChanged, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
     getShiftedValue: (current, delta) => shiftDateByDays(current, delta * 7),
     onChange: onSelectDate,
@@ -55,6 +55,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
         <PagerView
           ref={pagerRef}
           initialPage={1}
+          onPageScrollStateChanged={handlePageScrollStateChanged}
           onPageSelected={handlePageSelected}
           scrollEnabled={scrollEnabled}
           style={{ height: 68 }}
