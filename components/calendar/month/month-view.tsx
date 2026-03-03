@@ -1,89 +1,156 @@
-import AnimatedHeightView from '@/components/ui/animated-height-view';
-import CardContainer from '@/components/ui/card-container';
 import { monthNames } from '@/constants/calendar';
-import usePagerLoop from '@/hooks/use-pager-loop';
+import { formatDateKey } from '@/lib/utils/date-utils';
 import { getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/utilities';
 import type { MonthViewProps } from '@/types';
-import React, { useMemo, useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import React, { useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
-import PagerView from 'react-native-pager-view';
-import MonthBlock from './month-block';
+import { Calendar, DateData } from 'react-native-calendars';
+import type { MarkedDates } from 'react-native-calendars/src/types';
+import AnimatedHeightView from '../../ui/animated-height-view';
+import CardContainer from '../../ui/card-container';
+
+const calendarTheme = {
+  backgroundColor: 'transparent',
+  calendarBackground: 'transparent',
+  monthTextColor: '#e4e4e7',
+  dayTextColor: '#a1a1aa',
+  textDisabledColor: '#3f3f46',
+  todayTextColor: '#e4e4e7',
+  todayBackgroundColor: '#27272a',
+  selectedDayBackgroundColor: '#f4f4f5',
+  selectedDayTextColor: '#18181b',
+  dotColor: '#6366f1',
+  selectedDotColor: '#6366f1',
+  arrowColor: '#71717a',
+  textDayFontWeight: '500' as const,
+  textDayHeaderFontWeight: '500' as const,
+  textDayFontSize: 14,
+  textDayHeaderFontSize: 10,
+  textMonthFontSize: 0,
+  textMonthFontWeight: '600' as const,
+  weekVerticalMargin: 12,
+  'stylesheet.calendar.header': {
+    header: { height: 0 },
+    monthText: { display: 'none' as const },
+    dayHeader: {
+      color: '#71717a',
+      fontSize: 10,
+      fontWeight: '500' as const,
+      textTransform: 'uppercase' as const,
+      letterSpacing: 1,
+      marginBottom: 4,
+    },
+  },
+};
 
 export default function MonthView({ monthDate, selectedDate, activities, onSelectDate }: MonthViewProps) {
-  const pages = useMemo(() => {
-    return [
-      { key: 'prev-month', days: shiftDateByMonth(selectedDate, -1) },
-      { key: 'current-month', days: selectedDate },
-      { key: 'next-month', days: shiftDateByMonth(selectedDate, 1) },
-    ];
-  }, [selectedDate]);
-  
-  const monthActivityCount = useMemo(() => {
-    return getMonthActivityCount(activities, monthDate)
-  }, [activities, monthDate]);
+  const monthActivityCount = useMemo(
+    () => getMonthActivityCount(activities, monthDate),
+    [activities, monthDate]
+  );
   const title = `${monthNames[monthDate.getMonth()]} ${monthDate.getFullYear()}`;
   const infoLabel = `${monthActivityCount} ${monthActivityCount === 1 ? 'activity' : 'activities'} this month`;
 
   const [expand, setExpand] = useState(false);
-  const [pageHeights, setPageHeights] = useState<Record<number, number>>({});
-  const pagerHeight = pageHeights[1] ?? 0;
-  const containerHeight = expand ? pagerHeight : 0;
+  const [contentHeight, setContentHeight] = useState(0);
 
-  const onPageLayout = (event: LayoutChangeEvent, pageIndex: number) => {
+  const selectedKey = formatDateKey(selectedDate);
+
+  const markedDates: MarkedDates = useMemo(() => {
+    const marks: MarkedDates = {};
+    for (const key of Object.keys(activities)) {
+      if (activities[key]?.length) {
+        marks[key] = { marked: true };
+      }
+    }
+    // Merge selected state
+    if (marks[selectedKey]) {
+      marks[selectedKey] = { ...marks[selectedKey], selected: true };
+    } else {
+      marks[selectedKey] = { selected: true };
+    }
+    return marks;
+  }, [activities, selectedKey]);
+
+  const handleDayPress = useCallback(
+    (day: DateData) => {
+      const date = new Date(day.year, day.month - 1, day.day);
+      onSelectDate(date);
+      setExpand(false);
+    },
+    [onSelectDate]
+  );
+
+  const handleMonthChange = useCallback(
+    (month: DateData) => {
+      const date = new Date(month.year, month.month - 1, 1);
+      onSelectDate(date);
+    },
+    [onSelectDate]
+  );
+
+  const switchMonth = (to: 'prev' | 'next') => {
+    const date = shiftDateByMonth(selectedDate, to === 'prev' ? -1 : 1);
+    onSelectDate(date);
+  }
+
+  const onContentLayout = useCallback((event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
-    setPageHeights(prevHeights => ({
-      ...prevHeights,
-      [pageIndex]: height,
-    }));
-  };
-
-  const { pagerRef, scrollEnabled, handlePageScrollStateChanged, handlePageSelected } = usePagerLoop({
-    currentValue: selectedDate,
-    getShiftedValue: shiftDateByMonth,
-    onChange: onSelectDate,
-  });
+    if (height > 0) setContentHeight(height);
+  }, []);
 
   return (
-    <CardContainer className="overflow-hidden">
-      <Pressable 
+    <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+      <Pressable
         onPress={() => setExpand(!expand)}
-        className="flex-row items-center justify-between p-4 active:bg-zinc-800 rounded-t-3xl"
+        className="flex-row items-center justify-between p-5 active:bg-zinc-800/50"
       >
-        <Text className="text-lg font-semibold text-zinc-100">
-          {title}
-        </Text>
-        <Text className="text-xs text-zinc-400">
-          {infoLabel}
-        </Text>
+        <View>
+          <Text className="text-lg font-semibold text-zinc-100 mb-0.5">{title}</Text>
+          <Text className="text-xs font-medium text-zinc-500 uppercase tracking-wider">{infoLabel}</Text>
+        </View>
+        <View className="w-8 h-8 rounded-full bg-zinc-800 items-center justify-center border border-zinc-700">
+          <Feather name={expand ? 'chevron-up' : 'chevron-down'} size={18} color="#71717a" />
+        </View>
       </Pressable>
-      
-      <AnimatedHeightView height={containerHeight} springConfig={{ duration: 200 }}>
-        <PagerView
-          ref={pagerRef}
-          initialPage={1}
-          onPageScrollStateChanged={handlePageScrollStateChanged}
-          onPageSelected={handlePageSelected}
-          scrollEnabled={scrollEnabled}
-          style={{ flex: 1 }}
-        >
-          {pages.map((page, index) => (
-            <View key={page.key}>
-              <View
-                collapsable={false}
-                onLayout={event => onPageLayout(event, index)}
-                style={{ alignSelf: 'flex-start' }}
-              >
-                <MonthBlock
-                  monthDate={page.days}
-                  selectedDate={selectedDate}
-                  activities={activities}
-                  onSelectDate={onSelectDate}
-                  setExpand={setExpand}
-                />
-              </View>
-            </View>
-          ))}
-        </PagerView>
+
+      <AnimatedHeightView height={expand ? contentHeight : 0} springConfig={{ duration: 200 }}>
+        <View onLayout={onContentLayout} collapsable={false} style={{ position: 'absolute', width: '100%' }}>
+          {/* Month navigation bar */}
+          <View className="flex-row items-center justify-between px-4 pb-2">
+            <Pressable
+              onPress={() => switchMonth('prev')}
+              hitSlop={8}
+              className="w-8 h-8 rounded-full bg-zinc-800/80 items-center justify-center active:bg-zinc-700 border border-zinc-700/50"
+            >
+              <Feather name="chevron-left" size={16} color="#a1a1aa" />
+            </Pressable>
+            <Text className="text-sm font-semibold text-zinc-300 tracking-wide">{title}</Text>
+            <Pressable
+              onPress={() => switchMonth('next')}
+              hitSlop={8}
+              className="w-8 h-8 rounded-full bg-zinc-800/80 items-center justify-center active:bg-zinc-700 border border-zinc-700/50"
+            >
+              <Feather name="chevron-right" size={16} color="#a1a1aa" />
+            </Pressable>
+          </View>
+
+          <View className="px-2 pb-4">
+            <Calendar
+              key={formatDateKey(monthDate)}
+              current={formatDateKey(monthDate)}
+              onDayPress={handleDayPress}
+              onMonthChange={handleMonthChange}
+              markedDates={markedDates}
+              enableSwipeMonths
+              hideExtraDays={false}
+              hideArrows
+              firstDay={1}
+              theme={calendarTheme}
+            />
+          </View>
+        </View>
       </AnimatedHeightView>
     </CardContainer>
   );

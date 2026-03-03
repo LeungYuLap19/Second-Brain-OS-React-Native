@@ -8,7 +8,8 @@
     "scheme": "secondbrainosmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.Second-Brain-OS-Mobile"
     },
     "android": {
       "adaptiveIcon": {

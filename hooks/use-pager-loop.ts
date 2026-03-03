@@ -14,22 +14,7 @@ export default function usePagerLoop<T>({
 }: UsePagerLoopOptions<T>) {
   const pagerRef = useRef<PagerView>(null);
   const isResetting = useRef(false);
-  const isUserDragging = useRef(false);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-
-  const handlePageScrollStateChanged = useCallback(
-    (event: { nativeEvent: { pageScrollState: 'idle' | 'dragging' | 'settling' } }) => {
-      const state = event.nativeEvent.pageScrollState;
-      if (state === 'dragging') {
-        isUserDragging.current = true;
-      }
-
-      if (state === 'idle' && !isResetting.current) {
-        isUserDragging.current = false;
-      }
-    },
-    []
-  );
 
   const handlePageSelected = useCallback(
     (event: { nativeEvent: { position: number } }) => {
@@ -39,23 +24,13 @@ export default function usePagerLoop<T>({
       }
 
       const position = event.nativeEvent.position;
-
-      if (!isUserDragging.current) {
-        if (position !== 1) {
-          pagerRef.current?.setPageWithoutAnimation(1);
-        }
-        return;
-      }
-
       if (position === 1) {
-        isUserDragging.current = false;
         return;
       }
 
       const delta: -1 | 1 = position === 0 ? -1 : 1;
       setScrollEnabled(false);
       onChange(getShiftedValue(currentValue, delta));
-      isUserDragging.current = false;
       isResetting.current = true;
       setTimeout(() => {
         pagerRef.current?.setPageWithoutAnimation(1);
@@ -68,7 +43,6 @@ export default function usePagerLoop<T>({
   return {
     pagerRef,
     scrollEnabled,
-    handlePageScrollStateChanged,
     handlePageSelected,
   };
 }

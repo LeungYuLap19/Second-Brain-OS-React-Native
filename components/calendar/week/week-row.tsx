@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { weekdayLabels } from '@/constants/calendar';
 import { formatDateKey, isSameDay } from '@/lib/utils/date-utils';
 import type { WeekRowProps } from '@/types';
@@ -18,23 +19,28 @@ export default function WeekRow({ days, selectedDate, activities, onSelectDate }
             onPress={() => onSelectDate(date)}
             disabled={isSelected}
             className={`
-              flex-1 items-center py-3 rounded-2xl 
-              ${isSelected ? 'bg-zinc-100' : 'bg-zinc-950'} 
-              ${isToday && !isSelected ? 'border border-zinc-400' : ''}
+              flex-1 items-center justify-center py-3 rounded-2xl border
+              ${isSelected 
+                ? 'bg-zinc-100 border-zinc-100' 
+                : isToday
+                  ? 'bg-zinc-800/50 border-zinc-700'
+                  : 'bg-zinc-900/30 border-zinc-800'
+              } 
             `}
-            style={{ marginRight: index === days.length - 1 ? 0 : 6 }}
+            style={{ marginRight: index === days.length - 1 ? 0 : 8 }}
           >
-            <Text className={`text-xs ${isSelected ? 'text-zinc-900' : 'text-zinc-400'}`}>
+            <Text className={`text-[10px] font-medium uppercase tracking-wider mb-1 ${isSelected ? 'text-zinc-500' : 'text-zinc-500'}`}>
               {weekdayLabels[index]}
             </Text>
-            <Text className={`text-base font-semibold ${isSelected ? 'text-zinc-900' : 'text-zinc-200'}`}>
+            <Text className={`text-lg font-semibold ${isSelected ? 'text-zinc-900' : 'text-zinc-400'}`}>
               {date.getDate()}
             </Text>
-            {hasActivities ? (
-              <View className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-zinc-900' : 'bg-red-400'} mt-1`} />
-            ) : (
-              <View className="w-1.5 h-1.5 rounded-full mt-1" />
-            )}
+            
+            {
+              hasActivities ? 
+              <View className={`w-1 h-1 rounded-full mt-1.5 ${isSelected ? 'bg-zinc-900' : 'bg-indigo-500'}`} /> :
+              <View className={`w-1 h-1 rounded-full mt-1.5`} />
+            }
           </Pressable>
         );
       })}

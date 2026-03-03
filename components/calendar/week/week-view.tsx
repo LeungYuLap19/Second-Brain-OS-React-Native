@@ -29,7 +29,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
   const selectedKey = formatDateKey(selectedDate);
   const dayActivities = activities[selectedKey] ?? [];  
   
-  const { pagerRef, scrollEnabled, handlePageScrollStateChanged, handlePageSelected } = usePagerLoop({
+  const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
     getShiftedValue: (current, delta) => shiftDateByDays(current, delta * 7),
     onChange: onSelectDate,
@@ -37,16 +37,16 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
 
   return (
     <View className="gap-4">
-      <CardContainer className="py-4">
-        <View className="flex-row items-center justify-between mb-4">
-          <View className='px-4'>
-            <Text className="text-lg font-semibold text-zinc-100">Weekly View</Text>
-            <Text className="text-xs text-zinc-400">
+      <CardContainer className="py-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+        <View className="flex-row items-center justify-between mb-4 px-5">
+          <View>
+            <Text className="text-lg font-semibold text-zinc-100 mb-0.5">Weekly View</Text>
+            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
               {weekRangeLabel}
             </Text>
           </View>
-          <View className="px-4">
-            <Text className="text-xs text-zinc-400">
+          <View className="bg-zinc-800 px-3 py-1 rounded-full border border-zinc-700">
+            <Text className="text-[10px] font-medium text-zinc-400">
               {infoLabel}
             </Text>
           </View>
@@ -55,10 +55,9 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
         <PagerView
           ref={pagerRef}
           initialPage={1}
-          onPageScrollStateChanged={handlePageScrollStateChanged}
           onPageSelected={handlePageSelected}
           scrollEnabled={scrollEnabled}
-          style={{ height: 68 }}
+          style={{ height: 80 }}
         >
           {
             pages.map(page => (

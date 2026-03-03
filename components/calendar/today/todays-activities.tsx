@@ -37,12 +37,19 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
   };
 
   return (
-    <CardContainer className="overflow-hidden">
-      <View className="flex-row items-center justify-between p-4">
-        <Text className="text-lg font-semibold text-zinc-100">
-          {`${dayActivities.length > 1 ? 'Activities' : 'Activity'} for ${isToday ? 'Today' : title}`}
-        </Text>
-        <Text className="text-xs text-zinc-400">{dayActivities.length} items</Text>
+    <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+      <View className="flex-row items-center justify-between p-5 border-b border-zinc-800/50">
+        <View>
+          <Text className="text-lg font-semibold text-zinc-100 mb-0.5">
+            {isToday ? 'Today' : title}
+          </Text>
+          <Text className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+            {dayActivities.length} {dayActivities.length === 1 ? 'Task' : 'Tasks'} Scheduled
+          </Text>
+        </View>
+        <View className="bg-zinc-800 w-8 h-8 rounded-full items-center justify-center border border-zinc-700">
+          <Text className="text-xs font-bold text-zinc-400">{dayActivities.length}</Text>
+        </View>
       </View>
 
       <AnimatedHeightView height={listHeight} overflowHidden springConfig={SPRING_CONFIG}>
@@ -78,8 +85,8 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
                 <HiddenDelete
                   rowMap={rowMap}
                   item={item}
-                  containerClassName="flex-1 h-full flex-row justify-end items-center"
-                  buttonClassName="bg-red-500 h-full w-20 rounded-2xl items-center justify-center"
+                  containerClassName='flex-1 h-full flex-row justify-end items-center pr-4'
+                  buttonClassName="bg-red-500/10 active:bg-red-500/20 w-16 h-full rounded-2xl items-center justify-center border border-red-500/20"
                   onDelete={() => { }}
                 />
               )}
