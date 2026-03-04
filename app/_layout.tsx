@@ -1,10 +1,11 @@
-import { Stack } from 'expo-router';
-import 'react-native-reanimated';
-import '../global.css'
-import { useCallback, useEffect, useState } from 'react';
+import ErrorBoundary from '@/components/ui/layout/error-boundary';
 import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import 'react-native-reanimated';
+import '../global.css';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -36,30 +37,32 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="history-modal"
-          options={{ presentation: 'modal', }}
-        />
-        <Stack.Screen 
-          name='activity-modal'
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen 
-          name='mail-modal'
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen 
-          name='(auth)' 
-          options={{ gestureEnabled: false, }}
-        />
-        <Stack.Screen 
-          name='(tabs)' 
-          options={{ gestureEnabled: false, }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </View>
+    <ErrorBoundary>
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="history-modal"
+            options={{ presentation: 'modal', }}
+          />
+          <Stack.Screen 
+            name='activity-modal'
+            options={{ presentation: 'modal' }}
+          />
+          <Stack.Screen 
+            name='mail-modal'
+            options={{ presentation: 'modal' }}
+          />
+          <Stack.Screen 
+            name='(auth)' 
+            options={{ gestureEnabled: false, }}
+          />
+          <Stack.Screen 
+            name='(tabs)' 
+            options={{ gestureEnabled: false, }}
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </View>
+    </ErrorBoundary>
   );
 }

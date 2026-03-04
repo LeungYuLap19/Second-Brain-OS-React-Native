@@ -1,10 +1,8 @@
 import { WS_URL } from '@/lib/utils/server-uri';
 import { getClientId } from '@/lib/utils/utilities';
-import { Message, WebSocketMessage } from '@/types/chat';
+import { parseWebSocketMessage } from '@/lib/utils/ws-parser';
+import { Message } from '@/types/chat';
 import { useEffect, useRef, useState } from 'react';
-
-const RESPONSE_START_TAG = '<RESPONSE_START>';
-const END_OF_STREAM_TAG = '<END_OF_STREAM>';
 
 export function useChatroomWebSocket(chatroomId: string | undefined) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -14,24 +12,6 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
 
   const socketRef = useRef<WebSocket | null>(null);
   const currentAssistantMessageIdRef = useRef<string | null>(null);
-
-  const parseWebSocketMessage = (rawData: any): WebSocketMessage | null => {
-    let data: string;
-    
-    try {
-      data = typeof rawData === 'string' ? rawData : String(rawData);
-    } catch {
-      return null;
-    }
-
-    const hasStart = data.includes(RESPONSE_START_TAG);
-    const hasEnd = data.includes(END_OF_STREAM_TAG);
-    const cleanData = data
-      .replace(new RegExp(RESPONSE_START_TAG, 'g'), '')
-      .replace(new RegExp(END_OF_STREAM_TAG, 'g'), '');
-
-    return { data: cleanData, hasStart, hasEnd };
-  };
 
   const handleMessageStart = () => {
     // Remove previous placeholder if exists
@@ -94,8 +74,8 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
         currentAssistantMessageIdRef.current = null;
       };
 
-      ws.onerror = (error) => {
-        // console.error('WebSocket error:', error);
+      ws.onerror = () => {
+        console.error('WebSocket connection error');
         setIsConnecting(false);
       };
 
@@ -117,8 +97,8 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
           handleMessageEnd();
         }
       };
-    } catch (error) {
-      // console.error('Failed to connect WebSocket:', error);
+    } catch (error: unknown) {
+      console.error('Failed to connect WebSocket:', error instanceof Error ? error.message : error);
       setIsConnecting(false);
     }
   };

@@ -35,8 +35,8 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
         default:
           throw new Error(`Unsupported platform: ${platform}`);
       }
-    } catch (error: any) {
-      handleError(error, platform);
+    } catch (error: unknown) {
+      handleError(error instanceof Error ? error : new Error(String(error)), platform);
     } finally {
       setLoading(false);
     }

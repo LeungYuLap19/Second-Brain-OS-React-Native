@@ -1,7 +1,7 @@
 import type { AppleAuthResult } from '@/types';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 // Store keys
 const APPLE_AUTH_KEYS = {
@@ -77,8 +77,8 @@ export async function appleSignIn(): Promise<AppleAuthResult> {
       token: credential.identityToken,
     };
 
-  } catch (error: any) {
-    if (error.code === 'ERR_CANCELED') {
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && (error as { code: string }).code === 'ERR_CANCELED') {
       return {
         success: false,
         error: 'Sign in cancelled by user',
@@ -88,7 +88,7 @@ export async function appleSignIn(): Promise<AppleAuthResult> {
     console.error('Apple Sign-In Error:', error);
     return {
       success: false,
-      error: error.message || 'Apple Sign-In failed',
+      error: error instanceof Error ? error.message : 'Apple Sign-In failed',
     };
   }
 }

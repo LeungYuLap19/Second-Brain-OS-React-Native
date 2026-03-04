@@ -3,7 +3,7 @@ import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/message-list';
 import ThemedSafeAreaView from '@/components/ui/layout/themed-safe-area-view';
 import { useChatroomWebSocket } from '@/hooks/use-chatroom-websocket';
-import { API_URL } from '@/lib/utils/server-uri';
+import { apiFetch } from '@/lib/utils/error';
 import { getNewChatroomId } from '@/lib/utils/utilities';
 import { Chatroom } from '@/types/chat';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -28,15 +28,10 @@ export default function ChatroomPage() {
 
   const retrieveChatroom = async (id: string) => {
     try {
-      const response = await fetch(`${API_URL}/retrieve_chatroom/${id}`, { method: 'GET' });
-      const body = await response.json();
-      
-      if (response.ok && body.success) {
-        const chatroom: Chatroom = body.data;
-        addMessages(chatroom.messages);
-      }
-    } catch (error) {
-      // console.error('Error retrieving chatroom:', error);
+      const chatroom = await apiFetch<Chatroom>(`/retrieve_chatroom/${id}`);
+      addMessages(chatroom.messages);
+    } catch (error: unknown) {
+      console.error('Failed to retrieve chatroom:', error instanceof Error ? error.message : error);
     }
   };
 

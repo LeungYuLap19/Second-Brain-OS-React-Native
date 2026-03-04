@@ -1,7 +1,7 @@
 import type { GoogleAuthResult } from '@/types';
 import * as AuthSession from 'expo-auth-session';
-import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
+import * as WebBrowser from 'expo-web-browser';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -120,11 +120,11 @@ export async function googleSignIn(
       success: false,
       error: 'Authentication failed'
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Google Sign-In Error:', error);
     return {
       success: false,
-      error: error.message || 'Google Sign-In failed',
+      error: error instanceof Error ? error.message : 'Google Sign-In failed',
     };
   }
 }
@@ -137,7 +137,7 @@ export async function checkGoogleSignIn(): Promise<boolean> {
   try {
     const token = await SecureStore.getItemAsync(GOOGLE_AUTH_KEYS.ACCESS_TOKEN);
     return !!token;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Google signin check error:', error);
     return false;
   }
@@ -180,7 +180,7 @@ export async function refreshGoogleToken(): Promise<string | null> {
     }
 
     return null;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Google token refresh error:', error);
     return null;
   }
@@ -214,7 +214,7 @@ export async function googleSignOut(): Promise<void> {
     ]);
 
     console.log('Google Sign-Out successful');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Google Sign-Out Error:', error);
     throw error;
   }

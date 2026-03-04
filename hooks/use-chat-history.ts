@@ -1,4 +1,4 @@
-import { API_URL } from "@/lib/utils/server-uri";
+import { apiFetch, AppError, getErrorMessage } from "@/lib/utils/error";
 import { getChatroomId, getClientId, getNewChatroomId } from "@/lib/utils/utilities";
 import { ChatHistory } from "@/types";
 import { router } from "expo-router";
@@ -15,17 +15,12 @@ export function useChatHistory() {
   }, []);
 
   const getChatHistory = async () => {
-    const client_id = await getClientId();
     try {
-      const response = await fetch(`${API_URL}/chat_history/${client_id}`, {
-        method: 'GET'
-      });
-      const body = await response.json();
-      if (response.ok && body.success) {
-        setHistories(body.data)
-      }
-    } catch (error: any) {
-      console.log(error);
+      const client_id = await getClientId();
+      const data = await apiFetch<ChatHistory[]>(`/chat_history/${client_id}`);
+      setHistories(data);
+    } catch (error: unknown) {
+      console.error('Failed to fetch chat history:', getErrorMessage(error));
     }
   }
 
@@ -77,29 +72,21 @@ export function useChatHistory() {
       async () => {
         try {
           const client_id = await getClientId();
-
-          const response = await fetch(`${API_URL}/delete_all_chatrooms`, {
+          await apiFetch(`/delete_all_chatrooms`, {
             method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
             body: JSON.stringify({ client_id }),
           });
 
-          const body = await response.json();
+          Alert.alert('Success', 'All chat history cleared');
+          setHistories([]);
 
-          if (response.ok && body.success) {
-            Alert.alert('Success', 'All chat history cleared');
-            setHistories([]);
-
-            const id = await getNewChatroomId();
-            router.replace(`/(tabs)/chatroom/${id}`);
-          } else {
-            Alert.alert('Error', body.detail || 'Failed to clear history');
-          }
-        } catch (error: any) {
-          console.log('Error clearing chat history:', error);
-          Alert.alert('Error', 'Failed to clear history. Please try again.');
+          const id = await getNewChatroomId();
+          router.replace(`/(tabs)/chatroom/${id}`);
+        } catch (error: unknown) {
+          const message = error instanceof AppError && error.detail
+            ? error.detail
+            : 'Failed to clear history. Please try again.';
+          Alert.alert('Error', message);
         }
       }
     );
@@ -113,30 +100,23 @@ export function useChatHistory() {
       async () => {
         try {
           const client_id = await getClientId();
-          const response = await fetch(`${API_URL}/delete_chatroom`, {
+          await apiFetch(`/delete_chatroom`, {
             method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
             body: JSON.stringify({ client_id, chatroom_id: chatroomId }),
           });
 
-          const body = await response.json();
+          setHistories((prev) => prev.filter((item) => item.id !== chatroomId));
 
-          if (response.ok && body.success) {
-            setHistories((prev) => prev.filter((item) => item.id !== chatroomId));
-
-            if (currentId === chatroomId) {
-              const id = await getNewChatroomId();
-              setCurrentId(id);
-              router.replace(`/(tabs)/chatroom/${id}`);
-            }
-          } else {
-            Alert.alert('Error', body.detail || 'Failed to delete chat history');
+          if (currentId === chatroomId) {
+            const id = await getNewChatroomId();
+            setCurrentId(id);
+            router.replace(`/(tabs)/chatroom/${id}`);
           }
-        } catch (error: any) {
-          console.log('Error deleting chat history:', error);
-          Alert.alert('Error', 'Failed to delete chat history. Please try again.');
+        } catch (error: unknown) {
+          const message = error instanceof AppError && error.detail
+            ? error.detail
+            : 'Failed to delete chat history. Please try again.';
+          Alert.alert('Error', message);
         }
       }
     );
