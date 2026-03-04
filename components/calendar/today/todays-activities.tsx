@@ -1,12 +1,13 @@
-import AnimatedHeightView from '@/components/ui/animated-height-view';
+import AnimatedHeightView from '@/components/ui/animation/animated-height-view';
 import { monthNames, weekdayNames } from '@/constants/calendar';
 import { isSameDay } from '@/lib/utils/date-utils';
 import type { TodaysActivitiesProps } from '@/types';
 import React, { useEffect, useState } from 'react';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 
-import CardContainer from '@/components/ui/card-container';
-import HiddenDelete from '@/components/ui/hidden-delete';
+import HiddenDelete from '@/components/ui/elements/hidden-delete';
+import IconCircle from '@/components/ui/elements/icon-circle';
+import CardContainer from '@/components/ui/layout/card-container';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ActivityItem from './activity-item';
 import Placeholder from './placeholder';
@@ -47,9 +48,9 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
             {dayActivities.length} {dayActivities.length === 1 ? 'Task' : 'Tasks'} Scheduled
           </Text>
         </View>
-        <View className="bg-zinc-800 w-8 h-8 rounded-full items-center justify-center border border-zinc-700">
+        <IconCircle size="sm" bgClassName="bg-zinc-800" borderClassName="border border-zinc-700">
           <Text className="text-xs font-bold text-zinc-400">{dayActivities.length}</Text>
-        </View>
+        </IconCircle>
       </View>
 
       <AnimatedHeightView height={listHeight} overflowHidden springConfig={SPRING_CONFIG}>

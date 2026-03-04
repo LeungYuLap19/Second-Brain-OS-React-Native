@@ -1,4 +1,6 @@
-import CardContainer from '@/components/ui/card-container';
+import Badge from '@/components/ui/elements/badge';
+import IconCircle from '@/components/ui/elements/icon-circle';
+import CardContainer from '@/components/ui/layout/card-container';
 import type { UploadCardProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
@@ -11,9 +13,9 @@ export default function UploadCard({ onUpload }: UploadCardProps) {
     <CardContainer className="p-5 mb-6">
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-3">
-          <View className="w-11 h-11 rounded-2xl bg-zinc-800 items-center justify-center">
+          <IconCircle size="lg" shape="rounded" bgClassName="bg-zinc-800">
             <Feather name="upload-cloud" size={18} color="#e4e4e7" />
-          </View>
+          </IconCircle>
           <View>
             <Text className="text-base font-semibold text-zinc-100">Upload files</Text>
             <Text className="text-xs text-zinc-400">Drag in or pick from device</Text>
@@ -30,12 +32,14 @@ export default function UploadCard({ onUpload }: UploadCardProps) {
 
       <View className="flex-row flex-wrap gap-2 mt-4">
         {fileTypes.map((type) => (
-          <View
+          <Badge
             key={type}
-            className="px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700"
-          >
-            <Text className="text-xs text-zinc-300">{type}</Text>
-          </View>
+            label={type}
+            variant="neutral"
+            size="sm"
+            borderClassName="border border-zinc-700"
+            className="bg-zinc-800"
+          />
         ))}
       </View>
     </CardContainer>

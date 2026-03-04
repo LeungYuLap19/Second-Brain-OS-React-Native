@@ -1,6 +1,6 @@
 import type { ReplyBoxProps } from '@/types';
 import React from 'react';
-import MessageComposer from '../ui/message-composer';
+import MessageComposer from '../ui/elements/message-composer';
 
 export default function ReplyBox({ value, onChangeText, onSend }: ReplyBoxProps) {
   return (

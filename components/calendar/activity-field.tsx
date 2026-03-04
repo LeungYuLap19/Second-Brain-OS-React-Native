@@ -1,7 +1,10 @@
 import type { ActivityFieldProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React, { useEffect, useMemo, useState } from 'react'
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native'
+import SectionLabel from '../ui/elements/section-label'
+import ThemedTextInput from '../ui/elements/themed-text-input'
+import FormFieldContainer from '../ui/layout/form-field-container'
 
 const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const
 
@@ -84,78 +87,68 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
         <View className="gap-6">
           {/* Title Section */}
           <View>
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2 ml-1">
-              Activity Title
-            </Text>
-            <TextInput
+            <SectionLabel label="Activity Title" />
+            <ThemedTextInput
               value={form.title}
               onChangeText={(text) => updateField('title', text)}
               placeholder="What needs to be done?"
-              placeholderTextColor="#52525b"
               className="text-2xl font-semibold text-white bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800"
             />
           </View>
 
           {/* Details Grid */}
           <View className="gap-4">
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest ml-1">
-              Details
-            </Text>
+            <SectionLabel label="Details" className="mb-0" />
             
             <View className="flex-row gap-3">
-              <View className="flex-1 bg-zinc-900/50 p-3 rounded-2xl border border-zinc-800">
+              <FormFieldContainer padding="sm" className="flex-1">
                 <View className="flex-row items-center gap-2 mb-1">
                   <Feather name="clock" size={14} color="#71717a" />
                   <Text className="text-xs text-zinc-500 font-medium">Time</Text>
                 </View>
-                <TextInput
+                <ThemedTextInput
                   value={form.time}
                   onChangeText={(text) => updateField('time', text)}
                   placeholder="00:00"
-                  placeholderTextColor="#52525b"
-                  className="text-base text-zinc-200 font-medium h-8"
+                  className="h-8"
                 />
-              </View>
+              </FormFieldContainer>
 
-              <View className="flex-1 bg-zinc-900/50 p-3 rounded-2xl border border-zinc-800">
+              <FormFieldContainer padding="sm" className="flex-1">
                 <View className="flex-row items-center gap-2 mb-1">
                   <Feather name="tag" size={14} color="#71717a" />
                   <Text className="text-xs text-zinc-500 font-medium">Tag</Text>
                 </View>
-                <TextInput
+                <ThemedTextInput
                   value={form.tag}
                   onChangeText={(text) => updateField('tag', text)}
                   placeholder="Category"
-                  placeholderTextColor="#52525b"
-                  className="text-base text-zinc-200 font-medium h-8"
+                  className="h-8"
                 />
-              </View>
+              </FormFieldContainer>
             </View>
 
-            <View className="bg-zinc-900/50 p-3 rounded-2xl border border-zinc-800">
+            <FormFieldContainer padding="sm">
               <View className="flex-row items-center gap-2 mb-1">
                 <Feather name="map-pin" size={14} color="#71717a" />
                 <Text className="text-xs text-zinc-500 font-medium">Location</Text>
               </View>
-              <TextInput
+              <ThemedTextInput
                 value={form.location}
                 onChangeText={(text) => updateField('location', text)}
                 placeholder="Add location"
-                placeholderTextColor="#52525b"
-                className="text-base text-zinc-200 font-medium h-8"
+                className="h-8"
               />
-            </View>
+            </FormFieldContainer>
           </View>
 
           {/* Priority & Urgent */}
           <View>
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest ml-1">
-              Settings
-            </Text>
+            <SectionLabel label="Settings" className="mb-0" />
             
             <PrioritySelector />
 
-            <View className="flex-row items-center justify-between bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800 mt-3">
+            <FormFieldContainer className="flex-row items-center justify-between mt-3">
               <Pressable 
                 onPress={() => updateField('urgent', !form.urgent)}
                 className="flex-1 flex-row items-center gap-3"
@@ -178,20 +171,17 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
                 trackColor={{ false: '#3f3f46', true: '#ef4444' }}
                 thumbColor={'#ffffff'}
               />
-            </View>
+            </FormFieldContainer>
           </View>
 
           {/* Notes */}
           <View className="flex-1">
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2 ml-1">
-              Notes
-            </Text>
-            <TextInput
+            <SectionLabel label="Notes" />
+            <ThemedTextInput
               value={form.notes}
               onChangeText={(text) => updateField('notes', text)}
               placeholder="Add description or notes..."
-              placeholderTextColor="#52525b"
-              className="flex-1 bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800 text-zinc-200 text-base leading-6 min-h-[120px]"
+              className="flex-1 bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800 leading-6 min-h-[120px]"
               multiline
               textAlignVertical="top"
             />

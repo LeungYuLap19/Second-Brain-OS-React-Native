@@ -1,12 +1,10 @@
 import ActivityField from '@/components/calendar/activity-field'
-import CircleButton from '@/components/ui/circle-button'
-import Header from '@/components/ui/header'
-import ThemedView from '@/components/ui/themed-view'
+import CircleButton from '@/components/ui/elements/circle-button'
+import ModalScreen from '@/components/ui/layout/modal-screen'
 import { activityMap } from '@/constants/calendar'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
-import { View } from 'react-native'
 
 export default function ActivityModal() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -17,20 +15,15 @@ export default function ActivityModal() {
     : undefined;
 
   return (
-    <ThemedView>
-      <Header 
-        title={selectedActivity ? 'Details' : 'New Activity'}
-        variant='modal'
-        rightSlot={
-          <CircleButton>
-            <MaterialIcons name="done" size={18} color="#e4e4e7" />
-          </CircleButton>
-        }
-      />
-
-      <View className="flex-1 px-6 pb-6">
-        <ActivityField value={selectedActivity} />
-      </View>
-    </ThemedView>
+    <ModalScreen
+      title={selectedActivity ? 'Details' : 'New Activity'}
+      rightSlot={
+        <CircleButton>
+          <MaterialIcons name="done" size={18} color="#e4e4e7" />
+        </CircleButton>
+      }
+    >
+      <ActivityField value={selectedActivity} />
+    </ModalScreen>
   )
 }

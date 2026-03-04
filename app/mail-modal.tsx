@@ -1,14 +1,13 @@
 import EmailDetail from '@/components/inbox/email-detail'
 import NewEmailFields from '@/components/inbox/new-email-fields'
 import ReplyBox from '@/components/inbox/reply-box'
-import CircleButton from '@/components/ui/circle-button'
-import Header from '@/components/ui/header'
-import ThemedView from '@/components/ui/themed-view'
+import CircleButton from '@/components/ui/elements/circle-button'
+import ModalScreen from '@/components/ui/layout/modal-screen'
 import { emailThreads } from '@/constants/emails'
 import { Feather } from '@expo/vector-icons'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView } from 'react-native'
 
 export default function MailModal() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -18,31 +17,27 @@ export default function MailModal() {
   const handleSendReply = () => { setReplyText('') };
 
   return (
-    <ThemedView>
-      <Header 
-        title={selectedEmail ? selectedEmail.subject : 'New Email'}
-        variant='modal'
-        rightSlot={
-          !selectedEmail ?
-          <CircleButton>
-            <Feather name="send" size={18} color="#e4e4e7" />
-          </CircleButton> :
-          undefined
-        }
-      />
-
+    <ModalScreen
+      title={selectedEmail ? selectedEmail.subject : 'New Email'}
+      contentClassName={selectedEmail ? 'px-0 pb-0' : ''}
+      rightSlot={
+        !selectedEmail ?
+        <CircleButton>
+          <Feather name="send" size={18} color="#e4e4e7" />
+        </CircleButton> :
+        undefined
+      }
+    >
       {selectedEmail ?
         <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 24 }}>
           <EmailDetail email={selectedEmail} />
         </ScrollView> :
-        <View className="flex-1 px-6 pb-6">
-          <NewEmailFields />
-        </View>
+        <NewEmailFields />
       }
 
       {selectedEmail && (
         <ReplyBox value={replyText} onChangeText={setReplyText} onSend={handleSendReply} />
       )}
-    </ThemedView>
+    </ModalScreen>
   )
 }

@@ -7,8 +7,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import type { MarkedDates } from 'react-native-calendars/src/types';
-import AnimatedHeightView from '../../ui/animated-height-view';
-import CardContainer from '../../ui/card-container';
+import AnimatedHeightView from '../../ui/animation/animated-height-view';
+import IconCircle from '../../ui/elements/icon-circle';
+import CardContainer from '../../ui/layout/card-container';
 
 const calendarTheme = {
   backgroundColor: 'transparent',
@@ -110,9 +111,9 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
           <Text className="text-lg font-semibold text-zinc-100 mb-0.5">{title}</Text>
           <Text className="text-xs font-medium text-zinc-500 uppercase tracking-wider">{infoLabel}</Text>
         </View>
-        <View className="w-8 h-8 rounded-full bg-zinc-800 items-center justify-center border border-zinc-700">
+        <IconCircle size="sm" bgClassName="bg-zinc-800" borderClassName="border border-zinc-700">
           <Feather name={expand ? 'chevron-up' : 'chevron-down'} size={18} color="#71717a" />
-        </View>
+        </IconCircle>
       </Pressable>
 
       <AnimatedHeightView height={expand ? contentHeight : 0} springConfig={{ duration: 200 }}>

@@ -4,8 +4,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-import CircleButton from '../ui/circle-button';
-import Header from '../ui/header';
+import CircleButton from '../ui/elements/circle-button';
+import Header from '../ui/layout/header';
 
 export function ChatHeader({ isConnecting, isConnected, onReconnect, onNewChatroom }: ChatHeaderProps) {
   return (

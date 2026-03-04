@@ -1,31 +1,23 @@
-import type { FileStatus, FileStatusPillProps } from '@/types';
+import Badge from '@/components/ui/elements/badge';
+import type { BadgeVariant, FileStatus, FileStatusPillProps } from '@/types';
 import React from 'react';
-import { Text, View } from 'react-native';
 
-const statusStyles: Record<FileStatus, { label: string; container: string; text: string }> = {
-  uploading: {
-    label: 'Uploading',
-    container: 'bg-sky-500/15 border border-sky-500/30',
-    text: 'text-sky-200',
-  },
-  processing: {
-    label: 'Processing',
-    container: 'bg-amber-500/15 border border-amber-500/30',
-    text: 'text-amber-200',
-  },
-  ready: {
-    label: 'Ready',
-    container: 'bg-emerald-500/15 border border-emerald-500/30',
-    text: 'text-emerald-200',
-  },
+const statusConfig: Record<FileStatus, { label: string; variant: BadgeVariant; border: string }> = {
+  uploading:  { label: 'Uploading',  variant: 'sky',     border: 'border border-sky-500/30' },
+  processing: { label: 'Processing', variant: 'amber',   border: 'border border-amber-500/30' },
+  ready:      { label: 'Ready',      variant: 'emerald', border: 'border border-emerald-500/30' },
 };
 
 export default function FileStatusPill({ status }: FileStatusPillProps) {
-  const styles = statusStyles[status];
+  const config = statusConfig[status];
 
   return (
-    <View className={`px-2.5 py-1 rounded-full ${styles.container}`}>
-      <Text className={`text-xs font-medium ${styles.text}`}>{styles.label}</Text>
-    </View>
+    <Badge
+      label={config.label}
+      variant={config.variant}
+      size="sm"
+      borderClassName={config.border}
+      className="px-2.5"
+    />
   );
 }

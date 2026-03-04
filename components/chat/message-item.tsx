@@ -1,10 +1,11 @@
+import IconCircle from '@/components/ui/elements/icon-circle';
 import { getMarkdownStyles } from '@/lib/utils/utilities';
 import { MessageItemProps } from '@/types/components';
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
-export function MessageItem({ message, isStreaming }: MessageItemProps) {
+function MessageItem({ message, isStreaming }: MessageItemProps) {
   const isUser = message.role === 'user';
 
   return (
@@ -15,15 +16,15 @@ export function MessageItem({ message, isStreaming }: MessageItemProps) {
         }`}
       >
         {/* Avatar */}
-        <View
-          className={`w-8 h-8 rounded-full items-center justify-center flex-shrink-0 ${
-            isUser ? 'bg-zinc-800/70' : 'bg-zinc-900/70'
-          }`}
+        <IconCircle
+          size="sm"
+          bgClassName={isUser ? 'bg-zinc-800/70' : 'bg-zinc-900/70'}
+          className="flex-shrink-0"
         >
           <Text className="text-xs text-zinc-100">
             {isUser ? '👨🏻‍💻' : '😸'}
           </Text>
-        </View>
+        </IconCircle>
 
         {/* Message Bubble */}
         <View
@@ -45,4 +46,6 @@ export function MessageItem({ message, isStreaming }: MessageItemProps) {
       </View>
     </View>
   );
-}
+};
+
+export default React.memo(MessageItem);

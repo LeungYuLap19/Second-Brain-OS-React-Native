@@ -129,3 +129,30 @@ Second-Brain-OS-Mobile
 └─ tsconfig.json
 
 ```
+
+components/ui/
+├── layout/              # Screen-level & structural containers
+│   ├── card-container.tsx
+│   ├── form-field-container.tsx
+│   ├── header.tsx
+│   ├── modal-screen.tsx
+│   ├── tab-screen.tsx
+│   ├── themed-safe-area-view.tsx
+│   └── themed-view.tsx
+├── elements/            # Atomic UI building blocks
+│   ├── badge.tsx
+│   ├── circle-button.tsx
+│   ├── divider.tsx
+│   ├── dot-separator.tsx
+│   ├── empty-state.tsx
+│   ├── hidden-delete.tsx
+│   ├── icon-circle.tsx
+│   ├── message-composer.tsx
+│   ├── section-label.tsx
+│   ├── siginin-button.tsx
+│   ├── themed-text-input.tsx
+│   └── themed-text.tsx
+└── animation/           # Animation-related components
+    ├── animated-background.tsx
+    ├── animated-height-view.tsx
+    └── typewriter.tsx

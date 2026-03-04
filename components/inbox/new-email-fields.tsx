@@ -1,6 +1,11 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import Divider from '../ui/elements/divider';
+import IconCircle from '../ui/elements/icon-circle';
+import SectionLabel from '../ui/elements/section-label';
+import ThemedTextInput from '../ui/elements/themed-text-input';
+import FormFieldContainer from '../ui/layout/form-field-container';
 
 export default function NewEmailFields() {
   return (
@@ -17,70 +22,60 @@ export default function NewEmailFields() {
         <View className="gap-6">
           {/* Subject Section */}
           <View>
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2 ml-1">
-              Subject
-            </Text>
-            <TextInput
+            <SectionLabel label="Subject" />
+            <ThemedTextInput
               placeholder="What is this email about?"
-              placeholderTextColor="#52525b"
               className="text-xl font-semibold text-white bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800"
             />
           </View>
 
           {/* Recipients Section */}
           <View className="gap-3">
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest ml-1">
-              Recipients
-            </Text>
+            <SectionLabel label="Recipients" className="mb-0" />
             
-            <View className="bg-zinc-900/50 p-3 rounded-2xl border border-zinc-800 gap-3">
+            <FormFieldContainer padding="sm" className="gap-3">
               {/* To Field */}
               <View className="flex-row items-center gap-3">
-                <View className="w-8 h-8 rounded-full bg-zinc-800 items-center justify-center">
+                <IconCircle size="sm" bgClassName="bg-zinc-800">
                   <Feather name="user" size={14} color="#a1a1aa" />
-                </View>
+                </IconCircle>
                 <View className="flex-1">
                   <Text className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mb-0.5">To</Text>
-                  <TextInput
+                  <ThemedTextInput
                     placeholder="recipient@example.com"
-                    placeholderTextColor="#52525b"
-                    className="text-base text-zinc-200 font-medium h-6 p-0"
+                    className="h-6 p-0"
                     keyboardType="email-address"
                     autoCapitalize="none"
                   />
                 </View>
               </View>
 
-              <View className="h-px bg-zinc-800/50 w-full" />
+              <Divider />
 
               {/* Cc Field */}
               <View className="flex-row items-center gap-3">
-                <View className="w-8 h-8 rounded-full bg-zinc-800 items-center justify-center">
+                <IconCircle size="sm" bgClassName="bg-zinc-800">
                   <Feather name="users" size={14} color="#a1a1aa" />
-                </View>
+                </IconCircle>
                 <View className="flex-1">
                   <Text className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider mb-0.5">Cc</Text>
-                  <TextInput
+                  <ThemedTextInput
                     placeholder="Optional"
-                    placeholderTextColor="#52525b"
-                    className="text-base text-zinc-200 font-medium h-6 p-0"
+                    className="h-6 p-0"
                     keyboardType="email-address"
                     autoCapitalize="none"
                   />
                 </View>
               </View>
-            </View>
+            </FormFieldContainer>
           </View>
 
           {/* Body Section */}
           <View className="flex-1">
-            <Text className="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2 ml-1">
-              Message
-            </Text>
-            <TextInput
+            <SectionLabel label="Message" />
+            <ThemedTextInput
               placeholder="Write your email..."
-              placeholderTextColor="#52525b"
-              className="flex-1 bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 text-zinc-200 text-base leading-7 min-h-[300px]"
+              className="flex-1 bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 leading-7 min-h-[300px]"
               multiline
               textAlignVertical="top"
             />

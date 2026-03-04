@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import DotSeparator from '@/components/ui/elements/dot-separator';
 import type { ActivityItemProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
 import { Link } from 'expo-router';
@@ -46,7 +47,7 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
               </View>
               {activity.tag && (
                 <>
-                  <View className="w-0.5 h-0.5 rounded-full bg-zinc-700" />
+                  <DotSeparator />
                   <Text className="text-xs text-zinc-500 font-medium">{activity.tag}</Text>
                 </>
               )}

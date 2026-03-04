@@ -1,5 +1,7 @@
 import FileStatusPill from '@/components/files/file-status-pill';
-import CardContainer from '@/components/ui/card-container';
+import DotSeparator from '@/components/ui/elements/dot-separator';
+import IconCircle from '@/components/ui/elements/icon-circle';
+import CardContainer from '@/components/ui/layout/card-container';
 import type { FileItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
@@ -17,15 +19,15 @@ const typeIconMap: Record<string, keyof typeof Feather.glyphMap> = {
   zip: 'archive',
 };
 
-export default function FileItem({ name, size, type, status, updatedAt }: FileItemProps) {
+function FileItem({ name, size, type, status, updatedAt }: FileItemProps) {
   const iconName = typeIconMap[type] ?? 'file';
 
   return (
     <CardContainer asChild className="p-4 mb-4 active:bg-zinc-900">
       <View className="flex-row items-center gap-3">
-        <View className="w-11 h-11 rounded-2xl bg-zinc-800 items-center justify-center">
+        <IconCircle size="lg" shape="rounded" bgClassName="bg-zinc-800">
           <Feather name={iconName} size={18} color="#e4e4e7" />
-        </View>
+        </IconCircle>
 
         <View className="flex-1">
           <View className="flex-row items-center justify-between">
@@ -37,9 +39,9 @@ export default function FileItem({ name, size, type, status, updatedAt }: FileIt
 
           <View className="flex-row items-center gap-2 mt-1">
             <Text className="text-xs text-zinc-400">{type.toUpperCase()}</Text>
-            <View className="w-1 h-1 rounded-full bg-zinc-600" />
+            <DotSeparator />
             <Text className="text-xs text-zinc-400">{size}</Text>
-            <View className="w-1 h-1 rounded-full bg-zinc-600" />
+            <DotSeparator />
             <Text className="text-xs text-zinc-500">{updatedAt}</Text>
           </View>
         </View>
@@ -47,3 +49,5 @@ export default function FileItem({ name, size, type, status, updatedAt }: FileIt
     </CardContainer>
   );
 }
+
+export default React.memo(FileItem);

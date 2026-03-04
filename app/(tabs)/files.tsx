@@ -1,38 +1,34 @@
 import FileItem from '@/components/files/file-item';
 import UploadCard from '@/components/files/upload-card';
-import Header from '@/components/ui/header';
-import ThemedSafeAreaView from '@/components/ui/themed-safe-area-view';
+import TabScreen from '@/components/ui/layout/tab-screen';
 import { files } from '@/constants/files';
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 export default function FilesPage() {
   return (
-    <ThemedSafeAreaView>
-      <Header
-        title="Files"
-        subtitle="Upload and index your knowledge"
-      />
+    <TabScreen
+      title="Files"
+      subtitle="Upload and index your knowledge"
+      contentPaddingBottom={32}
+    >
+      <UploadCard />
 
-      <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 32 }}>
-        <UploadCard />
+      <View className="flex-row items-center justify-between mb-4">
+        <Text className="text-lg font-semibold text-zinc-100">Recent uploads</Text>
+        <Text className="text-xs text-zinc-400">5 items</Text>
+      </View>
 
-        <View className="flex-row items-center justify-between mb-4">
-          <Text className="text-lg font-semibold text-zinc-100">Recent uploads</Text>
-          <Text className="text-xs text-zinc-400">5 items</Text>
-        </View>
-
-        {files.map((file) => (
-          <FileItem
-            key={file.id}
-            name={file.name}
-            size={file.size}
-            type={file.type}
-            status={file.status as 'uploading' | 'processing' | 'ready'}
-            updatedAt={file.updatedAt}
-          />
-        ))}
-      </ScrollView>
-    </ThemedSafeAreaView>
+      {files.map((file) => (
+        <FileItem
+          key={file.id}
+          name={file.name}
+          size={file.size}
+          type={file.type}
+          status={file.status as 'uploading' | 'processing' | 'ready'}
+          updatedAt={file.updatedAt}
+        />
+      ))}
+    </TabScreen>
   );
 }

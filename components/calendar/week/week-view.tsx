@@ -5,7 +5,8 @@ import type { WeekViewProps } from '@/types';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import CardContainer from '../../ui/card-container';
+import Badge from '../../ui/elements/badge';
+import CardContainer from '../../ui/layout/card-container';
 import TodaysActivities from '../today/todays-activities';
 import WeekRow from './week-row';
 
@@ -45,11 +46,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
               {weekRangeLabel}
             </Text>
           </View>
-          <View className="bg-zinc-800 px-3 py-1 rounded-full border border-zinc-700">
-            <Text className="text-[10px] font-medium text-zinc-400">
-              {infoLabel}
-            </Text>
-          </View>
+          <Badge label={infoLabel} variant="neutral" size="sm" borderClassName="border border-zinc-700" className="bg-zinc-800 px-3" />
         </View>
 
         <PagerView

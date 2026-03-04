@@ -1,6 +1,6 @@
 import { ChatInputProps } from '@/types/components';
 import React from 'react';
-import MessageComposer from '../ui/message-composer';
+import MessageComposer from '../ui/elements/message-composer';
 
 export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightChange }: ChatInputProps) {
   return (

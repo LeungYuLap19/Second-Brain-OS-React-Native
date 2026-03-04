@@ -1,3 +1,4 @@
+import IconCircle from '@/components/ui/elements/icon-circle';
 import { setChatroomId } from '@/lib/utils/utilities';
 import { HistoryItemProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
@@ -5,7 +6,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-export default function HistoryItem({ currentId, item }: HistoryItemProps) {
+function HistoryItem({ currentId, item }: HistoryItemProps) {
   const isSelected = currentId === item.id;
   
   return (
@@ -20,17 +21,17 @@ export default function HistoryItem({ currentId, item }: HistoryItemProps) {
           : 'bg-zinc-950 border-zinc-800'
       }`}
     >
-      <View className={`w-10 h-10 rounded-full items-center justify-center border ${
-        isSelected
-          ? 'bg-zinc-800 border-zinc-600'
-          : 'bg-zinc-800 border-zinc-700'
-      }`}>
+      <IconCircle
+        size="md"
+        bgClassName="bg-zinc-800"
+        borderClassName={isSelected ? 'border border-zinc-600' : 'border border-zinc-700'}
+      >
         <Feather 
           name="message-square" 
           size={18} 
           color={isSelected ? '#f4f4f5' : '#a1a1aa'} 
         />
-      </View>
+      </IconCircle>
 
       <View className="flex-1 gap-1">
         <View className="flex-row justify-between items-start">
@@ -51,3 +52,5 @@ export default function HistoryItem({ currentId, item }: HistoryItemProps) {
     </Pressable>
   )
 }
+
+export default React.memo(HistoryItem);

@@ -1,6 +1,6 @@
 // Chat component props
 import type { ReactNode } from 'react';
-import { PressableProps, StyleProp, TextProps, ViewProps, ViewStyle } from 'react-native';
+import { PressableProps, StyleProp, TextInputProps, TextProps, ViewProps, ViewStyle } from 'react-native';
 import { WithSpringConfig } from 'react-native-reanimated';
 import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 import { RowMap } from 'react-native-swipe-list-view';
@@ -8,6 +8,78 @@ import { Activity } from './calendar';
 import { ChatHistory, Message } from './chat';
 import { FileStatus } from './files';
 import { EmailDetailData, EmailListItemData } from './inbox';
+
+// ── Shared UI component props ──────────────────────────────────────
+
+export type BadgeVariant = 'sky' | 'emerald' | 'amber' | 'rose' | 'fuchsia' | 'indigo' | 'neutral';
+
+export interface BadgeProps {
+  label: string;
+  variant?: BadgeVariant;
+  size?: 'xs' | 'sm';
+  borderClassName?: string;
+  className?: string;
+}
+
+export interface SectionLabelProps {
+  label: string;
+  className?: string;
+}
+
+export interface FormFieldContainerProps extends ViewProps {
+  children: ReactNode;
+  padding?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+export interface ThemedTextInputProps extends TextInputProps {
+  className?: string;
+}
+
+export type IconCircleSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type IconCircleShape = 'circle' | 'rounded';
+
+export interface IconCircleProps {
+  size?: IconCircleSize;
+  shape?: IconCircleShape;
+  bgClassName?: string;
+  borderClassName?: string;
+  children: ReactNode;
+  className?: string;
+}
+
+export interface DividerProps {
+  className?: string;
+}
+
+export interface EmptyStateProps {
+  icon: React.ComponentProps<typeof import('@expo/vector-icons/Feather').default>['name'];
+  message: string;
+  iconColor?: string;
+  className?: string;
+}
+
+export interface ModalScreenProps {
+  title: string;
+  rightSlot?: ReactNode;
+  children: ReactNode;
+  contentClassName?: string;
+}
+
+export interface TabScreenProps {
+  title: string;
+  subtitle?: string;
+  rightSlot?: ReactNode;
+  scrollable?: boolean;
+  contentPaddingBottom?: number;
+  children: ReactNode;
+}
+
+export interface DotSeparatorProps {
+  size?: 'sm' | 'md';
+}
+
+// ── Feature component props ────────────────────────────────────────
 
 export interface ChatHeaderProps {
   isConnecting: boolean;

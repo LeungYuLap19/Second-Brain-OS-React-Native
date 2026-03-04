@@ -1,7 +1,7 @@
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/message-list';
-import ThemedSafeAreaView from '@/components/ui/themed-safe-area-view';
+import ThemedSafeAreaView from '@/components/ui/layout/themed-safe-area-view';
 import { useChatroomWebSocket } from '@/hooks/use-chatroom-websocket';
 import { API_URL } from '@/lib/utils/server-uri';
 import { getNewChatroomId } from '@/lib/utils/utilities';

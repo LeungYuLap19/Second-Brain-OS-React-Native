@@ -1,17 +1,18 @@
-import CardContainer from '@/components/ui/card-container';
-import type { EmailListItemProps } from '@/types';
+import Badge from '@/components/ui/elements/badge';
+import CardContainer from '@/components/ui/layout/card-container';
+import type { BadgeVariant, EmailListItemProps } from '@/types';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const tagStyles: Record<string, { bg: string; text: string }> = {
-  Work: { bg: 'bg-sky-500/15', text: 'text-sky-200' },
-  Product: { bg: 'bg-emerald-500/15', text: 'text-emerald-200' },
-  Billing: { bg: 'bg-amber-500/15', text: 'text-amber-200' },
-  Personal: { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-200' },
+const tagVariants: Record<string, BadgeVariant> = {
+  Work: 'sky',
+  Product: 'emerald',
+  Billing: 'amber',
+  Personal: 'fuchsia',
 };
 
-export default function EmailListItem({ email, isSelected, onPress }: EmailListItemProps) {
+function EmailListItem({ email, isSelected, onPress }: EmailListItemProps) {
   return (
     <Link href={`/mail-modal?id=${email.id}`} asChild>
       <CardContainer 
@@ -43,17 +44,14 @@ export default function EmailListItem({ email, isSelected, onPress }: EmailListI
 
             {email.tags && email.tags.length > 0 && (
               <View className="flex-row items-center gap-2 mt-3 flex-wrap">
-                {email.tags.map((tag) => {
-                  const styles = tagStyles[tag] ?? {
-                    bg: 'bg-zinc-800/70',
-                    text: 'text-zinc-300',
-                  };
-                  return (
-                    <View key={tag} className={`px-2 py-1 rounded-full ${styles.bg}`}>
-                      <Text className={`text-[10px] font-semibold ${styles.text}`}>{tag}</Text>
-                    </View>
-                  );
-                })}
+                {email.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    label={tag}
+                    variant={tagVariants[tag] ?? 'neutral'}
+                    size="xs"
+                  />
+                ))}
               </View>
             )}
           </View>
@@ -62,3 +60,5 @@ export default function EmailListItem({ email, isSelected, onPress }: EmailListI
     </Link>
   );
 }
+
+export default React.memo(EmailListItem);
