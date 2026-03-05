@@ -1,5 +1,6 @@
-import { apiFetch, AppError, getErrorMessage } from "@/lib/utils/error";
-import { getChatroomId, getClientId, getNewChatroomId } from "@/lib/utils/utilities";
+import { chatApi } from "@/lib/api/chat";
+import { AppError, getErrorMessage } from "@/lib/api/client";
+import { getChatroomId, getClientId, getNewChatroomId } from "@/lib/utils/storage";
 import { ChatHistory } from "@/types";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -10,24 +11,21 @@ export function useChatHistory() {
   const [currentId, setCurrentId] = useState<string | null>(null);
 
   useEffect(() => {
-    getChatHistory();
-    getCurrentId();
-  }, []);
+    async function init() {
+      try {
+        const client_id = await getClientId();
+        const data = await chatApi.getHistory(client_id);
+        setHistories(data);
+      } catch (error: unknown) {
+        console.error('Failed to fetch chat history:', getErrorMessage(error));
+      }
 
-  const getChatHistory = async () => {
-    try {
-      const client_id = await getClientId();
-      const data = await apiFetch<ChatHistory[]>(`/chat_history/${client_id}`);
-      setHistories(data);
-    } catch (error: unknown) {
-      console.error('Failed to fetch chat history:', getErrorMessage(error));
+      const id = await getChatroomId();
+      setCurrentId(id);
     }
-  }
 
-  const getCurrentId = async () => {
-    const id = await getChatroomId();
-    setCurrentId(id);
-  }
+    init();
+  }, []);
 
   const handleNewChatroom = async () => {
     const id = await getNewChatroomId();
@@ -72,10 +70,7 @@ export function useChatHistory() {
       async () => {
         try {
           const client_id = await getClientId();
-          await apiFetch(`/delete_all_chatrooms`, {
-            method: 'DELETE',
-            body: JSON.stringify({ client_id }),
-          });
+          await chatApi.deleteAllChatrooms(client_id);
 
           Alert.alert('Success', 'All chat history cleared');
           setHistories([]);
@@ -100,10 +95,7 @@ export function useChatHistory() {
       async () => {
         try {
           const client_id = await getClientId();
-          await apiFetch(`/delete_chatroom`, {
-            method: 'DELETE',
-            body: JSON.stringify({ client_id, chatroom_id: chatroomId }),
-          });
+          await chatApi.deleteChatroom(client_id, chatroomId);
 
           setHistories((prev) => prev.filter((item) => item.id !== chatroomId));
 

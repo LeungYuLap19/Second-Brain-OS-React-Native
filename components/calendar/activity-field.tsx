@@ -1,4 +1,4 @@
-import type { ActivityFieldProps } from '@/types'
+import type { Activity, ActivityFieldProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React, { useEffect, useMemo, useState } from 'react'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native'
@@ -6,7 +6,8 @@ import SectionLabel from '../ui/elements/section-label'
 import ThemedTextInput from '../ui/elements/themed-text-input'
 import FormFieldContainer from '../ui/layout/form-field-container'
 
-const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const
+const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const;
+type ActivityForm = Omit<Activity, 'id'>;
 
 export default function ActivityField({ value, onChange }: ActivityFieldProps) {
   const initialValue = useMemo(
@@ -22,17 +23,17 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
     [value],
   )
 
-  const [form, setForm] = useState(initialValue)
+  const [form, setForm] = useState<ActivityForm>(initialValue)
 
   useEffect(() => {
-    setForm(initialValue)
+    setForm(initialValue);
   }, [initialValue])
 
   useEffect(() => {
-    onChange?.(form)
+    onChange?.(form);
   }, [form, onChange])
 
-  const updateField = <K extends keyof typeof form>(key: K, fieldValue: (typeof form)[K]) => {
+  const updateField = <K extends keyof ActivityForm>(key: K, fieldValue: (ActivityForm)[K]) => {
     setForm((prev) => ({ ...prev, [key]: fieldValue }))
   }
 

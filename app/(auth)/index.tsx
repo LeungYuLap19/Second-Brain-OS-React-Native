@@ -1,6 +1,6 @@
 import AnimatedBackground from '@/components/ui/animation/animated-background';
 import TypeWriter from '@/components/ui/animation/typewriter';
-import SigninButton from '@/components/ui/elements/siginin-button';
+import SigninButton from '@/components/ui/elements/signin-button';
 import ThemedSafeAreaView from '@/components/ui/layout/themed-safe-area-view';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';

@@ -1,12 +1,12 @@
-import { getWeekDays } from '@/lib/utils/date-utils';
 import {
     countWeekActivities,
     formatRangeLabel,
-    getMarkdownStyles,
     getMonthActivityCount,
+    getWeekDays,
     shiftDateByDays,
     shiftDateByMonth,
-} from '@/lib/utils/utilities';
+} from '@/lib/utils/date-utils';
+import { getMarkdownStyles } from '@/lib/utils/markdown-styles';
 import type { Activity } from '@/types';
 
 // ── shiftDateByMonth ───────────────────────────────────────────────

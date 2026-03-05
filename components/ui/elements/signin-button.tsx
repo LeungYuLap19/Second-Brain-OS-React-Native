@@ -1,5 +1,5 @@
 import { useSignIn } from '@/hooks/use-signin';
-import { clientIds, googleDiscovery } from '@/lib/utils/googleAuth';
+import { clientIds, googleDiscovery } from '@/lib/auth/google';
 import { PlatformType, SigninButtonProps } from '@/types';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as AuthSession from 'expo-auth-session';

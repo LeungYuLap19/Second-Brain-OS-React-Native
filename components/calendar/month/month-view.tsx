@@ -1,6 +1,5 @@
 import { monthNames } from '@/constants/calendar';
-import { formatDateKey } from '@/lib/utils/date-utils';
-import { getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/utilities';
+import { formatDateKey, getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/date-utils';
 import type { MonthViewProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
 import React, { useCallback, useMemo, useState } from 'react';

@@ -33,7 +33,7 @@ export default function HistoryModal() {
         disableRightSwipe
         closeOnRowPress
         closeOnRowOpen
-        contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 16 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <HistoryItem currentId={currentId} item={item} />

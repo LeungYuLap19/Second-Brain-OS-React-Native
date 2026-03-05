@@ -1,4 +1,5 @@
-import type { MonthDay, MonthMatrix } from '@/types';
+import { monthNames } from '@/constants/calendar';
+import type { Activity, MonthDay, MonthMatrix } from '@/types';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -57,4 +58,39 @@ export const getMonthMatrix = (date: Date): MonthMatrix => {
   }
 
   return weeks;
+};
+
+export const shiftDateByMonth = (date: Date, delta: 1 | -1) => {
+  return new Date(date.getFullYear(), date.getMonth() + delta, 1);
+};
+
+export const shiftDateByDays = (date: Date, delta: number) => {
+  const next = new Date(date);
+  next.setDate(date.getDate() + delta);
+  return next;
+};
+
+export const formatRangeLabel = (days: Date[]) => {
+  const start = days[0];
+  const end = days[6];
+  return `${monthNames[start.getMonth()]} ${start.getDate()} - ${monthNames[end.getMonth()]} ${end.getDate()}`;
+};
+
+export const getMonthActivityCount = (activities: Record<string, Activity[]>, monthDate: Date) => {
+  const targetMonth = monthDate.getMonth();
+  const targetYear = monthDate.getFullYear();
+  return Object.entries(activities).reduce((acc, [key, list]) => {
+    const date = new Date(key);
+    if (date.getMonth() === targetMonth && date.getFullYear() === targetYear) {
+      return acc + (list?.length ?? 0);
+    }
+    return acc;
+  }, 0);
+};
+
+export const countWeekActivities = (days: Date[], activities: Record<string, Activity[]>) => {
+  return days.reduce((acc, value) => {
+    const key = formatDateKey(value);
+    return acc + (activities[key]?.length ?? 0);
+  }, 0);
 };

@@ -1,6 +1,6 @@
 // hooks/useSignIn.ts
-import { appleSignIn } from '@/lib/utils/appleAuth';
-import { googleSignIn } from '@/lib/utils/googleAuth';
+import { appleSignIn } from '@/lib/auth/apple';
+import { googleSignIn } from '@/lib/auth/google';
 import { PlatformType, UseSignInOptions, UseSignInReturn } from '@/types/auth';
 import * as AuthSession from 'expo-auth-session';
 import { useCallback, useState } from 'react';
@@ -71,7 +71,7 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
     const result = await googleSignIn(redirectUri, promptAsync);
 
     if (result.success && result.user) {
-      console.log('Apple Sign-In Success:', result.user);
+      console.log('Google Sign-In Success:', result.user);
       
       // Show success alert
       if (showAlerts) {

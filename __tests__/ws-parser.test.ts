@@ -1,4 +1,4 @@
-import { parseWebSocketMessage } from '@/lib/utils/ws-parser';
+import { parseWebSocketMessage } from '@/lib/api/ws-parser';
 
 describe('parseWebSocketMessage', () => {
   // ── Stream start tag ───────────────────────────────────────────

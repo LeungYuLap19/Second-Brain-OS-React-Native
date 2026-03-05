@@ -1,5 +1,5 @@
 import IconCircle from '@/components/ui/elements/icon-circle';
-import { setChatroomId } from '@/lib/utils/utilities';
+import { setChatroomId } from '@/lib/utils/storage';
 import { HistoryItemProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';

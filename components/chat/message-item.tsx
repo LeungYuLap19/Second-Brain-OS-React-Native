@@ -1,5 +1,5 @@
 import IconCircle from '@/components/ui/elements/icon-circle';
-import { getMarkdownStyles } from '@/lib/utils/utilities';
+import { getMarkdownStyles } from '@/lib/utils/markdown-styles';
 import { MessageItemProps } from '@/types/components';
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';

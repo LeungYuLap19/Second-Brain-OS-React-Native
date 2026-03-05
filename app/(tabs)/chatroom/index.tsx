@@ -1,4 +1,4 @@
-import { getNewChatroomId } from '@/lib/utils/utilities';
+import { getNewChatroomId } from '@/lib/utils/storage';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';

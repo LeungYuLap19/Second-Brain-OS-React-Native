@@ -182,7 +182,7 @@ export interface ActivityItemProps {
 
 export interface ActivityFieldProps {
   value?: Partial<Activity>;
-  onChange?: (value: Partial<Activity>) => void;
+  onChange?: (value: Omit<Activity, 'id'>) => void;
 }
 
 export interface FileStatusPillProps {

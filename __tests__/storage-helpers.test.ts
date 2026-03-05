@@ -9,7 +9,7 @@ import {
     getClientId,
     getNewChatroomId,
     setChatroomId,
-} from '@/lib/utils/utilities';
+} from '@/lib/utils/storage';
 
 // ── Manual mock for AsyncStorage ───────────────────────────────────
 

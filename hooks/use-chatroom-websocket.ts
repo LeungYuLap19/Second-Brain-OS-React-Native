@@ -1,6 +1,6 @@
-import { WS_URL } from '@/lib/utils/server-uri';
-import { getClientId } from '@/lib/utils/utilities';
-import { parseWebSocketMessage } from '@/lib/utils/ws-parser';
+import { WS_URL } from '@/lib/api/config';
+import { parseWebSocketMessage } from '@/lib/api/ws-parser';
+import { getClientId } from '@/lib/utils/storage';
 import { Message } from '@/types/chat';
 import { useEffect, useRef, useState } from 'react';
 

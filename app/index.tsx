@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { checkAppleSignIn } from '@/lib/auth/apple';
 import { Redirect } from 'expo-router';
-import { checkAppleSignIn } from '@/lib/utils/appleAuth';
-import { View, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function Index() {
   const [isLoading, setIsLoading] = useState(true);

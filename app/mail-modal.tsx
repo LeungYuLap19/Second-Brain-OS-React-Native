@@ -29,7 +29,7 @@ export default function MailModal() {
       }
     >
       {selectedEmail ?
-        <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 24 }}>
+        <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 24 }}>
           <EmailDetail email={selectedEmail} />
         </ScrollView> :
         <NewEmailFields />

@@ -1,4 +1,4 @@
-import { API_URL } from '@/lib/utils/server-uri';
+import { API_URL } from '@/lib/api/config';
 
 /**
  * Represents an API error with status code and server detail.

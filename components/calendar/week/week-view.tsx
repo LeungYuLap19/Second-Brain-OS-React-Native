@@ -1,6 +1,5 @@
 import usePagerLoop from '@/hooks/use-pager-loop';
-import { formatDateKey, getWeekDays } from '@/lib/utils/date-utils';
-import { countWeekActivities, formatRangeLabel, shiftDateByDays } from '@/lib/utils/utilities';
+import { countWeekActivities, formatDateKey, formatRangeLabel, getWeekDays, shiftDateByDays } from '@/lib/utils/date-utils';
 import type { WeekViewProps } from '@/types';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';

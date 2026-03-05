@@ -1,8 +1,3 @@
-import { monthNames } from '@/constants/calendar';
-import { formatDateKey } from '@/lib/utils/date-utils';
-import type { MonthViewProps, WeekViewProps } from '@/types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export const getMarkdownStyles = (isDark: boolean) => {
   const textColor = isDark ? '#ffffff' : '#111827';
   const subtleText = isDark ? '#d1d5db' : '#6b7280';
@@ -96,7 +91,7 @@ export const getMarkdownStyles = (isDark: boolean) => {
 
     /* images */
     image: { 
-      width: '100%' as const, // Add 'as const' to width
+      width: '100%' as const,
       height: 200, 
       resizeMode: 'cover' as const,
       borderRadius: 8, 
@@ -107,70 +102,4 @@ export const getMarkdownStyles = (isDark: boolean) => {
     small: { fontSize: 13, color: subtleText },
     list_bullet: { color: subtleText },
   };
-};
-
-const CLIENT_ID_KEY = 'clientid';
-const CHATROOM_ID_KEY = 'chatroomid';
-
-export async function getClientId() {
-  let id = await AsyncStorage.getItem(CLIENT_ID_KEY);
-  if (!id) {
-    id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
-    await AsyncStorage.setItem(CLIENT_ID_KEY, id);
-  }
-  return id;
-}
-
-export async function getChatroomId() {
-  let id = await AsyncStorage.getItem(CHATROOM_ID_KEY);
-  if (!id) {
-    id = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
-    await AsyncStorage.setItem(CHATROOM_ID_KEY, id);
-  }
-  return id;
-}
-
-export async function getNewChatroomId() {
-  await AsyncStorage.removeItem(CHATROOM_ID_KEY);
-  const id = await getChatroomId();
-  return id;
-}
-
-export async function setChatroomId(id: string) {
-  await AsyncStorage.setItem(CHATROOM_ID_KEY, id);
-}
-
-export const shiftDateByMonth = (date: Date, delta: 1 | -1) => {
-  return new Date(date.getFullYear(), date.getMonth() + delta, 1);
-};
-
-export const getMonthActivityCount = (activities: MonthViewProps['activities'], monthDate: Date) => {
-  const targetMonth = monthDate.getMonth();
-  const targetYear = monthDate.getFullYear();
-  return Object.entries(activities).reduce((acc, [key, list]) => {
-    const date = new Date(key);
-    if (date.getMonth() === targetMonth && date.getFullYear() === targetYear) {
-      return acc + (list?.length ?? 0);
-    }
-    return acc;
-  }, 0);
-};
-
-export const shiftDateByDays = (date: Date, delta: number) => {
-  const next = new Date(date);
-  next.setDate(date.getDate() + delta);
-  return next;
-};
-
-export const formatRangeLabel = (days: Date[]) => {
-  const start = days[0];
-  const end = days[6];
-  return `${monthNames[start.getMonth()]} ${start.getDate()} - ${monthNames[end.getMonth()]} ${end.getDate()}`;
-};
-
-export const countWeekActivities = (days: Date[], activities: WeekViewProps['activities']) => {
-  return days.reduce((acc, value) => {
-    const key = formatDateKey(value);
-    return acc + (activities[key]?.length ?? 0);
-  }, 0);
 };
