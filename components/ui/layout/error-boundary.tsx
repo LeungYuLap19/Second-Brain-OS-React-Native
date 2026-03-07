@@ -1,26 +1,20 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import type { ErrorBoundaryProps, ErrorBoundaryState } from '@/types';
 
-interface Props {
-  children: ReactNode;
-}
 
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
 
 /**
  * Global error boundary that catches unhandled JS errors in the component tree.
  * Without this, any thrown error white-screens the entire app.
  */
-export default class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedErrorBoundaryStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 

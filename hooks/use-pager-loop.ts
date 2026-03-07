@@ -1,11 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
+import type { UsePagerLoopOptions } from '@/types';
 
-type UsePagerLoopOptions<T> = {
-  currentValue: T;
-  getShiftedValue: (current: T, delta: -1 | 1) => T;
-  onChange: (next: T) => void;
-};
 
 export default function usePagerLoop<T>({
   currentValue,

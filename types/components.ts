@@ -4,7 +4,7 @@ import { PressableProps, StyleProp, TextInputProps, TextProps, ViewProps, ViewSt
 import { WithSpringConfig } from 'react-native-reanimated';
 import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 import { RowMap } from 'react-native-swipe-list-view';
-import { Activity } from './calendar';
+import { Activity, Priority } from './calendar';
 import { ChatHistory, Message } from './chat';
 import { FileStatus } from './files';
 import { EmailDetailData, EmailListItemData } from './inbox';
@@ -273,3 +273,35 @@ export interface CardPressableProps extends PressableProps {
   children: React.ReactNode;
   asChild: true;
 }
+export interface PrioritySelectorProps {
+  value: Priority;
+  onChange: (priority: Priority) => void;
+}
+
+
+export interface ThemedDateTimePickerProps {
+  isVisible: boolean;
+  value: Date;
+  mode: 'date' | 'time';
+  onChange: (date?: Date) => void;
+  onClose: () => void;
+  title?: string;
+}
+
+
+export interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+
+export type UsePagerLoopOptions<T> = {
+  currentValue: T;
+  getShiftedValue: (current: T, delta: -1 | 1) => T;
+  onChange: (next: T) => void;
+};
+

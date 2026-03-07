@@ -94,3 +94,25 @@ export const countWeekActivities = (days: Date[], activities: Record<string, Act
     return acc + (activities[key]?.length ?? 0);
   }, 0);
 };
+
+export const timeStringToDate = (time?: string): Date | undefined => {
+  if (!time) return undefined;
+  const [h, m] = time.split(':').map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d;
+};
+
+export const dateToTimeString = (d: Date): string => {
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
+
+export const dateToDateString = (d: Date): string => {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
+export const dateStringToDate = (s?: string): Date => {
+  if (!s) return new Date();
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+};

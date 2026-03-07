@@ -43,7 +43,11 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
             <View className="flex-row items-center gap-2">
               <View className="flex-row items-center gap-1">
                 <Feather name="clock" size={10} color="#71717a" />
-                <Text className="text-xs text-zinc-500 font-medium">{activity.time}</Text>
+                <Text className="text-xs text-zinc-500 font-medium">
+                  {activity.startTime && activity.endTime
+                    ? `${activity.startTime} – ${activity.endTime}`
+                    : activity.startTime ?? activity.date}
+                </Text>
               </View>
               {activity.tag && (
                 <>

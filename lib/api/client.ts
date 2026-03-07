@@ -1,4 +1,5 @@
 import { API_URL } from '@/lib/api/config';
+import type { ApiResponse } from '@/types';
 
 /**
  * Represents an API error with status code and server detail.
@@ -15,11 +16,6 @@ export class AppError extends Error {
   }
 }
 
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  detail?: string;
-}
 
 /**
  * Type-safe wrapper around fetch for your API.

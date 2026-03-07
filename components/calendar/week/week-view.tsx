@@ -53,7 +53,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
           initialPage={1}
           onPageSelected={handlePageSelected}
           scrollEnabled={scrollEnabled}
-          style={{ height: 80 }}
+          style={{ height: 72 }}
         >
           {
             pages.map(page => (

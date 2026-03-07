@@ -1,7 +1,9 @@
 export interface Activity {
   id: string;
   title: string;
-  time: string;
+  date: string;
+  startTime?: string;
+  endTime?: string;
   tag?: string;
   notes?: string;
   urgent?: boolean;
@@ -15,3 +17,7 @@ export interface MonthDay {
 }
 
 export type MonthMatrix = MonthDay[][];
+export type ActivityForm = Omit<Activity, 'id'>;
+export type Priority = NonNullable<Activity['priority']>;
+export type PickerType = 'date' | 'start' | 'end' | null;
+

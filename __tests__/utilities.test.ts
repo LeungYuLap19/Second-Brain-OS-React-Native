@@ -88,7 +88,8 @@ describe('countWeekActivities', () => {
   const makeActivity = (id: string): Activity => ({
     id,
     title: 'Test',
-    time: '09:00',
+    date: '2026-03-07',
+    startTime: '09:00',
     tag: 'Work',
     notes: '',
     urgent: false,
@@ -124,7 +125,8 @@ describe('getMonthActivityCount', () => {
   const makeActivity = (id: string): Activity => ({
     id,
     title: 'Test',
-    time: '09:00',
+    date: '2026-03-07',
+    startTime: '09:00',
     tag: 'Work',
     notes: '',
     urgent: false,

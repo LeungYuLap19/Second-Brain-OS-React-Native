@@ -1,19 +1,23 @@
-import type { Activity, ActivityFieldProps } from '@/types'
+import { dateToDateString } from '@/lib/utils/date-utils'
+import type { Activity, ActivityFieldProps, ActivityForm } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React, { useEffect, useMemo, useState } from 'react'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native'
+import { useActivityDatePicker } from '../../hooks/use-activity-date-picker'
 import SectionLabel from '../ui/elements/section-label'
+import ThemedDateTimePicker from '../ui/elements/themed-datetime-picker'
 import ThemedTextInput from '../ui/elements/themed-text-input'
 import FormFieldContainer from '../ui/layout/form-field-container'
+import PrioritySelector from './priority-selector'
 
-const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const;
-type ActivityForm = Omit<Activity, 'id'>;
 
 export default function ActivityField({ value, onChange }: ActivityFieldProps) {
   const initialValue = useMemo(
     () => ({
       title: value?.title ?? '',
-      time: value?.time ?? '',
+      date: value?.date ?? dateToDateString(new Date()),
+      startTime: value?.startTime,
+      endTime: value?.endTime,
       tag: value?.tag ?? '',
       location: value?.location ?? '',
       priority: value?.priority ?? 'medium',
@@ -25,6 +29,12 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
 
   const [form, setForm] = useState<ActivityForm>(initialValue)
 
+  const updateField = <K extends keyof ActivityForm>(key: K, fieldValue: (ActivityForm)[K]) => {
+    setForm((prev) => ({ ...prev, [key]: fieldValue }))
+  }
+
+  const { activePicker, setActivePicker, handleDateChange, getPickerValue } = useActivityDatePicker(form, updateField)
+
   useEffect(() => {
     setForm(initialValue);
   }, [initialValue])
@@ -33,49 +43,9 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
     onChange?.(form);
   }, [form, onChange])
 
-  const updateField = <K extends keyof ActivityForm>(key: K, fieldValue: (ActivityForm)[K]) => {
-    setForm((prev) => ({ ...prev, [key]: fieldValue }))
-  }
-
-  const PrioritySelector = () => (
-    <View className="flex-row gap-2 mt-2">
-      {PRIORITY_OPTIONS.map((priorityOption) => {
-        const isSelected = form.priority === priorityOption
-        const colorMap = {
-          low: 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400',
-          medium: 'bg-amber-500/20 border-amber-500/50 text-amber-400',
-          high: 'bg-rose-500/20 border-rose-500/50 text-rose-400',
-        }[priorityOption]
-
-        const baseColor = {
-          low: 'text-zinc-500 border-zinc-700 bg-zinc-800/50',
-          medium: 'text-zinc-500 border-zinc-700 bg-zinc-800/50',
-          high: 'text-zinc-500 border-zinc-700 bg-zinc-800/50',
-        }[priorityOption]
-
-        return (
-          <Pressable
-            key={priorityOption}
-            onPress={() => updateField('priority', priorityOption)}
-            className={`flex-1 flex-row items-center justify-center py-2.5 rounded-xl border ${
-              isSelected ? colorMap.split(' ').slice(0, 2).join(' ') : baseColor
-            }`}
-          >
-            <Text
-              className={`text-xs font-semibold uppercase tracking-wider ${
-                isSelected ? colorMap.split(' ')[2] : 'text-zinc-400'
-              }`}
-            >
-              {priorityOption}
-            </Text>
-          </Pressable>
-        )
-      })}
-    </View>
-  )
-
   return (
-    <KeyboardAvoidingView 
+    <>
+      <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
       className="flex-1"
       keyboardVerticalOffset={100}
@@ -93,7 +63,8 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
               value={form.title}
               onChangeText={(text) => updateField('title', text)}
               placeholder="What needs to be done?"
-              className="text-2xl font-semibold text-white bg-zinc-900/50 p-4 rounded-2xl border border-zinc-800"
+              className="!text-2xl !font-semibold text-white bg-zinc-900/50 p-4 pt-2 rounded-2xl border border-zinc-800"
+              style={{ minHeight: 64, textAlignVertical: 'center' }}
             />
           </View>
 
@@ -101,20 +72,41 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
           <View className="gap-4">
             <SectionLabel label="Details" className="mb-0" />
             
+            {/* Date Picker */}
+            <FormFieldContainer padding="sm">
+              <Pressable onPress={() => setActivePicker('date')} className="flex-row items-center gap-2">
+                <Feather name="calendar" size={14} color="#71717a" />
+                <Text className="text-xs text-zinc-500 font-medium">Date</Text>
+              </Pressable>
+              <Pressable onPress={() => setActivePicker('date')} className="mt-1">
+                <Text className="text-base font-medium text-zinc-200">{form.date || 'Select date'}</Text>
+              </Pressable>
+            </FormFieldContainer>
+
+            {/* Start / End Time */}
             <View className="flex-row gap-3">
               <FormFieldContainer padding="sm" className="flex-1">
-                <View className="flex-row items-center gap-2 mb-1">
+                <Pressable onPress={() => setActivePicker('start')} className="flex-row items-center gap-2 mb-1">
                   <Feather name="clock" size={14} color="#71717a" />
-                  <Text className="text-xs text-zinc-500 font-medium">Time</Text>
-                </View>
-                <ThemedTextInput
-                  value={form.time}
-                  onChangeText={(text) => updateField('time', text)}
-                  placeholder="00:00"
-                  className="h-8"
-                />
+                  <Text className="text-xs text-zinc-500 font-medium">Start</Text>
+                </Pressable>
+                <Pressable onPress={() => setActivePicker('start')}>
+                  <Text className="text-base font-medium text-zinc-200">{form.startTime ?? 'Optional'}</Text>
+                </Pressable>
               </FormFieldContainer>
 
+              <FormFieldContainer padding="sm" className="flex-1">
+                <Pressable onPress={() => setActivePicker('end')} className="flex-row items-center gap-2 mb-1">
+                  <Feather name="clock" size={14} color="#71717a" />
+                  <Text className="text-xs text-zinc-500 font-medium">End</Text>
+                </Pressable>
+                <Pressable onPress={() => setActivePicker('end')}>
+                  <Text className="text-base font-medium text-zinc-200">{form.endTime ?? 'Optional'}</Text>
+                </Pressable>
+              </FormFieldContainer>
+            </View>
+
+            <View className="flex-row gap-3">
               <FormFieldContainer padding="sm" className="flex-1">
                 <View className="flex-row items-center gap-2 mb-1">
                   <Feather name="tag" size={14} color="#71717a" />
@@ -127,27 +119,30 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
                   className="h-8"
                 />
               </FormFieldContainer>
-            </View>
 
-            <FormFieldContainer padding="sm">
-              <View className="flex-row items-center gap-2 mb-1">
-                <Feather name="map-pin" size={14} color="#71717a" />
-                <Text className="text-xs text-zinc-500 font-medium">Location</Text>
-              </View>
-              <ThemedTextInput
-                value={form.location}
-                onChangeText={(text) => updateField('location', text)}
-                placeholder="Add location"
-                className="h-8"
-              />
-            </FormFieldContainer>
+              <FormFieldContainer padding="sm" className="flex-1">
+                <View className="flex-row items-center gap-2 mb-1">
+                  <Feather name="map-pin" size={14} color="#71717a" />
+                  <Text className="text-xs text-zinc-500 font-medium">Location</Text>
+                </View>
+                <ThemedTextInput
+                  value={form.location}
+                  onChangeText={(text) => updateField('location', text)}
+                  placeholder="Add location"
+                  className="h-8"
+                />
+              </FormFieldContainer>
+            </View>
           </View>
 
           {/* Priority & Urgent */}
           <View>
             <SectionLabel label="Settings" className="mb-0" />
             
-            <PrioritySelector />
+            <PrioritySelector 
+              value={form.priority ?? 'medium'}
+              onChange={(priority) => updateField('priority', priority)}
+            />
 
             <FormFieldContainer className="flex-row items-center justify-between mt-3">
               <Pressable 
@@ -190,5 +185,14 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+
+      <ThemedDateTimePicker
+        isVisible={activePicker !== null}
+        value={getPickerValue()}
+        mode={activePicker === 'date' ? 'date' : 'time'}
+        onClose={() => setActivePicker(null)}
+        onChange={handleDateChange}
+      />
+    </>
   )
 }

@@ -4,13 +4,15 @@ import ModalScreen from '@/components/ui/layout/modal-screen'
 import { activityMap } from '@/constants/calendar'
 import { Activity } from '@/types'
 import { MaterialIcons } from '@expo/vector-icons'
+import { randomUUID } from 'expo-crypto'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 
 export default function ActivityModal() {
   const { id } = useLocalSearchParams<{ id?: string }>();
+  const [activities, setActivities] = useState<Record<string, Activity[]>>(activityMap);
   const selectedActivity = id
-    ? Object.values(activityMap)
+    ? Object.values(activities)
       .flat()
       .find((activity) => activity.id === id)
     : undefined;
@@ -23,7 +25,10 @@ export default function ActivityModal() {
       rightSlot={
         <CircleButton
           onPress={() => {
-            if (formData) {
+            if (
+              formData &&
+              formData.title.trim() && formData.date.trim()
+            ) {
               
             }
           }}
