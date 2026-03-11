@@ -1,47 +1,17 @@
-import { dateToDateString } from '@/lib/utils/date-utils'
-import type { Activity, ActivityFieldProps, ActivityForm } from '@/types'
+import type { ActivityFieldProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
-import React, { useEffect, useMemo, useState } from 'react'
+import React from 'react'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from 'react-native'
 import { useActivityDatePicker } from '../../hooks/use-activity-date-picker'
+import AnimatedHeightView from '../ui/animation/animated-height-view'
 import SectionLabel from '../ui/elements/section-label'
 import ThemedDateTimePicker from '../ui/elements/themed-datetime-picker'
 import ThemedTextInput from '../ui/elements/themed-text-input'
 import FormFieldContainer from '../ui/layout/form-field-container'
 import PrioritySelector from './priority-selector'
 
-
-export default function ActivityField({ value, onChange }: ActivityFieldProps) {
-  const initialValue = useMemo(
-    () => ({
-      title: value?.title ?? '',
-      date: value?.date ?? dateToDateString(new Date()),
-      startTime: value?.startTime,
-      endTime: value?.endTime,
-      tag: value?.tag ?? '',
-      location: value?.location ?? '',
-      priority: value?.priority ?? 'medium',
-      urgent: value?.urgent ?? false,
-      notes: value?.notes ?? '',
-    }),
-    [value],
-  )
-
-  const [form, setForm] = useState<ActivityForm>(initialValue)
-
-  const updateField = <K extends keyof ActivityForm>(key: K, fieldValue: (ActivityForm)[K]) => {
-    setForm((prev) => ({ ...prev, [key]: fieldValue }))
-  }
-
+export default function ActivityField({ form, updateField }: ActivityFieldProps) {
   const { activePicker, setActivePicker, handleDateChange, getPickerValue } = useActivityDatePicker(form, updateField)
-
-  useEffect(() => {
-    setForm(initialValue);
-  }, [initialValue])
-
-  useEffect(() => {
-    onChange?.(form);
-  }, [form, onChange])
 
   return (
     <>
@@ -70,10 +40,10 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
 
           {/* Details Grid */}
           <View className="gap-4">
-            <SectionLabel label="Details" className="mb-0" />
+            <SectionLabel label="Details" className="!mb-0" />
             
             {/* Date Picker */}
-            <FormFieldContainer padding="sm">
+            <FormFieldContainer padding="sm" className='gap-2'>
               <Pressable onPress={() => setActivePicker('date')} className="flex-row items-center gap-2">
                 <Feather name="calendar" size={14} color="#71717a" />
                 <Text className="text-xs text-zinc-500 font-medium">Date</Text>
@@ -85,27 +55,48 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
 
             {/* Start / End Time */}
             <View className="flex-row gap-3">
-              <FormFieldContainer padding="sm" className="flex-1">
-                <Pressable onPress={() => setActivePicker('start')} className="flex-row items-center gap-2 mb-1">
-                  <Feather name="clock" size={14} color="#71717a" />
-                  <Text className="text-xs text-zinc-500 font-medium">Start</Text>
-                </Pressable>
+              <FormFieldContainer padding="sm" className="flex-1 gap-2">
+                <View className="flex-row items-center justify-between mb-1">
+                  <Pressable onPress={() => setActivePicker('start')} className="flex-row items-center gap-2">
+                    <Feather name="clock" size={14} color="#71717a" />
+                    <Text className="text-xs text-zinc-500 font-medium">Start</Text>
+                  </Pressable>
+                  {form.startTime && (
+                    <Pressable onPress={() => {
+                      updateField('startTime', undefined)
+                      updateField('endTime', undefined)
+                    }} hitSlop={8}>
+                      <Feather name="x" size={14} color="#71717a" />
+                    </Pressable>
+                  )}
+                </View>
                 <Pressable onPress={() => setActivePicker('start')}>
                   <Text className="text-base font-medium text-zinc-200">{form.startTime ?? 'Optional'}</Text>
                 </Pressable>
               </FormFieldContainer>
 
-              <FormFieldContainer padding="sm" className="flex-1">
-                <Pressable onPress={() => setActivePicker('end')} className="flex-row items-center gap-2 mb-1">
-                  <Feather name="clock" size={14} color="#71717a" />
-                  <Text className="text-xs text-zinc-500 font-medium">End</Text>
-                </Pressable>
+              <FormFieldContainer padding="sm" className="flex-1 gap-2">
+                <View className="flex-row items-center justify-between mb-1">
+                  <Pressable onPress={() => setActivePicker('end')} className="flex-row items-center gap-2">
+                    <Feather name="clock" size={14} color="#71717a" />
+                    <Text className="text-xs text-zinc-500 font-medium">End</Text>
+                  </Pressable>
+                  {form.endTime && (
+                    <Pressable onPress={() => {
+                      updateField('startTime', undefined)
+                      updateField('endTime', undefined)
+                    }} hitSlop={8}>
+                      <Feather name="x" size={14} color="#71717a" />
+                    </Pressable>
+                  )}
+                </View>
                 <Pressable onPress={() => setActivePicker('end')}>
                   <Text className="text-base font-medium text-zinc-200">{form.endTime ?? 'Optional'}</Text>
                 </Pressable>
               </FormFieldContainer>
             </View>
 
+            {/* Tag */}
             <View className="flex-row gap-3">
               <FormFieldContainer padding="sm" className="flex-1">
                 <View className="flex-row items-center gap-2 mb-1">
@@ -120,6 +111,7 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
                 />
               </FormFieldContainer>
 
+              {/* Location */}
               <FormFieldContainer padding="sm" className="flex-1">
                 <View className="flex-row items-center gap-2 mb-1">
                   <Feather name="map-pin" size={14} color="#71717a" />
@@ -139,10 +131,37 @@ export default function ActivityField({ value, onChange }: ActivityFieldProps) {
           <View>
             <SectionLabel label="Settings" className="mb-0" />
             
-            <PrioritySelector 
-              value={form.priority ?? 'medium'}
-              onChange={(priority) => updateField('priority', priority)}
-            />
+            <FormFieldContainer className="flex-row items-center justify-between mt-3 mb-3">
+              <Pressable 
+                onPress={() => updateField('priority', form.priority ? undefined : 'medium')}
+                className="flex-1 flex-row items-center gap-3"
+              >
+                <View className={`p-2 rounded-full ${form.priority ? 'bg-blue-500/20' : 'bg-zinc-800'}`}>
+                  <Feather 
+                    name="flag" 
+                    size={18} 
+                    color={form.priority ? '#3b82f6' : '#71717a'} 
+                  />
+                </View>
+                <View>
+                  <Text className="text-base font-medium text-zinc-200">Priority</Text>
+                  <Text className="text-xs text-zinc-500">Enable priority rating</Text>
+                </View>
+              </Pressable>
+              <Switch
+                value={!!form.priority}
+                onValueChange={(val) => updateField('priority', val ? 'medium' : undefined)}
+                trackColor={{ false: '#3f3f46', true: '#3b82f6' }}
+                thumbColor={'#ffffff'}
+              />
+            </FormFieldContainer>
+
+            <AnimatedHeightView height={form.priority ? 50 : 0} overflowHidden>
+              <PrioritySelector 
+                value={form.priority ?? 'medium'}
+                onChange={(priority) => updateField('priority', priority)}
+              />
+            </AnimatedHeightView>
 
             <FormFieldContainer className="flex-row items-center justify-between mt-3">
               <Pressable 

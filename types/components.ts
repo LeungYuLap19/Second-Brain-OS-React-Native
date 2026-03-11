@@ -4,7 +4,7 @@ import { PressableProps, StyleProp, TextInputProps, TextProps, ViewProps, ViewSt
 import { WithSpringConfig } from 'react-native-reanimated';
 import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 import { RowMap } from 'react-native-swipe-list-view';
-import { Activity, Priority } from './calendar';
+import { Activity, ActivityForm, Priority } from './calendar';
 import { ChatHistory, Message } from './chat';
 import { FileStatus } from './files';
 import { EmailDetailData, EmailListItemData } from './inbox';
@@ -181,8 +181,8 @@ export interface ActivityItemProps {
 }
 
 export interface ActivityFieldProps {
-  value?: Partial<Activity>;
-  onChange?: (value: Omit<Activity, 'id'>) => void;
+  form: ActivityForm;
+  updateField: <K extends keyof ActivityForm>(key: K, value: ActivityForm[K]) => void;
 }
 
 export interface FileStatusPillProps {

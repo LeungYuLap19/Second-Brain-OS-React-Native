@@ -13,7 +13,7 @@ export function ChatInput({ value, onChangeText, onSend, isConnected, onHeightCh
       onHeightChange={onHeightChange}
       sendIcon="arrow-up"
       sendIconSize={22}
-      containerClassName={'pb-8'}
+      containerClassName={'pb-6'}
     />
   );
 }

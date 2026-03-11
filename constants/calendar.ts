@@ -1,10 +1,10 @@
-import type { Activity } from '@/types';
+import type { ActivityMap } from '@/types';
 
 export const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-export const activityMap: Record<string, Activity[]> = {
+export const activityMap: ActivityMap = {
   '2026-02-12': [
     {
       id: 'a1',
@@ -15,6 +15,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Design',
       notes: 'Finalize empty-state behavior and CTA copy before handoff.',
       urgent: false,
+      completed: false,
       priority: 'medium',
       location: 'Design Studio',
     },
@@ -27,6 +28,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Meeting',
       notes: 'Align API payload shape for inbox thread and auth token refresh.',
       urgent: true,
+      completed: true,
       priority: 'high',
       location: 'Zoom Room A',
     },
@@ -39,6 +41,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Meeting',
       notes: 'Capture action items and owners after architecture decisions.',
       urgent: false,
+      completed: false,
       priority: 'medium',
       location: 'Zoom Room A',
     },
@@ -53,6 +56,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Marketing',
       notes: 'Prepare two subject-line variants and include personalization token.',
       urgent: false,
+      completed: false,
       priority: 'medium',
       location: 'Workspace Desk',
     },
@@ -67,6 +71,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Build',
       notes: 'Validate upload card interactions and error states on iOS + Android.',
       urgent: true,
+      completed: false,
       priority: 'high',
       location: 'Engineering Pod',
     },
@@ -79,6 +84,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Demo',
       notes: 'Show end-to-end chatroom creation and history persistence flow.',
       urgent: false,
+      completed: true,
       priority: 'medium',
       location: 'Conference Room 2',
     },
@@ -93,6 +99,7 @@ export const activityMap: Record<string, Activity[]> = {
       tag: 'Team',
       notes: 'Collect blockers, wins, and one process improvement for next sprint.',
       urgent: false,
+      completed: false,
       priority: 'low',
       location: 'War Room',
     },

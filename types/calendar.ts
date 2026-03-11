@@ -7,6 +7,7 @@ export interface Activity {
   tag?: string;
   notes?: string;
   urgent?: boolean;
+  completed?: boolean;
   priority?: 'low' | 'medium' | 'high';
   location?: string;
 }
@@ -18,6 +19,7 @@ export interface MonthDay {
 
 export type MonthMatrix = MonthDay[][];
 export type ActivityForm = Omit<Activity, 'id'>;
+export type ActivityMap = Record<string, Activity[]>;
 export type Priority = NonNullable<Activity['priority']>;
 export type PickerType = 'date' | 'start' | 'end' | null;
 

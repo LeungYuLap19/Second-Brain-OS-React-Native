@@ -7,24 +7,26 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 export default function ActivityItem({ activity, isSelected, onToggle }: ActivityItemProps) {
+  const completed = activity.completed || isSelected;
+
   return (
     <View className={`flex-row items-center gap-3 p-3 rounded-2xl border ${
-      isSelected 
+      completed 
         ? 'bg-zinc-800 border-zinc-700' 
         : 'bg-zinc-900 border-zinc-800'
     }`}>
       <Pressable
         onPress={() => onToggle(activity.id)}
         accessibilityRole="radio"
-        accessibilityState={{ checked: isSelected }}
+        accessibilityState={{ checked: completed }}
         hitSlop={8}
         className={`w-10 h-10 rounded-full border items-center justify-center ${
-          isSelected 
+          completed 
             ? 'border-indigo-500/50 bg-indigo-500/20' 
             : 'border-zinc-700 bg-zinc-800/50'
         }`}
       >
-        {isSelected ? (
+        {completed ? (
           <Feather name="check" size={18} color="#818cf8" />
         ) : (
           <View />
@@ -35,7 +37,7 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
         <Pressable className="flex-row items-center gap-3 flex-1">
           <View className="flex-1 gap-0.5">
             <Text 
-              className={`text-base font-medium ${isSelected ? 'text-zinc-500 line-through' : 'text-zinc-200'}`} 
+              className={`text-base font-medium ${completed ? 'text-zinc-500 line-through' : 'text-zinc-200'}`} 
               numberOfLines={1}
             >
               {activity.title}
