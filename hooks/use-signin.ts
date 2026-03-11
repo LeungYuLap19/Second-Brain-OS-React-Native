@@ -14,7 +14,8 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
     async (
       platform: PlatformType,
       redirectUri?: string,
-      promptAsync?: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>
+      promptAsync?: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>,
+      codeVerifier?: string
     ): Promise<void> => {
     if (loading) return;
 
@@ -27,7 +28,7 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
           break;
         case 'Google':
           if (!redirectUri || !promptAsync) return;
-          await handleGoogleSignIn(redirectUri, promptAsync);
+          await handleGoogleSignIn(redirectUri, promptAsync, codeVerifier);
           break;
         case 'Email':
           await handleEmailSignIn();
@@ -66,9 +67,10 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
 
   const handleGoogleSignIn = async (
     redirectUri: string,
-    promptAsync: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>
+    promptAsync: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>,
+    codeVerifier?: string
   ) => {
-    const result = await googleSignIn(redirectUri, promptAsync);
+    const result = await googleSignIn(redirectUri, promptAsync, codeVerifier);
 
     if (result.success && result.user) {
       console.log('Google Sign-In Success:', result.user);

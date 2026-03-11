@@ -9,7 +9,17 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Second-Brain-OS-Mobile"
+      "bundleIdentifier": "com.anonymous.Second-Brain-OS-Mobile",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "secondbrainosmobile",
+              "com.googleusercontent.apps.334208813928-dtijbkf5ko7q4b95i3r2mmpk8bc40at0"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +28,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.SecondBrainOSMobile"
     },
     "web": {
       "output": "static",

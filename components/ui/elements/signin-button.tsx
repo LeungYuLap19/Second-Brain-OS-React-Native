@@ -1,10 +1,10 @@
 import { useSignIn } from '@/hooks/use-signin';
-import { clientIds, googleDiscovery } from '@/lib/auth/google';
+import { clientIds, googleDiscovery, googleIosReverseClientId } from '@/lib/auth/google';
 import { PlatformType, SigninButtonProps } from '@/types';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as AuthSession from 'expo-auth-session';
 import { router } from 'expo-router';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Alert, Pressable, Text } from 'react-native';
 
 export default function SigninButton({ platform }: SigninButtonProps) {
@@ -14,15 +14,9 @@ export default function SigninButton({ platform }: SigninButtonProps) {
     }
   });
 
-  const redirectUri = useMemo(() => {
-    const uri = AuthSession.makeRedirectUri();
-    
-    if (!uri.startsWith('https://')) {
-      return 'https://auth.expo.io/@anonymous/Second-Brain-OS-Mobile';
-    }
-    
-    return uri;
-  }, []); 
+  const redirectUri = AuthSession.makeRedirectUri({
+    scheme: googleIosReverseClientId,
+  }); 
 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
@@ -58,7 +52,7 @@ export default function SigninButton({ platform }: SigninButtonProps) {
         return;
       }
 
-      signIn(platform, redirectUri, promptAsync);
+      signIn(platform, redirectUri, promptAsync, request?.codeVerifier);
     }
     else {
       signIn(platform);
@@ -68,7 +62,7 @@ export default function SigninButton({ platform }: SigninButtonProps) {
   return (
     <Pressable
       onPress={() => handleHybridSignIn(platform)}
-      disabled={loading}
+      disabled={loading || (platform === 'Google' && !request)}
       className={`bg-zinc-900/80 rounded-full py-5 flex-row items-center justify-center active:bg-zinc-800/80 active:opacity-90 w-full`}
     >
       {getPlatformIcon(platform)}

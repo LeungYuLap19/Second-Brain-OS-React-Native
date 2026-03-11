@@ -31,7 +31,8 @@ export interface UseSignInReturn {
   signIn: (
     platform: PlatformType,
     redirectUri?: string,
-    promptAsync?: (options?: any) => Promise<any>
+    promptAsync?: (options?: any) => Promise<any>,
+    codeVerifier?: string
   ) => Promise<void>;
 }
 

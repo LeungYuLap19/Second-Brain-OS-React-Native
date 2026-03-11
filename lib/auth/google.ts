@@ -21,9 +21,16 @@ export const googleDiscovery = {
 };
 
 export const clientIds = {
-  ios: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  ios: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
   // android:
 };
+
+/**
+ * Reverse client ID used as the iOS redirect URI scheme.
+ * Format: com.googleusercontent.apps.<CLIENT_ID_PREFIX>
+ * Found in Google Cloud Console under your iOS client credentials.
+ */
+export const googleIosReverseClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_REVERSE_CLIENT_ID;
 
 /**
  * Handle Google Sign-In using AuthSession
@@ -31,7 +38,8 @@ export const clientIds = {
  */
 export async function googleSignIn(
   redirectUri: string,
-  promptAsync: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>
+  promptAsync: (options?: AuthSession.AuthRequestPromptOptions | undefined) => Promise<AuthSession.AuthSessionResult>,
+  codeVerifier?: string
 ): Promise<GoogleAuthResult> {
   try {
     if (!clientIds.ios) {
@@ -53,6 +61,7 @@ export async function googleSignIn(
           code,
           extraParams: {
             grant_type: 'authorization_code',
+            ...(codeVerifier ? { code_verifier: codeVerifier } : {}),
           },
         },
         googleDiscovery
@@ -140,6 +149,28 @@ export async function checkGoogleSignIn(): Promise<boolean> {
   } catch (error: unknown) {
     console.error('Google signin check error:', error);
     return false;
+  }
+}
+
+/**
+ * Get stored Google user data
+ */
+export async function getGoogleUserData(): Promise<{
+  id?: string;
+  email?: string;
+} | null> {
+  try {
+    const id = await SecureStore.getItemAsync(GOOGLE_AUTH_KEYS.USER_ID);
+    const email = await SecureStore.getItemAsync(GOOGLE_AUTH_KEYS.USER_EMAIL);
+
+    if (!id) return null;
+
+    return {
+      id: id || undefined,
+      email: email || undefined,
+    };
+  } catch {
+    return null;
   }
 }
 

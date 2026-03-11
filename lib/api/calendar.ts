@@ -1,7 +1,7 @@
 import { Activity, ActivityForm, ActivityMap } from "@/types";
-import { Tables } from "@/types/supabase";
-import { getAppleUserData } from "../auth/apple";
+import { getCurrentUser } from "../auth";
 import { supabase } from "../utils/supabase";
+import { Tables } from "@/types/supabase";
 
 function rowToActivity(row: Tables<'activities'>): Activity {
   return {
@@ -21,8 +21,7 @@ function rowToActivity(row: Tables<'activities'>): Activity {
 
 export const calendarApi = {
   getActivitiesByMonth: async (year: number, month: number): Promise<ActivityMap> => {
-    const user = await getAppleUserData();
-    if (!user?.id) throw new Error('Not authenticated');
+    const user = await getCurrentUser();
 
     const from = `${year}-${String(month).padStart(2, '0')}-01`;
     const nextYear  = month === 12 ? year + 1 : year;
@@ -47,8 +46,7 @@ export const calendarApi = {
   },
 
   createActivity: async (form: ActivityForm): Promise<Activity> => {
-    const user = await getAppleUserData();
-    if (!user?.id) throw new Error('Not authenticated');
+    const user = await getCurrentUser();
 
     const { data, error } = await supabase
       .from('activities')
