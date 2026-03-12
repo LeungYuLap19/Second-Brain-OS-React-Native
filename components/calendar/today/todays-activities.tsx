@@ -2,12 +2,13 @@ import AnimatedHeightView from '@/components/ui/animation/animated-height-view';
 import { monthNames, weekdayNames } from '@/constants/calendar';
 import { isSameDay } from '@/lib/utils/date-utils';
 import type { TodaysActivitiesProps } from '@/types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 
 import HiddenDelete from '@/components/ui/elements/hidden-delete';
 import IconCircle from '@/components/ui/elements/icon-circle';
 import CardContainer from '@/components/ui/layout/card-container';
+import { useActivities } from '@/context/activity-context';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ActivityItem from './activity-item';
 import Placeholder from './placeholder';
@@ -18,10 +19,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
   const isToday = isSameDay(selectedDate, new Date());
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
   const [listHeight, setListHeight] = useState(0);
-
-  useEffect(() => {
-    setListHeight(0);
-  }, [selectedDate, dayActivities.length]);
+  const { deleteActivity } = useActivities();
 
   const updateListHeight = (height: number) => {
     if (height <= 0) return;
@@ -39,7 +37,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
 
   return (
     <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-      <View className="flex-row items-center justify-between p-5 border-b border-zinc-800/50">
+      <View className="flex-row items-center justify-between p-5 border-b border-zinc-800/50 mb-4">
         <View>
           <Text className="text-lg font-semibold text-zinc-100 mb-0.5">
             {isToday ? 'Today' : title}
@@ -88,7 +86,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
                   item={item}
                   containerClassName='flex-1 h-full flex-row justify-end items-center pr-4'
                   buttonClassName="bg-red-500/10 active:bg-red-500/20 w-16 h-full rounded-2xl items-center justify-center border border-red-500/20"
-                  onDelete={() => { }}
+                  onDelete={() => deleteActivity(item.id)}
                 />
               )}
             />

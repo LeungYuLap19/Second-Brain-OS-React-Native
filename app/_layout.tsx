@@ -1,4 +1,5 @@
 import ErrorBoundary from '@/components/ui/layout/error-boundary';
+import { ActivityProvider } from '@/context/activity-context';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -38,8 +39,9 @@ export default function RootLayout() {
 
   return (
     <ErrorBoundary>
-      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <Stack screenOptions={{ headerShown: false }}>
+      <ActivityProvider>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="history-modal"
             options={{ presentation: 'modal', }}
@@ -60,9 +62,10 @@ export default function RootLayout() {
             name='(tabs)' 
             options={{ gestureEnabled: false, }}
           />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </View>
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </View>
+      </ActivityProvider>
     </ErrorBoundary>
   );
 }

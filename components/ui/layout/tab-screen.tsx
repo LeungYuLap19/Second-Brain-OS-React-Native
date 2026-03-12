@@ -13,7 +13,7 @@ export default function TabScreen({
   children,
 }: TabScreenProps) {
   return (
-    <ThemedSafeAreaView edges={['top', 'left', 'right']}>
+    <ThemedSafeAreaView edges={['top', 'left', 'right']} className='pb-10'>
       <Header title={title} subtitle={subtitle} rightSlot={rightSlot} />
       {scrollable ? (
         <ScrollView

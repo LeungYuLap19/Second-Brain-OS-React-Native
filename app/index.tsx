@@ -1,4 +1,4 @@
-import { checkAppleSignIn } from '@/lib/auth/apple';
+import { checkSignedIn } from '@/lib/auth';
 import { Redirect } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -10,8 +10,8 @@ export default function Index() {
   useEffect(() => {
     async function checkAuthStatus() {
       try {
-        const appleAuth = await checkAppleSignIn();
-        setIsAuthenticated(appleAuth);
+        const signedIn = await checkSignedIn();
+        setIsAuthenticated(signedIn);
       } catch (error) {
         console.error('Error checking auth status:', error);
         setIsAuthenticated(false);

@@ -93,8 +93,6 @@ export const calendarApi = {
     return rowToActivity(data);
   },
 
-  // TODO: Create getActivityById(id: string) to fetch a single activity by its ID.
-
   deleteActivity: async (id: string): Promise<void> => {
     const { error } = await supabase
       .from('activities')
