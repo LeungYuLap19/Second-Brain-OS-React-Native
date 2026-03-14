@@ -1,4 +1,4 @@
-import ActivityField from '@/components/calendar/activity-field'
+import ActivityField from '@/components/calendar/form/activity-field'
 import CircleButton from '@/components/ui/elements/circle-button'
 import ModalScreen from '@/components/ui/layout/modal-screen'
 import { useActivities } from '@/context/activity-context'
@@ -62,7 +62,7 @@ export default function ActivityModal() {
         </CircleButton>
       }
     >
-      <ActivityField form={form} updateField={updateField} />
+      <ActivityField form={form} updateField={updateField} activityId={id} />
     </ModalScreen>
   )
 }

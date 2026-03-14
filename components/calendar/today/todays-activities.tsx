@@ -12,12 +12,14 @@ import { useActivities } from '@/context/activity-context';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ActivityItem from './activity-item';
 import Placeholder from './placeholder';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TodaysActivities({ selectedDate, dayActivities }: TodaysActivitiesProps) {
   const SPRING_CONFIG = { duration: 200 } as const;
   const title = `${weekdayNames[selectedDate.getDay()]}, ${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()}`;
   const isToday = isSameDay(selectedDate, new Date());
-  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
+  
+  const [selectedActivityIds, setSelectedActivityIds] = useState<Set<string>>(new Set());
   const [listHeight, setListHeight] = useState(0);
   const { deleteActivity } = useActivities();
 
@@ -47,7 +49,7 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
           </Text>
         </View>
         <IconCircle size="sm" bgClassName="bg-zinc-800" borderClassName="border border-zinc-700">
-          <Text className="text-xs font-bold text-zinc-400">{dayActivities.length}</Text>
+          <MaterialIcons name="menu" size={18} color="#71717a" />
         </IconCircle>
       </View>
 
@@ -69,14 +71,18 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
               ItemSeparatorComponent={() => <View className="h-3" />}
               ListFooterComponent={() => <View className="h-4" />}
               contentContainerStyle={{ paddingHorizontal: 16 }}
-              extraData={selectedActivityId}
+              extraData={selectedActivityIds}
               onContentSizeChange={onContentSizeChange}
               removeClippedSubviews={false}
               renderItem={({ item }) => (
                 <ActivityItem
                   activity={item}
-                  isSelected={selectedActivityId === item.id}
-                  onToggle={(id) => setSelectedActivityId((prev) => (prev === id ? null : id))}
+                  isSelected={selectedActivityIds.has(item.id)}
+                  onToggle={(id) => setSelectedActivityIds((prev) => {
+                    const next = new Set(prev);
+                    next.has(id) ? next.delete(id) : next.add(id);
+                    return next;
+                  })}
                 />
               )}
               

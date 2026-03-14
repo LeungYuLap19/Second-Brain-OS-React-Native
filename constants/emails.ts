@@ -1,4 +1,11 @@
-import { EmailDetailData } from "@/types";
+import type { BadgeVariant, EmailDetailData } from '@/types';
+
+export const tagVariants: Record<string, BadgeVariant> = {
+  Work: 'sky',
+  Product: 'emerald',
+  Billing: 'amber',
+  Personal: 'fuchsia',
+};
 
 export const emailThreads: EmailDetailData[] = [
   {

@@ -1,7 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import DotSeparator from '@/components/ui/elements/dot-separator';
+import IconCircle from '@/components/ui/elements/icon-circle';
+import { getPriorityStyles } from '@/constants/calendar';
 import type { ActivityItemProps } from '@/types';
-import { Feather } from '@expo/vector-icons';
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -60,7 +62,26 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
             </View>
           </View>
           
-          <Feather name="chevron-right" size={16} color="#3f3f46" />
+          <View className="flex-row items-center gap-2">
+            {
+              activity.urgent ?
+              !completed && (
+                <IconCircle size="sm" bgClassName="bg-zinc-800" borderClassName="border border-zinc-700">
+                  <MaterialIcons name="local-fire-department" size={16} color="#ef4444" /> 
+                </IconCircle>
+              ):
+              activity.priority && !completed && (
+                <IconCircle 
+                  size="sm" 
+                  bgClassName={getPriorityStyles(activity.priority).bg} 
+                  borderClassName={getPriorityStyles(activity.priority).border}
+                >
+                  <AntDesign name="exclamation" size={12} color={getPriorityStyles(activity.priority).icon} />
+                </IconCircle>
+              )
+            }
+            <Feather name="chevron-right" size={16} color="#3f3f46" />
+          </View>
         </Pressable>
       </Link>
     </View>

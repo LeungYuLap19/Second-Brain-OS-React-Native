@@ -1,4 +1,4 @@
-import { monthNames } from '@/constants/calendar';
+import { calendarTheme, monthNames } from '@/constants/calendar';
 import { formatDateKey, getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/date-utils';
 import type { MonthViewProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
@@ -9,40 +9,6 @@ import type { MarkedDates } from 'react-native-calendars/src/types';
 import AnimatedHeightView from '../../ui/animation/animated-height-view';
 import IconCircle from '../../ui/elements/icon-circle';
 import CardContainer from '../../ui/layout/card-container';
-
-const calendarTheme = {
-  backgroundColor: 'transparent',
-  calendarBackground: 'transparent',
-  monthTextColor: '#e4e4e7',
-  dayTextColor: '#a1a1aa',
-  textDisabledColor: '#3f3f46',
-  todayTextColor: '#e4e4e7',
-  todayBackgroundColor: '#27272a',
-  selectedDayBackgroundColor: '#f4f4f5',
-  selectedDayTextColor: '#18181b',
-  dotColor: '#6366f1',
-  selectedDotColor: '#6366f1',
-  arrowColor: '#71717a',
-  textDayFontWeight: '500' as const,
-  textDayHeaderFontWeight: '500' as const,
-  textDayFontSize: 14,
-  textDayHeaderFontSize: 10,
-  textMonthFontSize: 0,
-  textMonthFontWeight: '600' as const,
-  weekVerticalMargin: 12,
-  'stylesheet.calendar.header': {
-    header: { height: 0 },
-    monthText: { display: 'none' as const },
-    dayHeader: {
-      color: '#71717a',
-      fontSize: 10,
-      fontWeight: '500' as const,
-      textTransform: 'uppercase' as const,
-      letterSpacing: 1,
-      marginBottom: 4,
-    },
-  },
-};
 
 export default function MonthView({ monthDate, selectedDate, activities, onSelectDate }: MonthViewProps) {
   const monthActivityCount = useMemo(
@@ -104,7 +70,7 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
     <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
       <Pressable
         onPress={() => setExpand(!expand)}
-        className="flex-row items-center justify-between p-5 active:bg-zinc-800/50"
+        className="flex-row items-center justify-between p-5 active:bg-zinc-800/50 border-b border-zinc-800/50"
       >
         <View>
           <Text className="text-lg font-semibold text-zinc-100 mb-0.5">{title}</Text>
@@ -116,7 +82,12 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
       </Pressable>
 
       <AnimatedHeightView height={expand ? contentHeight : 0} springConfig={{ duration: 200 }}>
-        <View onLayout={onContentLayout} collapsable={false} style={{ position: 'absolute', width: '100%' }}>
+        <View 
+          className='pt-4'
+          onLayout={onContentLayout} 
+          collapsable={false} 
+          style={{ position: 'absolute', width: '100%' }}
+        >
           {/* Month navigation bar */}
           <View className="flex-row items-center justify-between px-4 pb-2">
             <Pressable

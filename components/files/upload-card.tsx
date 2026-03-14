@@ -1,12 +1,11 @@
 import Badge from '@/components/ui/elements/badge';
 import IconCircle from '@/components/ui/elements/icon-circle';
 import CardContainer from '@/components/ui/layout/card-container';
+import { FILE_TYPES } from '@/constants/files';
 import type { UploadCardProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-
-const fileTypes = ['PDF', 'DOCX', 'TXT', 'IMAGE'];
 
 export default function UploadCard({ onUpload }: UploadCardProps) {
   return (
@@ -31,7 +30,7 @@ export default function UploadCard({ onUpload }: UploadCardProps) {
       </View>
 
       <View className="flex-row flex-wrap gap-2 mt-4">
-        {fileTypes.map((type) => (
+        {FILE_TYPES.map((type) => (
           <Badge
             key={type}
             label={type}

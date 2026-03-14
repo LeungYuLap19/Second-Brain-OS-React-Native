@@ -1,12 +1,7 @@
+import { padMap } from '@/constants/ui';
 import type { FormFieldContainerProps } from '@/types';
 import React from 'react';
 import { View } from 'react-native';
-
-const padMap: Record<NonNullable<FormFieldContainerProps['padding']>, string> = {
-  sm: 'p-3',
-  md: 'p-4',
-  lg: 'p-5',
-};
 
 export default function FormFieldContainer({
   children,

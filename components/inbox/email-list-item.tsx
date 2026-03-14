@@ -1,16 +1,10 @@
 import Badge from '@/components/ui/elements/badge';
 import CardContainer from '@/components/ui/layout/card-container';
-import type { BadgeVariant, EmailListItemProps } from '@/types';
+import { tagVariants } from '@/constants/emails';
+import type { EmailListItemProps } from '@/types';
 import { Link } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
-
-const tagVariants: Record<string, BadgeVariant> = {
-  Work: 'sky',
-  Product: 'emerald',
-  Billing: 'amber',
-  Personal: 'fuchsia',
-};
 
 function EmailListItem({ email, isSelected, onPress }: EmailListItemProps) {
   return (

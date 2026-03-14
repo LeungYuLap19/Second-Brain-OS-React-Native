@@ -1,5 +1,50 @@
 import type { ActivityMap } from '@/types';
 
+export const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const;
+
+export const getPriorityStyles = (priority: string | undefined): { bg: string, border: string, icon: string } => {
+  switch (priority) {
+    case 'high': return { bg: 'bg-rose-500/20', border: 'border border-rose-500/50', icon: '#fb7185' };
+    case 'medium': return { bg: 'bg-amber-500/20', border: 'border border-amber-500/50', icon: '#fbbf24' };
+    case 'low': return { bg: 'bg-emerald-500/20', border: 'border border-emerald-500/50', icon: '#34d399' };
+    default: return { bg: 'bg-zinc-800', border: 'border border-zinc-700', icon: '#52525b' };
+  }
+};
+
+export const calendarTheme = {
+  backgroundColor: 'transparent',
+  calendarBackground: 'transparent',
+  monthTextColor: '#e4e4e7',
+  dayTextColor: '#a1a1aa',
+  textDisabledColor: '#3f3f46',
+  todayTextColor: '#e4e4e7',
+  todayBackgroundColor: '#27272a',
+  selectedDayBackgroundColor: '#f4f4f5',
+  selectedDayTextColor: '#18181b',
+  dotColor: '#6366f1',
+  selectedDotColor: '#6366f1',
+  arrowColor: '#71717a',
+  textDayFontWeight: '500' as const,
+  textDayHeaderFontWeight: '500' as const,
+  textDayFontSize: 14,
+  textDayHeaderFontSize: 10,
+  textMonthFontSize: 0,
+  textMonthFontWeight: '600' as const,
+  weekVerticalMargin: 12,
+  'stylesheet.calendar.header': {
+    header: { height: 0 },
+    monthText: { display: 'none' as const },
+    dayHeader: {
+      color: '#71717a',
+      fontSize: 10,
+      fontWeight: '500' as const,
+      textTransform: 'uppercase' as const,
+      letterSpacing: 1,
+      marginBottom: 4,
+    },
+  },
+};
+
 export const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

@@ -1,9 +1,7 @@
+import { PRIORITY_OPTIONS } from '@/constants/calendar';
 import type { PrioritySelectorProps } from '@/types';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-
-const PRIORITY_OPTIONS = ['low', 'medium', 'high'] as const;
-
 
 export default function PrioritySelector({ value, onChange }: PrioritySelectorProps) {
   return (

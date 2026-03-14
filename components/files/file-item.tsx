@@ -2,22 +2,11 @@ import FileStatusPill from '@/components/files/file-status-pill';
 import DotSeparator from '@/components/ui/elements/dot-separator';
 import IconCircle from '@/components/ui/elements/icon-circle';
 import CardContainer from '@/components/ui/layout/card-container';
+import { typeIconMap } from '@/constants/files';
 import type { FileItemProps } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
 import React from 'react';
 import { Text, View } from 'react-native';
-
-const typeIconMap: Record<string, keyof typeof Feather.glyphMap> = {
-  pdf: 'file-text',
-  txt: 'file-text',
-  docx: 'file-text',
-  doc: 'file-text',
-  image: 'image',
-  png: 'image',
-  jpg: 'image',
-  jpeg: 'image',
-  zip: 'archive',
-};
 
 function FileItem({ name, size, type, status, updatedAt }: FileItemProps) {
   const iconName = typeIconMap[type] ?? 'file';

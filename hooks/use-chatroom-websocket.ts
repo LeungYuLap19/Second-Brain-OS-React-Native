@@ -2,7 +2,7 @@ import { WS_URL } from '@/lib/api/config';
 import { parseWebSocketMessage } from '@/lib/api/ws-parser';
 import { getClientId } from '@/lib/utils/storage';
 import { Message } from '@/types/chat';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useChatroomWebSocket(chatroomId: string | undefined) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -52,7 +52,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
     currentAssistantMessageIdRef.current = null;
   };
 
-  const connectWebSocket = async (id: string) => {
+  const connectWebSocket = useCallback(async (id: string) => {
     setIsConnecting(true);
     
     try {
@@ -101,12 +101,12 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
       console.error('Failed to connect WebSocket:', error instanceof Error ? error.message : error);
       setIsConnecting(false);
     }
-  };
+  }, []);
 
-  const disconnect = () => {
+  const disconnect = useCallback(() => {
     socketRef.current?.close();
     socketRef.current = null;
-  };
+  }, []);
 
   const reconnect = () => {
     if (chatroomId) {
@@ -148,7 +148,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
     return true;
   };
 
-  const resetMessages = () => {
+  const resetMessages = useCallback(() => {
     setMessages([
       {
         id: '-1',
@@ -157,7 +157,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
         timestamp: Date.now().toString(),
       },
     ]);
-  };
+  }, []);
 
   const addMessages = (newMessages: Message[]) => {
     setMessages(prev => [...prev, ...newMessages]);
@@ -174,7 +174,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
     return () => {
       disconnect();
     };
-  }, [chatroomId]);
+  }, [chatroomId, disconnect, resetMessages, connectWebSocket]);
 
   const isConnected = socket?.readyState === WebSocket.OPEN;
 

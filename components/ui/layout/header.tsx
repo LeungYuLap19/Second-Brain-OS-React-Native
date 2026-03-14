@@ -1,11 +1,7 @@
+import { headerVariantClassMap } from '@/constants/ui'
 import { HeaderViewProps } from '@/types'
 import React from 'react'
 import { Text, View } from 'react-native'
-
-const variantClassMap: Record<NonNullable<HeaderViewProps['variant']>, string> = {
-  page: 'pt-2 pb-4',
-  modal: 'pt-12 pb-4',
-}
 
 export default function Header({
   title,
@@ -21,7 +17,7 @@ export default function Header({
   const hasStructuredContent = title || subtitle || leftSlot || rightSlot
 
   return (
-    <View className={`flex-row items-center justify-between px-6 ${variantClassMap[variant]} ${className}`}>
+    <View className={`flex-row items-center justify-between px-6 ${headerVariantClassMap[variant]} ${className}`}>
       {children ? (
         children
       ) : (

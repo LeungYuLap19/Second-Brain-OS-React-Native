@@ -183,6 +183,14 @@ export interface ActivityItemProps {
 export interface ActivityFieldProps {
   form: ActivityForm;
   updateField: <K extends keyof ActivityForm>(key: K, value: ActivityForm[K]) => void;
+  activityId?: string;
+}
+
+export type UpdateField = ActivityFieldProps['updateField'];
+
+export interface ActivityFormFieldProps {
+  form: ActivityForm;
+  updateField: UpdateField;
 }
 
 export interface FileStatusPillProps {
