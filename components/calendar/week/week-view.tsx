@@ -1,12 +1,11 @@
 import usePagerLoop from '@/hooks/use-pager-loop';
-import { countWeekActivities, formatDateKey, formatRangeLabel, getWeekDays, shiftDateByDays } from '@/lib/utils/date-utils';
+import { countWeekActivities, formatRangeLabel, getWeekDays, shiftDateByDays } from '@/lib/utils/date-utils';
 import type { WeekViewProps } from '@/types';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import Badge from '../../ui/elements/badge';
 import CardContainer from '../../ui/layout/card-container';
-import TodaysActivities from '../today/todays-activities';
 import WeekRow from './week-row';
 
 export default function WeekView({ selectedDate, activities, onSelectDate }: WeekViewProps) {
@@ -26,9 +25,6 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
   const weekRangeLabel = useMemo(() => formatRangeLabel(currentWeekDays), [currentWeekDays]);
   const infoLabel = `${numOfActivities} ${numOfActivities === 1 ? 'activity' : 'activities'} this week`;
 
-  const selectedKey = formatDateKey(selectedDate);
-  const dayActivities = activities[selectedKey] ?? [];  
-  
   const { pagerRef, scrollEnabled, handlePageSelected } = usePagerLoop({
     currentValue: selectedDate,
     getShiftedValue: (current, delta) => shiftDateByDays(current, delta * 7),
@@ -36,8 +32,7 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
   });
 
   return (
-    <View className="gap-4">
-      <CardContainer className="py-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+    <CardContainer className="py-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
         <View className="flex-row items-center justify-between mb-4 px-5">
           <View>
             <Text className="text-lg font-semibold text-zinc-100 mb-0.5">Weekly View</Text>
@@ -67,12 +62,6 @@ export default function WeekView({ selectedDate, activities, onSelectDate }: Wee
             ))
           }
         </PagerView>
-      </CardContainer>
-
-      <TodaysActivities
-        selectedDate={selectedDate}
-        dayActivities={dayActivities} 
-      />
-    </View>
+    </CardContainer>
   );
 }

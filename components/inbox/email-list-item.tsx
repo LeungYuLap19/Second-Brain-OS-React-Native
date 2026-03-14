@@ -6,12 +6,11 @@ import { Link } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
 
-function EmailListItem({ email, isSelected, onPress }: EmailListItemProps) {
+function EmailListItem({ email }: EmailListItemProps) {
   return (
     <Link href={`/mail-modal?id=${email.id}`} asChild>
       <CardContainer 
         asChild 
-        onPress={() => onPress(email.id)} 
         className="p-4 mb-4 active:bg-zinc-900"
       >
         <View className="flex-row items-start justify-between gap-3">

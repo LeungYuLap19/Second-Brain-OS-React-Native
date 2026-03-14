@@ -1,41 +1,30 @@
 import AnimatedHeightView from '@/components/ui/animation/animated-height-view';
 import { monthNames, weekdayNames } from '@/constants/calendar';
+import useAnimatedHeight from '@/hooks/use-animated-height';
 import { isSameDay } from '@/lib/utils/date-utils';
 import type { TodaysActivitiesProps } from '@/types';
 import React, { useState } from 'react';
-import { LayoutChangeEvent, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import EmptyState from '@/components/ui/elements/empty-state';
 import HiddenDelete from '@/components/ui/elements/hidden-delete';
 import IconCircle from '@/components/ui/elements/icon-circle';
 import CardContainer from '@/components/ui/layout/card-container';
 import { useActivities } from '@/context/activity-context';
+import { MaterialIcons } from '@expo/vector-icons';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import ActivityItem from './activity-item';
-import Placeholder from './placeholder';
-import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TodaysActivities({ selectedDate, dayActivities }: TodaysActivitiesProps) {
-  const SPRING_CONFIG = { duration: 200 } as const;
   const title = `${weekdayNames[selectedDate.getDay()]}, ${monthNames[selectedDate.getMonth()]} ${selectedDate.getDate()}`;
   const isToday = isSameDay(selectedDate, new Date());
   
   const [selectedActivityIds, setSelectedActivityIds] = useState<Set<string>>(new Set());
-  const [listHeight, setListHeight] = useState(0);
   const { deleteActivity } = useActivities();
-
-  const updateListHeight = (height: number) => {
-    if (height <= 0) return;
-    setListHeight((prev) => (prev === height ? prev : height));
-  };
-
-  const onPlaceholderLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    updateListHeight(height);
-  };
-
-  const onContentSizeChange = (_: number, height: number) => {
-    updateListHeight(height);
-  };
+  const { onLayout, onContentSizeChange, animatedViewProps } = useAnimatedHeight({
+    overflowHidden: true,
+    springConfig: { duration: 200 },
+  });
 
   return (
     <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
@@ -49,14 +38,14 @@ export default function TodaysActivities({ selectedDate, dayActivities }: Todays
           </Text>
         </View>
         <IconCircle size="sm" bgClassName="bg-zinc-800" borderClassName="border border-zinc-700">
-          <MaterialIcons name="menu" size={18} color="#71717a" />
+          <Text className='text-xs font-bold text-zinc-400'>{dayActivities.length}</Text>
         </IconCircle>
       </View>
 
-      <AnimatedHeightView height={listHeight} overflowHidden springConfig={SPRING_CONFIG}>
+      <AnimatedHeightView {...animatedViewProps}>
         {dayActivities.length === 0 ? (
-          <View onLayout={onPlaceholderLayout} className="px-4 pb-4">
-            <Placeholder />
+          <View onLayout={onLayout} className="px-4 pb-4">
+            <EmptyState icon="check" message="No activities scheduled" />
           </View>
         ) : (
             <SwipeListView

@@ -1,3 +1,4 @@
+import useAnimatedHeight from '@/hooks/use-animated-height'
 import type { ActivityFormFieldProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
@@ -8,6 +9,8 @@ import FormFieldContainer from '../../ui/layout/form-field-container'
 import PrioritySelector from './priority-selector'
 
 export default function SettingsFields({ form, updateField }: ActivityFormFieldProps) {
+  const { contentHeight, onLayout, animatedViewProps } = useAnimatedHeight({ overflowHidden: true });
+
   return (
     <View>
       <SectionLabel label="Settings" className="mb-0" />
@@ -37,11 +40,13 @@ export default function SettingsFields({ form, updateField }: ActivityFormFieldP
         />
       </FormFieldContainer>
 
-      <AnimatedHeightView height={form.priority ? 50 : 0} overflowHidden>
-        <PrioritySelector
-          value={form.priority ?? 'medium'}
-          onChange={(priority) => updateField('priority', priority)}
-        />
+      <AnimatedHeightView {...animatedViewProps} height={form.priority ? contentHeight : 0}>
+        <View onLayout={onLayout} collapsable={false} style={{ position: 'absolute', width: '100%' }}>
+          <PrioritySelector
+            value={form.priority ?? 'medium'}
+            onChange={(priority) => updateField('priority', priority)}
+          />
+        </View>
       </AnimatedHeightView>
 
       <FormFieldContainer className="flex-row items-center justify-between mt-4">

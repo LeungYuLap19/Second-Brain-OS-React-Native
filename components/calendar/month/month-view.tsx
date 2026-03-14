@@ -1,9 +1,10 @@
 import { calendarTheme, monthNames } from '@/constants/calendar';
+import useAnimatedHeight from '@/hooks/use-animated-height';
 import { formatDateKey, getMonthActivityCount, shiftDateByMonth } from '@/lib/utils/date-utils';
 import type { MonthViewProps } from '@/types';
 import { Feather } from '@expo/vector-icons';
 import React, { useCallback, useMemo, useState } from 'react';
-import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import type { MarkedDates } from 'react-native-calendars/src/types';
 import AnimatedHeightView from '../../ui/animation/animated-height-view';
@@ -19,7 +20,9 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
   const infoLabel = `${monthActivityCount} ${monthActivityCount === 1 ? 'activity' : 'activities'} this month`;
 
   const [expand, setExpand] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
+  const { contentHeight, onLayout, animatedViewProps } = useAnimatedHeight({
+    springConfig: { duration: 200 },
+  });
 
   const selectedKey = formatDateKey(selectedDate);
 
@@ -61,11 +64,6 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
     onSelectDate(date);
   }
 
-  const onContentLayout = useCallback((event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    if (height > 0) setContentHeight(height);
-  }, []);
-
   return (
     <CardContainer className="overflow-hidden bg-zinc-900/50 border border-zinc-800 rounded-3xl">
       <Pressable
@@ -81,10 +79,10 @@ export default function MonthView({ monthDate, selectedDate, activities, onSelec
         </IconCircle>
       </Pressable>
 
-      <AnimatedHeightView height={expand ? contentHeight : 0} springConfig={{ duration: 200 }}>
+      <AnimatedHeightView {...animatedViewProps} height={expand ? contentHeight : 0}>
         <View 
           className='pt-4'
-          onLayout={onContentLayout} 
+          onLayout={onLayout} 
           collapsable={false} 
           style={{ position: 'absolute', width: '100%' }}
         >

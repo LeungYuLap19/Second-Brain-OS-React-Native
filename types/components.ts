@@ -211,9 +211,8 @@ export interface UploadCardProps {
 
 export interface EmailListItemProps {
   email: EmailListItemData;
-  isSelected: boolean;
-  onPress: (id: string) => void;
 }
+
 export interface EmailDetailProps {
   email: EmailDetailData;
 }
@@ -264,6 +263,11 @@ export interface AnimatedHeightViewProps {
   height: number;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  overflowHidden?: boolean;
+  springConfig?: WithSpringConfig;
+};
+
+export interface UseAnimatedHeightOptions {
   overflowHidden?: boolean;
   springConfig?: WithSpringConfig;
 };

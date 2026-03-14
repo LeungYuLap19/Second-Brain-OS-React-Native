@@ -1,3 +1,4 @@
+import useAnimatedHeight from '@/hooks/use-animated-height'
 import type { Activity, ActivityFormFieldProps, PickerType } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
@@ -11,9 +12,8 @@ interface TimeFieldsProps extends ActivityFormFieldProps {
 }
 
 export default function TimeFields({ form, updateField, setActivePicker, overlappingActivities }: TimeFieldsProps) {
-  const overlapHeight = overlappingActivities.length > 0
-    ? 16 + 16 + 25 + (overlappingActivities.length * 40) + ((overlappingActivities.length - 1) * 8) + 2
-    : 0;
+  const { contentHeight, onLayout, animatedViewProps } = useAnimatedHeight({ overflowHidden: true });
+  const hasOverlap = overlappingActivities.length > 0;
 
   const clearTimes = () => {
     updateField('startTime', undefined)
@@ -58,7 +58,8 @@ export default function TimeFields({ form, updateField, setActivePicker, overlap
         </FormFieldContainer>
       </View>
 
-      <AnimatedHeightView height={overlapHeight} overflowHidden>
+      <AnimatedHeightView {...animatedViewProps} height={hasOverlap ? contentHeight : 0}>
+        <View onLayout={onLayout} collapsable={false} style={{ position: 'absolute', width: '100%' }}>
         <View className="mt-4 bg-red-500/10 rounded-2xl p-3 border border-red-500/20">
           <View className="flex-row items-center gap-2 mb-2">
             <Feather name="alert-triangle" size={14} color="#ef4444" />
@@ -78,6 +79,7 @@ export default function TimeFields({ form, updateField, setActivePicker, overlap
               </Text>
             </View>
           ))}
+        </View>
         </View>
       </AnimatedHeightView>
     </View>
