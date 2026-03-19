@@ -1,5 +1,6 @@
 import { calendarApi } from '@/lib/api/calendar';
 import { getErrorMessage } from '@/lib/api/client';
+import { sortActivities } from '@/lib/utils/activity-utils';
 import { Activity, ActivityForm, SetActivities } from '@/types';
 import { useCallback, useRef, useState } from 'react';
 
@@ -32,7 +33,7 @@ export function useActivityCrud(setActivities: SetActivities) {
     setActivities((prev) => {
       const dateKey = created.date;
       const existing = prev[dateKey] ?? [];
-      return { ...prev, [dateKey]: [...existing, created] };
+      return { ...prev, [dateKey]: sortActivities([...existing, created]) };
     });
     return created;
   }, [setActivities]);
@@ -46,7 +47,7 @@ export function useActivityCrud(setActivities: SetActivities) {
         if (next[key].length === 0) delete next[key];
       }
       const dateKey = updated.date;
-      next[dateKey] = [...(next[dateKey] ?? []), updated];
+      next[dateKey] = sortActivities([...(next[dateKey] ?? []), updated]);
       return next;
     });
     return updated;

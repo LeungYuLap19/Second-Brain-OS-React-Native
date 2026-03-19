@@ -180,6 +180,14 @@ export interface ActivityItemProps {
   onToggle: (id: string) => void;
 }
 
+export interface ActivitySectionProps {
+  label: string;
+  data: Activity[];
+  selectedActivityIds: Set<string>;
+  onToggle: (id: string) => void;
+  onContentSizeChange?: (w: number, h: number) => void;
+}
+
 export interface ActivityFieldProps {
   form: ActivityForm;
   updateField: <K extends keyof ActivityForm>(key: K, value: ActivityForm[K]) => void;
@@ -191,6 +199,15 @@ export type UpdateField = ActivityFieldProps['updateField'];
 export interface ActivityFormFieldProps {
   form: ActivityForm;
   updateField: UpdateField;
+}
+
+export interface DateFieldProps extends ActivityFormFieldProps {
+  setActivePicker: (picker: PickerType) => void;
+}
+
+export interface TimeFieldsProps extends ActivityFormFieldProps {
+  setActivePicker: (picker: PickerType) => void;
+  overlappingActivities: Activity[];
 }
 
 export interface FileStatusPillProps {

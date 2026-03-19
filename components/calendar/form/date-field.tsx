@@ -1,12 +1,8 @@
-import type { ActivityFormFieldProps, PickerType } from '@/types'
+import type { DateFieldProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
 import { Pressable, Text } from 'react-native'
 import FormFieldContainer from '../../ui/layout/form-field-container'
-
-interface DateFieldProps extends ActivityFormFieldProps {
-  setActivePicker: (picker: PickerType) => void
-}
 
 export default function DateField({ form, setActivePicker }: DateFieldProps) {
   return (

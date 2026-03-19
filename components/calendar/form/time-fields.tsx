@@ -1,15 +1,10 @@
 import useAnimatedHeight from '@/hooks/use-animated-height'
-import type { Activity, ActivityFormFieldProps, PickerType } from '@/types'
+import type { TimeFieldsProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
 import AnimatedHeightView from '../../ui/animation/animated-height-view'
 import FormFieldContainer from '../../ui/layout/form-field-container'
-
-interface TimeFieldsProps extends ActivityFormFieldProps {
-  setActivePicker: (picker: PickerType) => void
-  overlappingActivities: Activity[]
-}
 
 export default function TimeFields({ form, updateField, setActivePicker, overlappingActivities }: TimeFieldsProps) {
   const { contentHeight, onLayout, animatedViewProps } = useAnimatedHeight({ overflowHidden: true });
