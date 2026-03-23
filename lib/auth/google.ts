@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@/lib/api/client';
 import type { GoogleAuthResult } from '@/types';
 import * as AuthSession from 'expo-auth-session';
 import * as SecureStore from 'expo-secure-store';
@@ -130,10 +131,10 @@ export async function googleSignIn(
       error: 'Authentication failed'
     };
   } catch (error: unknown) {
-    console.error('Google Sign-In Error:', error);
+    console.error('Google Sign-In Error:', getErrorMessage(error));
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Google Sign-In failed',
+      error: getErrorMessage(error, 'Google Sign-In failed'),
     };
   }
 }
@@ -147,7 +148,7 @@ export async function checkGoogleSignIn(): Promise<boolean> {
     const token = await SecureStore.getItemAsync(GOOGLE_AUTH_KEYS.ACCESS_TOKEN);
     return !!token;
   } catch (error: unknown) {
-    console.error('Google signin check error:', error);
+    console.error('Google signin check error:', getErrorMessage(error));
     return false;
   }
 }
@@ -169,8 +170,28 @@ export async function getGoogleUserData(): Promise<{
       id: id || undefined,
       email: email || undefined,
     };
-  } catch {
+  } catch (error: unknown) {
+    console.error('Google user data error:', getErrorMessage(error));
     return null;
+  }
+}
+
+/**
+ * Get the current Google access token, refreshing if needed.
+ */
+export async function getGoogleAccessToken(): Promise<string> {
+  try {
+    let token = await SecureStore.getItemAsync(GOOGLE_AUTH_KEYS.ACCESS_TOKEN);
+
+    if (!token) {
+      token = await refreshGoogleToken();
+    }
+
+    if (!token) throw new Error('Not authenticated with Google');
+    return token;
+  } catch (error: unknown) {
+    console.error('Google access token error:', getErrorMessage(error));
+    throw error;
   }
 }
 
@@ -212,7 +233,7 @@ export async function refreshGoogleToken(): Promise<string | null> {
 
     return null;
   } catch (error: unknown) {
-    console.error('Google token refresh error:', error);
+    console.error('Google token refresh error:', getErrorMessage(error));
     return null;
   }
 }
@@ -246,7 +267,7 @@ export async function googleSignOut(): Promise<void> {
 
     console.log('Google Sign-Out successful');
   } catch (error: unknown) {
-    console.error('Google Sign-Out Error:', error);
+    console.error('Google Sign-Out Error:', getErrorMessage(error));
     throw error;
   }
 }

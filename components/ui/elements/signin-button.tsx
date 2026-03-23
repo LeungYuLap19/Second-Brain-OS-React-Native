@@ -22,7 +22,15 @@ export default function SigninButton({ platform }: SigninButtonProps) {
     {
       clientId: clientIds.ios!!,
       redirectUri,
-      scopes: ['openid', 'profile', 'email'],
+      scopes: [
+        'openid',
+        'profile',
+        'email',
+        'https://www.googleapis.com/auth/gmail.readonly',
+        'https://www.googleapis.com/auth/gmail.send',
+        'https://www.googleapis.com/auth/gmail.compose',
+        'https://www.googleapis.com/auth/gmail.modify',
+      ],
       responseType: AuthSession.ResponseType.Code,
       usePKCE: true,
     }, 

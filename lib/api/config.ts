@@ -10,3 +10,4 @@ const HOST = getDevHost();
 
 export const API_URL = `http://${HOST}:8000`;
 export const WS_URL  = `ws://${HOST}:8000/ws`;
+export const GMAIL_BASE = 'https://gmail.googleapis.com/gmail/v1/users/me';

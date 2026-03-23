@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "mapi-devdocs": {
+      "type": "http",
+      "url": "https://merchantapi.googleapis.com/devdocs/mcp/"
+    }
+  }
+}

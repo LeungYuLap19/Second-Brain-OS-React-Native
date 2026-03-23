@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@/lib/api/client';
 import type { AppleAuthResult } from '@/types';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -85,10 +86,10 @@ export async function appleSignIn(): Promise<AppleAuthResult> {
       };
     }
 
-    console.error('Apple Sign-In Error:', error);
+    console.error('Apple Sign-In Error:', getErrorMessage(error));
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Apple Sign-In failed',
+      error: getErrorMessage(error, 'Apple Sign-In failed'),
     };
   }
 }
@@ -104,7 +105,8 @@ export async function checkAppleSignIn(): Promise<boolean> {
   try {
     const userId = await SecureStore.getItemAsync(APPLE_AUTH_KEYS.USER_ID);
     return !!userId;
-  } catch {
+  } catch (error: unknown) {
+    console.error('Apple signin check error:', getErrorMessage(error));
     return false;
   }
 }
@@ -129,7 +131,8 @@ export async function getAppleUserData(): Promise<{
       email: email || undefined,
       fullName: fullNameStr ? JSON.parse(fullNameStr) : undefined,
     };
-  } catch {
+  } catch (error: unknown) {
+    console.error('Apple user data error:', getErrorMessage(error));
     return null;
   }
 }
@@ -148,8 +151,8 @@ export async function appleSignOut(): Promise<void> {
     ]);
     
     console.log('Apple Sign-Out successful - All credentials removed');
-  } catch (error) {
-    console.error('Apple Sign-Out Error:', error);
+  } catch (error: unknown) {
+    console.error('Apple Sign-Out Error:', getErrorMessage(error));
     throw error;
   }
 }
@@ -171,7 +174,8 @@ export async function refreshAppleCredentials(): Promise<boolean> {
     // Or attempt to get fresh credentials
     
     return true;
-  } catch {
+  } catch (error: unknown) {
+    console.error('Apple credential refresh error:', getErrorMessage(error));
     return false;
   }
 }
