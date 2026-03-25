@@ -217,7 +217,7 @@ export async function refreshGoogleToken(): Promise<string | null> {
         client_id: clientIds.ios,
         refresh_token: refreshToken,
         grant_type: 'refresh_token'
-      })
+      }).toString()
     });
 
     const data = await response.json();

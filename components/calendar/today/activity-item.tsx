@@ -1,7 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
+import Badge from '@/components/ui/elements/badge';
 import DotSeparator from '@/components/ui/elements/dot-separator';
 import IconCircle from '@/components/ui/elements/icon-circle';
 import { getPriorityStyles } from '@/constants/calendar';
+import { formatTime } from '@/lib/utils/date-utils';
 import type { ActivityItemProps } from '@/types';
 import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
@@ -49,14 +51,18 @@ export default function ActivityItem({ activity, isSelected, onToggle }: Activit
                 <Feather name="clock" size={10} color="#71717a" />
                 <Text className="text-xs text-zinc-500 font-medium">
                   {activity.startTime && activity.endTime
-                    ? `${activity.startTime} – ${activity.endTime}`
-                    : activity.startTime ?? activity.date}
+                    ? `${formatTime(activity.startTime)} – ${formatTime(activity.endTime)}`
+                    : activity.startTime ? formatTime(activity.startTime) : activity.date}
                 </Text>
               </View>
               {activity.tag && (
                 <>
                   <DotSeparator />
-                  <Text className="text-xs text-zinc-500 font-medium">{activity.tag}</Text>
+                  <Badge
+                    label={activity.tag}
+                    variant={'neutral'}
+                    size="xs"
+                  />
                 </>
               )}
             </View>

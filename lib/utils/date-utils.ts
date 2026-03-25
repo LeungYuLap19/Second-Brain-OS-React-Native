@@ -99,12 +99,17 @@ export const timeStringToDate = (time?: string): Date | undefined => {
   if (!time) return undefined;
   const [h, m] = time.split(':').map(Number);
   const d = new Date();
-  d.setHours(h, m, 0, 0);
+  d.setHours(h, m);
   return d;
 };
 
 export const dateToTimeString = (d: Date): string => {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
+
+export const formatTime = (time: string): string => {
+  const [h, m] = time.split(':');
+  return `${h}:${m}`;
 };
 
 export const dateToDateString = (d: Date): string => {

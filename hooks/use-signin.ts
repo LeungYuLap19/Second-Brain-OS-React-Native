@@ -1,4 +1,5 @@
 // hooks/useSignIn.ts
+import { getErrorMessage } from '@/lib/api/client';
 import { appleSignIn } from '@/lib/auth/apple';
 import { googleSignIn } from '@/lib/auth/google';
 import { PlatformType, UseSignInOptions, UseSignInReturn } from '@/types/auth';
@@ -99,7 +100,7 @@ export function useSignIn(options: UseSignInOptions = {}): UseSignInReturn {
   };
 
   const handleError = (error: Error, platform: PlatformType) => {
-    console.error(`${platform} Sign-In Error:`, error.message);
+    console.error(`${platform} Sign-In Error:`, getErrorMessage(error));
     
     // Don't show alert for user cancellation
     const isUserCancelled = error.message.includes('cancelled');

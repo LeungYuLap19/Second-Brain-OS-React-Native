@@ -4,7 +4,7 @@ import { PressableProps, StyleProp, TextInputProps, TextProps, ViewProps, ViewSt
 import { WithSpringConfig } from 'react-native-reanimated';
 import type { SafeAreaViewProps } from 'react-native-safe-area-context';
 import { RowMap } from 'react-native-swipe-list-view';
-import { Activity, ActivityForm, Priority } from './calendar';
+import { Activity, ActivityForm, PickerType, Priority } from './calendar';
 import { ChatHistory, Message } from './chat';
 import { FileStatus } from './files';
 import { EmailDetailData, EmailListItemData } from './inbox';
@@ -72,6 +72,8 @@ export interface TabScreenProps {
   rightSlot?: ReactNode;
   scrollable?: boolean;
   contentPaddingBottom?: number;
+  onRefresh?: (() => void) | undefined;
+  isRefreshing?: boolean;
   children: ReactNode;
 }
 

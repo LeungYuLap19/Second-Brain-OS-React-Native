@@ -1,3 +1,4 @@
+import { getErrorMessage } from '@/lib/api/client';
 import { WS_URL } from '@/lib/api/config';
 import { parseWebSocketMessage } from '@/lib/api/ws-parser';
 import { getClientId } from '@/lib/utils/storage';
@@ -98,7 +99,7 @@ export function useChatroomWebSocket(chatroomId: string | undefined) {
         }
       };
     } catch (error: unknown) {
-      console.error('Failed to connect WebSocket:', error instanceof Error ? error.message : error);
+      console.error('Failed to connect WebSocket:', getErrorMessage(error));
       setIsConnecting(false);
     }
   }, []);

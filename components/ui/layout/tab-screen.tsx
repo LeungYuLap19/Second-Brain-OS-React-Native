@@ -1,6 +1,6 @@
 import type { TabScreenProps } from '@/types';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import Header from './header';
 import ThemedSafeAreaView from './themed-safe-area-view';
 
@@ -10,6 +10,8 @@ export default function TabScreen({
   rightSlot,
   scrollable = true,
   contentPaddingBottom = 80,
+  onRefresh,
+  isRefreshing,
   children,
 }: TabScreenProps) {
   return (
@@ -19,6 +21,13 @@ export default function TabScreen({
         <ScrollView
           className="flex-1 px-6"
           contentContainerStyle={{ paddingBottom: contentPaddingBottom }}
+          refreshControl={
+            onRefresh ? 
+            <RefreshControl 
+              onRefresh={onRefresh} 
+              refreshing={!!isRefreshing} 
+            /> : undefined
+          }
         >
           {children}
         </ScrollView>

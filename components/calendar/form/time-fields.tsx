@@ -1,4 +1,5 @@
 import useAnimatedHeight from '@/hooks/use-animated-height'
+import { formatTime } from '@/lib/utils/date-utils'
 import type { TimeFieldsProps } from '@/types'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
@@ -31,7 +32,7 @@ export default function TimeFields({ form, updateField, setActivePicker, overlap
             )}
           </View>
           <Pressable onPress={() => setActivePicker('start')}>
-            <Text className="text-base font-medium text-zinc-200">{form.startTime ?? 'Optional'}</Text>
+            <Text className="text-base font-medium text-zinc-200">{form.startTime ? formatTime(form.startTime) : 'Optional'}</Text>
           </Pressable>
         </FormFieldContainer>
 
@@ -48,7 +49,7 @@ export default function TimeFields({ form, updateField, setActivePicker, overlap
             )}
           </View>
           <Pressable onPress={() => setActivePicker('end')}>
-            <Text className="text-base font-medium text-zinc-200">{form.endTime ?? 'Optional'}</Text>
+            <Text className="text-base font-medium text-zinc-200">{form.endTime ? formatTime(form.endTime) : 'Optional'}</Text>
           </Pressable>
         </FormFieldContainer>
       </View>
@@ -70,7 +71,7 @@ export default function TimeFields({ form, updateField, setActivePicker, overlap
                 {activity.title}
               </Text>
               <Text className="text-xs text-zinc-500 ml-2">
-                {activity.startTime} - {activity.endTime}
+                {formatTime(activity.startTime!)} - {formatTime(activity.endTime!)}
               </Text>
             </View>
           ))}

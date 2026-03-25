@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import 'react-native-reanimated';
 import '../global.css';
+import { EmailProvider } from '@/context/email-context';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -40,31 +41,33 @@ export default function RootLayout() {
   return (
     <ErrorBoundary>
       <ActivityProvider>
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="history-modal"
-            options={{ presentation: 'modal', }}
-          />
-          <Stack.Screen 
-            name='activity-modal'
-            options={{ presentation: 'modal' }}
-          />
-          <Stack.Screen 
-            name='mail-modal'
-            options={{ presentation: 'modal' }}
-          />
-          <Stack.Screen 
-            name='(auth)' 
-            options={{ gestureEnabled: false, }}
-          />
-          <Stack.Screen 
-            name='(tabs)' 
-            options={{ gestureEnabled: false, }}
-          />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </View>
+        <EmailProvider>
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="history-modal"
+              options={{ presentation: 'modal', }}
+            />
+            <Stack.Screen 
+              name='activity-modal'
+              options={{ presentation: 'modal' }}
+            />
+            <Stack.Screen 
+              name='mail-modal'
+              options={{ presentation: 'modal' }}
+            />
+            <Stack.Screen 
+              name='(auth)' 
+              options={{ gestureEnabled: false, }}
+            />
+            <Stack.Screen 
+              name='(tabs)' 
+              options={{ gestureEnabled: false, }}
+            />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </View>
+        </EmailProvider>
       </ActivityProvider>
     </ErrorBoundary>
   );

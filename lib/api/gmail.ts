@@ -1,4 +1,4 @@
-import { gmailFetch } from '@/lib/api/client';
+import { AppError, getErrorMessage } from '@/lib/api/client';
 import { buildRawMessage } from '@/lib/utils/gmail-helpers';
 import type {
     GmailDraft,
@@ -9,6 +9,84 @@ import type {
     GmailReplyParams,
     GmailSendParams,
 } from '@/types';
+import { getGoogleAccessToken, refreshGoogleToken } from '../auth/google';
+import { GMAIL_BASE } from './config';
+
+/**
+ * Type-safe wrapper around fetch for the Gmail REST API.
+ *
+ * - Automatically attaches the Google access token.
+ * - On a 401 response, refreshes the token once and retries.
+ * - Throws on non-OK responses with the Gmail API error message.
+ *
+ * @typeParam T - The expected JSON response shape.
+ * @param path - Gmail API path appended to the base URL (e.g. `/messages?maxResults=20`).
+ * @param options - Standard `RequestInit` overrides (method, body, headers, etc.).
+ * @returns The parsed JSON response typed as `T`.
+ * @throws {AppError} If the user is not authenticated or the request fails after a retry.
+ */
+async function gmailFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getGoogleAccessToken();
+
+  let response: Response;
+  try {
+    response = await fetch(`${GMAIL_BASE}${path}`, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+  } catch (error: unknown) {
+    throw new AppError(
+      getErrorMessage(error, 'Network request failed. Check your connection.'),
+    );
+  }
+
+  // If 401, try refreshing token once
+  if (response.status === 401) {
+    const newToken = await refreshGoogleToken();
+    if (!newToken) throw new AppError('Session expired. Please sign in again.', 401);
+
+    let retry: Response;
+    try {
+      retry = await fetch(`${GMAIL_BASE}${path}`, {
+        ...options,
+        headers: {
+          Authorization: `Bearer ${newToken}`,
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
+    } catch (error: unknown) {
+      throw new AppError(
+        getErrorMessage(error, 'Network request failed. Check your connection.'),
+      );
+    }
+
+    if (!retry.ok) {
+      const err = await retry.json().catch(() => ({}));
+      throw new AppError(
+        err.error?.message ?? `Gmail API error (${retry.status})`,
+        retry.status,
+        err.error?.message,
+      );
+    }
+    return retry.json();
+  }
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new AppError(
+      err.error?.message ?? `Gmail API error (${response.status})`,
+      response.status,
+      err.error?.message,
+    );
+  }
+
+  return response.json();
+}
 
 export const gmailApi = {
   /**

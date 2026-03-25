@@ -1,5 +1,5 @@
-import { checkAppleSignIn, getAppleUserData } from './apple';
-import { checkGoogleSignIn, getGoogleUserData } from './google';
+import { appleSignOut, checkAppleSignIn, getAppleUserData } from './apple';
+import { checkGoogleSignIn, getGoogleUserData, googleSignOut } from './google';
 
 export async function checkSignedIn(): Promise<boolean> {
   const [apple, google] = await Promise.all([checkAppleSignIn(), checkGoogleSignIn()]);
@@ -14,4 +14,11 @@ export async function getCurrentUser(): Promise<{ id: string }> {
   if (google?.id) return { id: google.id };
 
   throw new Error('Not authenticated');
+}
+
+export async function logout(): Promise<void> {
+  await Promise.all([
+    appleSignOut().catch(() => {}),
+    googleSignOut().catch(() => {}),
+  ]);
 }
