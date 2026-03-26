@@ -1,11 +1,11 @@
 import { useEmailActions } from '@/hooks/use-email-actions';
-import type { EmailContextValue, GmailMessage } from '@/types';
+import type { EmailContextValue, NormalizedEmail } from '@/types';
 import { createContext, useContext, useState } from 'react';
 
 const EmailContext = createContext<EmailContextValue | null>(null);
 
 export function EmailProvider({ children }: { children: React.ReactNode }) {
-  const [emails, setEmails] = useState<GmailMessage[]>([]);
+  const [emails, setEmails] = useState<NormalizedEmail[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | undefined>();
   const hookReturns = useEmailActions(setEmails, setNextPageToken);
 

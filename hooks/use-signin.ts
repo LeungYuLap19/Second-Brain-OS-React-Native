@@ -1,5 +1,5 @@
 // hooks/useSignIn.ts
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import { appleSignIn } from '@/lib/auth/apple';
 import { googleSignIn } from '@/lib/auth/google';
 import { PlatformType, UseSignInOptions, UseSignInReturn } from '@/types/auth';

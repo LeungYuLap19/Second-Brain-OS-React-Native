@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import { WS_URL } from '@/lib/api/config';
 import { parseWebSocketMessage } from '@/lib/api/ws-parser';
 import { getClientId } from '@/lib/utils/storage';

@@ -3,7 +3,7 @@ import { ChatInput } from '@/components/chat/chat-input';
 import { MessageList } from '@/components/chat/message-list';
 import ThemedSafeAreaView from '@/components/ui/layout/themed-safe-area-view';
 import { useChatroomWebSocket } from '@/hooks/use-chatroom-websocket';
-import { apiFetch, getErrorMessage } from '@/lib/api/client';
+import { apiFetch, getErrorMessage } from '@/lib/api/clients/base-client';
 import { getNewChatroomId } from '@/lib/utils/storage';
 import { Chatroom } from '@/types/chat';
 import { router, useLocalSearchParams } from 'expo-router';

@@ -1,4 +1,4 @@
-import { apiFetch } from '@/lib/api/client';
+import { apiFetch } from '@/lib/api/clients/base-client';
 import { ChatHistory } from '@/types';
 
 export const chatApi = {

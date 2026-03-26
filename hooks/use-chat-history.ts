@@ -1,5 +1,5 @@
 import { chatApi } from "@/lib/api/chat";
-import { AppError, getErrorMessage } from "@/lib/api/client";
+import { AppError, getErrorMessage } from "@/lib/api/clients/base-client";
 import { getChatroomId, getClientId, getNewChatroomId } from "@/lib/utils/storage";
 import { ChatHistory } from "@/types";
 import { router } from "expo-router";

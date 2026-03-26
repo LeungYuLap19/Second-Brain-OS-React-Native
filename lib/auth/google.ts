@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import type { GoogleAuthResult } from '@/types';
 import * as AuthSession from 'expo-auth-session';
 import * as SecureStore from 'expo-secure-store';

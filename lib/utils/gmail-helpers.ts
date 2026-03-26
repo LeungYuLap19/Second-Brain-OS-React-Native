@@ -1,6 +1,4 @@
-import type { GmailMessage } from '@/types';
-
-/* ── RFC 2822 message builder ── */
+import type { GmailMessage, NormalizedEmail, NormalizedHeader, ParsedEmailAddress } from '@/types';
 
 /**
  * Builds a URL-safe base64-encoded RFC 2822 email message for the Gmail API.
@@ -56,19 +54,6 @@ export function getHeader(message: GmailMessage, name: string): string {
 }
 
 /**
- * Extracts the plain-text (or HTML fallback) body from a Gmail message.
- *
- * @param message - The full Gmail message object.
- * @returns The decoded body string, or an empty string if no body is found.
- */
-export function getBody(message: GmailMessage): string {
-  const body = findPart(message.payload, 'text/plain')
-    ?? findPart(message.payload, 'text/html')
-    ?? '';
-  return body;
-}
-
-/**
  * Recursively searches a MIME payload tree for a part matching the given MIME type.
  *
  * @param payload - A MIME payload node (may contain nested `parts`).
@@ -114,8 +99,112 @@ export function decodeBase64Url(data: string): string {
  * @param header - The raw address string (e.g. `"Name <email>"` or just `"email"`).
  * @returns An object with `name` and `email` fields.
  */
-export function parseEmailAddress(header: string): { name: string; email: string } {
+export function parseEmailAddress(header: string): ParsedEmailAddress {
   const match = header.match(/^(.+?)\s*<(.+)>$/);
   if (match) return { name: match[1].replace(/^"|"$/g, ''), email: match[2] };
   return { name: header, email: header };
+}
+
+/**
+ * Parses relevant email headers from a Gmail message payload into a normalized format.
+ *
+ * @param message - The full Gmail message object.
+ * @returns An object containing normalized header information.
+ */
+export function parseEmailHeader(message: GmailMessage): NormalizedHeader {
+  const headers: NormalizedHeader = {
+    from: undefined,
+    to: undefined,
+    cc: undefined,
+    bcc: undefined,
+    subject: undefined,
+    date: undefined,
+    replyTo: undefined,
+    messageId: undefined,
+    inReplyTo: undefined,
+    references: undefined
+  };
+
+  const payload = message.payload; // Access payload directly from message
+
+  // The 'if (payload)' check is technically redundant here as payload is always present
+  // in a valid GmailMessage, but it doesn't cause harm.
+  if (payload) {
+    const fromHeader = getHeader(message, 'From');
+    if (fromHeader) headers.from = parseEmailAddress(fromHeader);
+
+    const toHeader = getHeader(message, 'To');
+    if (toHeader) {
+      // Split by comma and map each part to a parsed email address
+      headers.to = toHeader.split(',').map(s => parseEmailAddress(s.trim()));
+    }
+
+    const ccHeader = getHeader(message, 'Cc');
+    if (ccHeader) {
+      headers.cc = ccHeader.split(',').map(s => parseEmailAddress(s.trim()));
+    }
+
+    const bccHeader = getHeader(message, 'Bcc');
+    if (bccHeader) {
+      headers.bcc = bccHeader.split(',').map(s => parseEmailAddress(s.trim()));
+    }
+
+    const subjectHeader = getHeader(message, 'Subject');
+    if (subjectHeader) headers.subject = subjectHeader;
+
+    const dateHeader = getHeader(message, 'Date');
+    // Convert date string to Date object
+    if (dateHeader) headers.date = new Date(dateHeader);
+
+    const replyToHeader = getHeader(message, 'Reply-To');
+    if (replyToHeader) headers.replyTo = parseEmailAddress(replyToHeader);
+
+    const messageIdHeader = getHeader(message, 'Message-ID');
+    if (messageIdHeader) headers.messageId = messageIdHeader;
+
+    const inReplyToHeader = getHeader(message, 'In-Reply-To');
+    if (inReplyToHeader) headers.inReplyTo = inReplyToHeader;
+
+    const referencesHeader = getHeader(message, 'References');
+    // Split references by whitespace and filter out any empty strings
+    if (referencesHeader) {
+      headers.references = referencesHeader.split(/\s+/).filter(Boolean);
+    }
+  }
+
+  return headers;
+}
+
+/**
+ * Normalizes a raw GmailMessage object into a simplified and flattened NormalizedEmail interface.
+ * This function extracts headers, body content (plain text and HTML), and attachment metadata.
+ *
+ * @param message - The raw GmailMessage object fetched from the Gmail API.
+ * @returns A NormalizedEmail object, easier to consume by UI components.
+ */
+export function normalizedGmailMessage(message: GmailMessage): NormalizedEmail {
+  const normalized: NormalizedEmail = {
+    id: message.id,
+    threadId: message.threadId,
+    labelIds: message.labelIds,
+    snippet: message.snippet,
+    internalDate: message.internalDate,
+    headers: {},
+    plainTextBody: undefined,
+    htmlBody: undefined,
+    attachments: []
+  };
+
+  const payload = message.payload;
+
+  normalized.headers = parseEmailHeader(message);
+
+  // --- Parse Body ---
+  // Use findPart directly for both plain text and HTML to populate both fields
+  normalized.plainTextBody = findPart(payload, 'text/plain') || undefined;
+  normalized.htmlBody = findPart(payload, 'text/html') || undefined;
+
+  // TODO: --- Extract Attachments ---
+
+  return normalized;
 }

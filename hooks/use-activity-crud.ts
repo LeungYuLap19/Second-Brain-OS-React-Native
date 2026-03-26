@@ -1,5 +1,5 @@
 import { calendarApi } from '@/lib/api/calendar';
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import { sortActivities } from '@/lib/utils/activity-utils';
 import { Activity, ActivityForm, SetActivities } from '@/types';
 import { useCallback, useRef, useState } from 'react';

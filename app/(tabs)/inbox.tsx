@@ -25,6 +25,10 @@ export default function Inbox() {
     setIsRefreshing(loading);
   }, [loading]);
 
+  useEffect(() => {
+    console.log(JSON.stringify(emails, null, 2))
+  }, [emails]);
+
   return (
     <TabScreen
       title="Inbox"

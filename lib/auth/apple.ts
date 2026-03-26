@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import type { AppleAuthResult } from '@/types';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as SecureStore from 'expo-secure-store';

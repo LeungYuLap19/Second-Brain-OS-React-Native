@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/api/clients/base-client';
 import { gmailApi } from '@/lib/api/gmail';
 import type {
   GmailDraftParams,
