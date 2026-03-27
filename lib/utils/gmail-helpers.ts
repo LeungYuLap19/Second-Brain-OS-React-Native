@@ -192,7 +192,7 @@ export function normalizedGmailMessage(message: GmailMessage): NormalizedEmail {
     headers: {},
     plainTextBody: undefined,
     htmlBody: undefined,
-    attachments: []
+    attachments: [],
   };
 
   const payload = message.payload;

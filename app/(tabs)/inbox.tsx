@@ -1,38 +1,33 @@
 import EmailListItem from '@/components/inbox/email-list-item';
 import CircleButton from '@/components/ui/elements/circle-button';
 import ThemedTextInput from '@/components/ui/elements/themed-text-input';
+import CardContainer from '@/components/ui/layout/card-container';
 import TabScreen from '@/components/ui/layout/tab-screen';
-import { emailThreads } from '@/constants/emails';
 import { useEmails } from '@/context/email-context';
-import { EmailListItemData } from '@/types';
 import Feather from '@expo/vector-icons/Feather';
-import { Link, useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Link } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 
 export default function Inbox() {
   const [search, setSearch] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { emails, fetchInbox, loading } = useEmails();
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchInbox();
-    }, [fetchInbox])
-  );
+  useEffect(() => {
+    fetchInbox();
+  }, []);
 
   useEffect(() => {
     setIsRefreshing(loading);
   }, [loading]);
 
-  useEffect(() => {
-    console.log(JSON.stringify(emails, null, 2))
-  }, [emails]);
-
   return (
     <TabScreen
       title="Inbox"
-      subtitle={`${emailThreads.length} conversations`}
+      subtitle={`${emails.reduce((acc, email) => 
+        email.labelIds.includes('UNREAD') ? acc + 1 : acc, 0
+      )} unread emails`}
       isRefreshing={isRefreshing}
       onRefresh={fetchInbox}
       rightSlot={
@@ -48,26 +43,22 @@ export default function Inbox() {
         </View>
       }
     >
-      <View className="flex-row items-center gap-2 rounded-xl bg-zinc-800/60 px-3 py-2 mb-4">
+      <CardContainer className='flex-row items-center gap-2 px-3 py-4 mb-4'>
         <Feather name="search" size={16} color="#71717a" />
-        <ThemedTextInput
-          className="flex-1 text-sm py-1"
-          placeholder="Search emails..."
-          value={search}
-          onChangeText={setSearch}
-          returnKeyType="search"
-          autoCorrect={false}
-        />
-      </View>
+          <ThemedTextInput
+            className="flex-1 text-sm"
+            placeholder="Search emails..."
+            value={search}
+            onChangeText={setSearch}
+            returnKeyType="search"
+            autoCorrect={false}
+          />
+      </CardContainer>
 
-      <View className="mb-4">
-        <Text className="text-sm text-zinc-400">Priority</Text>
-      </View>
-
-      {emailThreads.map((email) => (
+      {emails.map((email) => (
         <EmailListItem
           key={email.id}
-          email={email as EmailListItemData}
+          email={email}
         />
       ))}
     </TabScreen>

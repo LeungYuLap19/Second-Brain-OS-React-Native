@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
+// --- types for email samples
+
 export interface EmailListItemData {
   id: string;
   senderName: string;
@@ -16,6 +18,8 @@ export interface EmailDetailData extends EmailListItemData {
   to: string[];
   cc?: string[];
 }
+
+// --- gmail api interfaces 
 
 export interface GmailMessage {
   id: string;
@@ -91,29 +95,16 @@ export interface GmailDraftParams {
   threadId?: string;
 }
 
-export interface EmailContextValue {
-  emails: NormalizedEmail[];
-  nextPageToken?: string;
-  loading: boolean;
-  fetchInbox: (pageToken?: string) => Promise<void>;
-  searchEmails: (query: string, pageToken?: string) => Promise<void>;
-  sendEmail: (params: GmailSendParams) => Promise<NormalizedEmail | undefined>;
-  replyToEmail: (params: GmailReplyParams) => Promise<NormalizedEmail | undefined>;
-  createDraft: (params: GmailDraftParams) => Promise<GmailDraft | undefined>;
-}
-
 export interface NormalizedEmail {
   id: string;
   threadId: string;
-  labelIds: string[];
+  labelIds: GmailLabelId[];
   snippet: string;
   internalDate: string;
   headers: NormalizedHeader;
   plainTextBody?: string;
   htmlBody?: string;
   attachments: NormalizedAttachment[];
-  // Other fields if you need them, e.g., raw email content
-  // raw?: string;
 }
 
 export interface NormalizedHeader {
@@ -144,5 +135,22 @@ export interface ParsedEmailAddress {
   email: string 
 }
 
+export type GmailSystemLabel =
+  | 'INBOX'
+  | 'SPAM'
+  | 'TRASH'
+  | 'UNREAD'
+  | 'STARRED'
+  | 'IMPORTANT'
+  | 'SENT'
+  | 'DRAFT'
+  | 'CHAT'
+  | 'CATEGORY_PERSONAL'
+  | 'CATEGORY_SOCIAL'
+  | 'CATEGORY_PROMOTIONS'
+  | 'CATEGORY_UPDATES'
+  | 'CATEGORY_FORUMS';
+
+export type GmailLabelId = GmailSystemLabel | (string & {});
 export type setEmails = Dispatch<SetStateAction<NormalizedEmail[]>>;
 export type setNextPageToken = Dispatch<SetStateAction<string | undefined>>

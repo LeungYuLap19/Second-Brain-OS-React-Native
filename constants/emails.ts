@@ -1,4 +1,48 @@
-import type { BadgeVariant, EmailDetailData } from '@/types';
+import type { BadgeVariant, EmailDetailData, GmailSystemLabel } from '@/types';
+
+export const gmailLabelDisplayNames: Record<GmailSystemLabel, string> = {
+  // Core Folders
+  INBOX: 'Inbox',
+  SENT: 'Sent',
+  DRAFT: 'Drafts',
+  TRASH: 'Trash',
+  SPAM: 'Spam',
+  
+  // Status/Flags
+  IMPORTANT: 'Important',
+  STARRED: 'Starred',
+  UNREAD: 'Unread',
+  CHAT: 'Chat',
+
+  // Smart Categories
+  CATEGORY_PERSONAL: 'Personal',
+  CATEGORY_SOCIAL: 'Social',
+  CATEGORY_PROMOTIONS: 'Promotions',
+  CATEGORY_UPDATES: 'Updates',
+  CATEGORY_FORUMS: 'Forums',
+};
+
+export const gmailTagVariants: Record<GmailSystemLabel, BadgeVariant> = {
+  // Core Folders
+  INBOX: 'indigo',
+  SENT: 'emerald',
+  DRAFT: 'amber',
+  TRASH: 'rose',
+  SPAM: 'orange',
+  
+  // Status Indicators
+  IMPORTANT: 'amber',
+  STARRED: 'amber',
+  UNREAD: 'fuchsia',
+  CHAT: 'sky',
+
+  // Categories (Smart Labels)
+  CATEGORY_PERSONAL: 'sky',
+  CATEGORY_SOCIAL: 'indigo',
+  CATEGORY_PROMOTIONS: 'rose',
+  CATEGORY_UPDATES: 'emerald',
+  CATEGORY_FORUMS: 'fuchsia',
+};
 
 export const tagVariants: Record<string, BadgeVariant> = {
   Work: 'sky',

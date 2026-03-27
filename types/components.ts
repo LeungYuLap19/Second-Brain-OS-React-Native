@@ -7,11 +7,11 @@ import { RowMap } from 'react-native-swipe-list-view';
 import { Activity, ActivityForm, PickerType, Priority } from './calendar';
 import { ChatHistory, Message } from './chat';
 import { FileStatus } from './files';
-import { EmailDetailData, EmailListItemData } from './inbox';
+import { EmailDetailData, EmailListItemData, NormalizedEmail } from './inbox';
 
 // ── Shared UI component props ──────────────────────────────────────
 
-export type BadgeVariant = 'sky' | 'emerald' | 'amber' | 'rose' | 'fuchsia' | 'indigo' | 'neutral';
+export type BadgeVariant = 'sky' | 'emerald' | 'amber' | 'rose' | 'fuchsia' | 'indigo' | 'orange' | 'slate' | 'neutral';
 
 export interface BadgeProps {
   label: string;
@@ -229,7 +229,7 @@ export interface UploadCardProps {
 }
 
 export interface EmailListItemProps {
-  email: EmailListItemData;
+  email: NormalizedEmail;
 }
 
 export interface EmailDetailProps {

@@ -1,10 +1,10 @@
 import type {
-    BadgeVariant,
-    FormFieldContainerProps,
-    HeaderViewProps,
-    IconCircleShape,
-    IconCircleSize,
-    ThemedTextProps,
+  BadgeVariant,
+  FormFieldContainerProps,
+  HeaderViewProps,
+  IconCircleShape,
+  IconCircleSize,
+  ThemedTextProps,
 } from '@/types';
 
 // ── Badge ──────────────────────────────────────────────────────────
@@ -16,6 +16,8 @@ export const badgeVariantStyles: Record<BadgeVariant, { bg: string; text: string
   rose:    { bg: 'bg-rose-500/15',    text: 'text-rose-200' },
   fuchsia: { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-200' },
   indigo:  { bg: 'bg-indigo-500/15',  text: 'text-indigo-200' },
+  orange:  { bg: 'bg-orange-500/15',  text: 'text-orange-200' },
+  slate:   { bg: 'bg-slate-500/15',   text: 'text-slate-200' },
   neutral: { bg: 'bg-zinc-800/70',    text: 'text-zinc-300' },
 };
 
@@ -58,3 +60,4 @@ export const headerVariantClassMap: Record<NonNullable<HeaderViewProps['variant'
   page: 'pt-2 pb-4',
   modal: 'pt-12 pb-4',
 };
+

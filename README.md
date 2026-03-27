@@ -23,6 +23,39 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
+
+## Project Structure
+
+Below is a high-level project tree showing the main folders and files:
+
+```text
+Second-Brain-OS-Mobile/
+├── app/                  # Expo Router app entry and route groups
+│   ├── _layout.tsx       # Main app shell
+│   ├── index.tsx         # Auth gate
+│   ├── (auth)/           # Auth routes
+│   └── (tabs)/           # Main tabbed app (chatroom, files, calendar, inbox)
+├── components/           # UI components (calendar, chat, files, inbox, ui primitives)
+├── constants/            # Static data (emails, files, calendar, theme)
+├── context/              # React context providers (activity, email)
+├── hooks/                # Custom React hooks (activity CRUD, chat, email, etc.)
+├── lib/                  # API, auth, and utility libraries
+│   ├── api/              # Networking and API logic
+│   ├── auth/             # Auth helpers
+│   └── utils/            # Utility functions (storage, etc.)
+├── types/                # TypeScript type definitions
+├── __tests__/            # Jest test files
+├── assets/               # Fonts, images, videos
+├── android/              # Android native project
+├── ios/                  # iOS native project
+├── app.json              # Expo app config
+├── package.json          # NPM dependencies and scripts
+├── tsconfig.json         # TypeScript config
+├── tailwind.config.js    # NativeWind/Tailwind config
+├── eslint.config.js      # ESLint config
+└── README.md             # Project documentation
+```
+
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Get a fresh project
@@ -49,110 +82,3 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
-
-```
-Second-Brain-OS-Mobile
-├─ .env
-├─ .env.example
-├─ README.md
-├─ app
-│  ├─ (auth)
-│  │  ├─ _layout.tsx
-│  │  └─ index.tsx
-│  ├─ (tabs)
-│  │  ├─ _layout.tsx
-│  │  ├─ calendar.tsx
-│  │  ├─ chatroom
-│  │  │  ├─ [chatroom_id].tsx
-│  │  │  └─ _layout.tsx
-│  │  ├─ files.tsx
-│  │  └─ inbox.tsx
-│  ├─ +not-found.tsx
-│  ├─ _layout.tsx
-│  ├─ history-modal.tsx
-│  └─ index.tsx
-├─ app.json
-├─ assets
-│  ├─ fonts
-│  │  ├─ GoogleSansCode-Italic-VariableFont_wght.ttf
-│  │  └─ GoogleSansCode-VariableFont_wght.ttf
-│  ├─ images
-│  │  ├─ android-icon-background.png
-│  │  ├─ android-icon-foreground.png
-│  │  ├─ android-icon-monochrome.png
-│  │  ├─ favicon.png
-│  │  ├─ icon.png
-│  │  ├─ partial-react-logo.png
-│  │  ├─ react-logo.png
-│  │  ├─ react-logo@2x.png
-│  │  ├─ react-logo@3x.png
-│  │  ├─ second-brain-icon.png
-│  │  └─ splash-icon.png
-│  └─ videos
-│     └─ auth-bg.mp4
-├─ babel.config.js
-├─ components
-│  ├─ external-link.tsx
-│  ├─ haptic-tab.tsx
-│  ├─ hello-wave.tsx
-│  ├─ parallax-scroll-view.tsx
-│  ├─ siginin-button.tsx
-│  ├─ themed-text.tsx
-│  ├─ themed-view.tsx
-│  └─ ui
-│     ├─ collapsible.tsx
-│     ├─ icon-symbol.ios.tsx
-│     ├─ icon-symbol.tsx
-│     └─ typewriter.tsx
-├─ constants
-│  └─ theme.ts
-├─ eslint.config.js
-├─ global.css
-├─ hooks
-│  ├─ use-color-scheme.ts
-│  ├─ use-color-scheme.web.ts
-│  ├─ use-signin.ts
-│  └─ use-theme-color.ts
-├─ lib
-│  └─ utils
-│     ├─ appleAuth.ts
-│     ├─ googleAuth.ts
-│     ├─ server-uri.ts
-│     └─ utilities.ts
-├─ metro.config.js
-├─ nativewind-env.d.ts
-├─ package-lock.json
-├─ package.json
-├─ scripts
-│  └─ reset-project.js
-├─ tailwind.config.js
-└─ tsconfig.json
-
-```
-
-components/ui/
-├── layout/              # Screen-level & structural containers
-│   ├── card-container.tsx
-│   ├── form-field-container.tsx
-│   ├── header.tsx
-│   ├── modal-screen.tsx
-│   ├── tab-screen.tsx
-│   ├── themed-safe-area-view.tsx
-│   └── themed-view.tsx
-├── elements/            # Atomic UI building blocks
-│   ├── badge.tsx
-│   ├── circle-button.tsx
-│   ├── divider.tsx
-│   ├── dot-separator.tsx
-│   ├── empty-state.tsx
-│   ├── hidden-delete.tsx
-│   ├── icon-circle.tsx
-│   ├── message-composer.tsx
-│   ├── section-label.tsx
-│   ├── siginin-button.tsx
-│   ├── themed-text-input.tsx
-│   └── themed-text.tsx
-└── animation/           # Animation-related components
-    ├── animated-background.tsx
-    ├── animated-height-view.tsx
-    └── typewriter.tsx
