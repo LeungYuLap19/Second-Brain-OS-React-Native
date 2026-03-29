@@ -100,7 +100,7 @@ export interface NormalizedEmail {
   threadId: string;
   labelIds: GmailLabelId[];
   snippet: string;
-  internalDate: string;
+  internalDate?: Date;
   headers: NormalizedHeader;
   plainTextBody?: string;
   htmlBody?: string;

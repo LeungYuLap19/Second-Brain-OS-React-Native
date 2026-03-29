@@ -1,6 +1,7 @@
 import Badge from '@/components/ui/elements/badge';
 import CardContainer from '@/components/ui/layout/card-container';
-import { gmailLabelDisplayNames, gmailTagVariants, tagVariants } from '@/constants/emails';
+import { gmailLabelDisplayNames, gmailTagVariants } from '@/constants/emails';
+import { formatEmailListDate } from '@/lib/utils/date-utils';
 import type { EmailListItemProps } from '@/types';
 import { Link } from 'expo-router';
 import React from 'react';
@@ -9,8 +10,7 @@ import { Text, View } from 'react-native';
 function EmailListItem({ email }: EmailListItemProps) {
   const unread = email.labelIds.includes('UNREAD');
   const senderName = email.headers.from?.name || 'Unknown';
-  const senderEmail = email.headers.from?.email || 'Unknown';
-  const time = email.headers.date?.toLocaleString();
+  const time = formatEmailListDate(email.internalDate);
   const subject = email.headers.subject;
   const snippet = email.snippet;
   const labels = email.labelIds;
@@ -28,9 +28,6 @@ function EmailListItem({ email }: EmailListItemProps) {
                 {unread && <View className="w-2 h-2 rounded-full bg-sky-400" />}
                 <Text className="text-base font-semibold text-zinc-100" numberOfLines={1}>
                   {senderName}
-                </Text>
-                <Text className="text-xs text-zinc-500" numberOfLines={1}>
-                  {senderEmail}
                 </Text>
               </View>
               <Text className="text-xs text-zinc-400">{time}</Text>

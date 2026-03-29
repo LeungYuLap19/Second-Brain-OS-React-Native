@@ -188,7 +188,7 @@ export function normalizedGmailMessage(message: GmailMessage): NormalizedEmail {
     threadId: message.threadId,
     labelIds: message.labelIds,
     snippet: message.snippet,
-    internalDate: message.internalDate,
+    internalDate: undefined,
     headers: {},
     plainTextBody: undefined,
     htmlBody: undefined,
@@ -197,7 +197,13 @@ export function normalizedGmailMessage(message: GmailMessage): NormalizedEmail {
 
   const payload = message.payload;
 
+  // --- Parse Header ---
   normalized.headers = parseEmailHeader(message);
+
+  // --- Parse Internal Date ---
+  const rawInternalDate = message.internalDate;
+  const timestamp = parseInt(rawInternalDate, 10);
+  normalized.internalDate = new Date(timestamp);
 
   // --- Parse Body ---
   // Use findPart directly for both plain text and HTML to populate both fields

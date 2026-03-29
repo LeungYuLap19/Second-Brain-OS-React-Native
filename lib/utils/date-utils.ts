@@ -121,3 +121,25 @@ export const dateStringToDate = (s?: string): Date => {
   const [y, m, d] = s.split('-').map(Number);
   return new Date(y, m - 1, d);
 };
+
+export function formatEmailListDate(date?: Date): string {
+  if (!date) return 'N/A';
+  const now = new Date();
+  const isToday =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+  if (isToday) {
+    // Format as hh:mm am/pm
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    if (hours === 0) hours = 12;
+    return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+  } else {
+    // Format as MMM DD
+    const month = monthNames[date.getMonth()];
+    return `${month} ${date.getDate()}`;
+  }
+}
